@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\BBMS1MVC.props" />
+</Project>

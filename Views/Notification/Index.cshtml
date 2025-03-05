@@ -1,0 +1,335 @@
+﻿@model IEnumerable<BBMSDATA1.Models.Notification>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+	<style>
+		:root {
+			--primary: #4a90e2;
+			--secondary: #2ecc71;
+			--danger: #e74c3c;
+			--warning: #f39c12;
+			--dark: #2c3e50;
+			--light: #ecf0f1;
+			--background: #f4f6f7;
+		}
+
+		* {
+			margin: 0;
+			padding: 0;
+			box-sizing: border-box;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: var(--background);
+			color: var(--dark);
+			line-height: 1.6;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		.page-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 30px;
+			border-bottom: 2px solid var(--primary);
+			padding-bottom: 15px;
+		}
+
+		.page-title {
+			font-size: 24px;
+			color: var(--dark);
+			font-weight: 600;
+		}
+
+		.btn {
+			display: inline-flex;
+			align-items: center;
+			padding: 10px 15px;
+			border-radius: 5px;
+			text-decoration: none;
+			font-weight: 500;
+			transition: all 0.3s ease;
+			gap: 8px;
+		}
+
+		.btn-primary {
+			background-color: var(--primary);
+			color: white;
+			border: none;
+		}
+
+			.btn-primary:hover {
+				background-color: #357abd;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+			}
+
+		.stats-container {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 20px;
+			margin-bottom: 30px;
+		}
+
+		.stat-card {
+			background-color: white;
+			border-radius: 8px;
+			padding: 20px;
+			box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+			text-align: center;
+			transition: transform 0.3s ease;
+		}
+
+			.stat-card:hover {
+				transform: translateY(-5px);
+			}
+
+		.stat-value {
+			font-size: 28px;
+			font-weight: 600;
+			color: var(--primary);
+			margin-bottom: 10px;
+		}
+
+		.stat-label {
+			color: #667;
+			font-size: 14px;
+		}
+
+		.notification-table {
+			width: 100%;
+			background-color: white;
+			border-radius: 8px;
+			box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+			overflow: hidden;
+		}
+
+			.notification-table thead {
+				background-color: var(--primary);
+				color: white;
+			}
+
+			.notification-table th {
+				padding: 15px;
+				text-align: left;
+				font-weight: 500;
+			}
+
+			.notification-table tbody tr {
+				transition: background-color 0.3s ease;
+			}
+
+				.notification-table tbody tr:hover {
+					background-color: #f9f9f9;
+				}
+
+			.notification-table td {
+				padding: 15px;
+				border-bottom: 1px solid var(--light);
+			}
+
+		.status-badge {
+			display: inline-block;
+			padding: 5px 10px;
+			border-radius: 20px;
+			font-size: 12px;
+			font-weight: 500;
+		}
+
+		.status-active {
+			background-color: #dff0d8;
+			color: #3c763d;
+		}
+
+		.status-inactive {
+			background-color: #f2dede;
+			color: #a94442;
+		}
+
+		.actions {
+			display: flex;
+			gap: 10px;
+		}
+
+		.action-btn {
+			display: inline-flex;
+			align-items: center;
+			gap: 5px;
+			text-decoration: none;
+			padding: 5px 10px;
+			border-radius: 4px;
+			font-size: 13px;
+		}
+
+		.action-edit {
+			color: var(--primary);
+			background-color: #e6f2ff;
+		}
+
+		.action-details {
+			color: var(--secondary);
+			background-color: #e6f7ef;
+		}
+
+		.action-delete {
+			color: var(--danger);
+			background-color: #f9e6e6;
+		}
+
+		.filters {
+			display: flex;
+			gap: 15px;
+			margin-bottom: 20px;
+		}
+
+		.filter-group {
+			display: flex;
+			flex-direction: column;
+		}
+
+		.filter-label {
+			margin-bottom: 5px;
+			font-size: 14px;
+			color: var(--dark);
+		}
+
+		.filter-select {
+			padding: 8px;
+			border: 1px solid var(--light);
+			border-radius: 4px;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div class="page-header">
+			<h1 class="page-title">Notification Management</h1>
+			<a asp-action="AddNoti" asp-controller="Notification" class="btn btn-primary">
+				<i class="fas fa-plus"></i> Create New Notification
+			</a>
+		</div>
+
+		<div class="stats-container">
+			<div class="stat-card">
+				<div class="stat-value">@Model.Count()</div>
+				<div class="stat-label">Total Notifications</div>
+			</div>
+			<div class="stat-card">
+				<div class="stat-value">@Model.Count(n => n.IsActive)</div>
+				<div class="stat-label">Active Notifications</div>
+			</div>
+			<div class="stat-card">
+				<div class="stat-value">@Model.Count(n => !n.IsActive)</div>
+				<div class="stat-label">Inactive Notifications</div>
+			</div>
+		</div>
+
+		<div class="filters">
+			<div class="filter-group">
+				<label class="filter-label">Blood Bank</label>
+				<select id="bloodBankFilter" class="filter-select">
+					<option value="">All Blood Banks</option>
+					@foreach (var bank in Model.Select(n => n.BloodBankId).Distinct())
+					{
+						<option value="@bank">@bank</option>
+					}
+				</select>
+			</div>
+			<div class="filter-group">
+				<label class="filter-label">Status</label>
+				<select id="statusFilter" class="filter-select">
+					<option value="">All Statuses</option>
+					<option value="true">Active</option>
+					<option value="false">Inactive</option>
+				</select>
+			</div>
+		</div>
+
+		<table class="notification-table" id="notificationTable">
+			<thead>
+				<tr>
+					<th>Blood Bank</th>
+					<th>Title</th>
+					<th>Message</th>
+					<th>Start Date</th>
+					<th>End Date</th>
+					<th>Status</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					<tr data-bank="@item.BloodBankId" data-status="@item.IsActive">
+						<td>@item.BloodBankId</td>
+						<td>@item.Title</td>
+						<td>
+							@(item.Message.Length > 50 ? item.Message.Substring(0, 50) + "..." : item.Message)
+						</td>
+						<td>@item.StartDate.ToString("MMM dd, yyyy")</td>
+						<td>@item.EndDate.ToString("MMM dd, yyyy")</td>
+						<td>
+							<span class="status-badge @(item.IsActive ? "status-active" : "status-inactive")">
+								@(item.IsActive ? "Active" : "Inactive")
+							</span>
+						</td>
+						<td class="actions">
+							<a href="@Url.Action("UpdateNotifi", new { id = item.NotificationId })"
+							   class="action-btn action-edit">
+								<i class="fas fa-edit"></i> Edit
+							</a>
+							<a href="@Url.Action("Details", new { id = item.NotificationId })"
+							   class="action-btn action-details">
+								<i class="fas fa-info-circle"></i> Details
+							</a>
+							<a href="@Url.Action("Delete", new { id = item.NotificationId })"
+							   class="action-btn action-delete">
+								<i class="fas fa-trash"></i> Delete
+							</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			const bloodBankFilter = document.getElementById('bloodBankFilter');
+			const statusFilter = document.getElementById('statusFilter');
+			const table = document.getElementById('notificationTable');
+			const rows = table.querySelectorAll('tbody tr');
+
+			function applyFilters() {
+				const bankValue = bloodBankFilter.value;
+				const statusValue = statusFilter.value;
+
+				rows.forEach(row => {
+					const bankMatch = !bankValue || row.getAttribute('data-bank') === bankValue;
+					const statusMatch = !statusValue || row.getAttribute('data-status') === statusValue;
+
+					row.style.display = bankMatch && statusMatch ? '' : 'none';
+				});
+			}
+
+			bloodBankFilter.addEventListener('change', applyFilters);
+			statusFilter.addEventListener('change', applyFilters);
+		});
+	</script>
+</body>
+</html>

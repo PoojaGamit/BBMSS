@@ -1,0 +1,129 @@
+﻿@model BBMSDATA1.Models.ComponentStock
+
+@{
+    ViewData["Title"] = "AddCStocks";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Component Stock</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        .card {
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            padding: 15px 20px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .btn-primary {
+            background-color: #0d6efd;
+            border: none;
+            padding: 10px 20px;
+        }
+
+            .btn-primary:hover {
+                background-color: #0b5ed7;
+            }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            border: none;
+            padding: 10px 20px;
+        }
+
+        .required-field::after {
+            content: "*";
+            color: red;
+            margin-left: 4px;
+        }
+
+        .form-label {
+            font-weight: 500;
+        }
+
+        .form-control, .form-select {
+            padding: 12px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-0"><i class="fas fa-plus-circle text-primary me-2"></i> Add Blood Component Stock</h3>
+                    </div>
+                    <div class="card-body p-4">
+                        <form asp-action="AddCStocks">
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label asp-for="BloodGroupId" class="form-label required-field">Blood Group</label>
+                                        <select asp-for="BloodGroupId" class="form-select" asp-items="ViewBag.BloodGroups">
+                                            <option value="">Select Blood Group</option>
+                                        </select>
+                                        <span asp-validation-for="BloodGroupId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label asp-for="ComponentTypeId" class="form-label required-field">Component Type</label>
+                                        <select asp-for="ComponentTypeId" class="form-select" asp-items="ViewBag.Component">
+                                            <option value="">Select Component Type</option>
+                                        </select>
+                                        <span asp-validation-for="ComponentTypeId" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                         
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label asp-for="Quantity" class="form-label required-field">Quantity</label>
+                                        <input asp-for="Quantity" class="form-control" type="number" min="0" />
+                                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label asp-for="ExpiryDate" class="form-label required-field">Expiry Date</label>
+                                        <input asp-for="ExpiryDate" class="form-control" type="date" />
+                                        <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="d-flex justify-content-between mt-4">
+                                <a asp-action="Index" class="btn btn-secondary">
+                                    <i class="fas fa-arrow-left me-1"></i> Back to List
+                                </a>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save me-1"></i> Create
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
