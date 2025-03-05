@@ -1,0 +1,14 @@
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\bin\Debug\net8.0\BBMSDATA1.deps.json
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\bin\Debug\net8.0\BBMSDATA1.runtimeconfig.json
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\bin\Debug\net8.0\BBMSDATA1.dll
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\bin\Debug\net8.0\BBMSDATA1.pdb
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.csproj.AssemblyReference.cache
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.AssemblyInfoInputs.cache
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.AssemblyInfo.cs
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.csproj.CoreCompileInputs.cache
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.dll
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\refint\BBMSDATA1.dll
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.pdb
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.genruntimeconfig.cache
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\ref\BBMSDATA1.dll
