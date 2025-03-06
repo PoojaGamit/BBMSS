@@ -1,13 +1,22 @@
 ﻿@model BBMSDATA1.Models.LoginRequest
 @{
     ViewData["Title"] = "Login";
+
+}
+@if (TempData["LogoutMessage"] != null)
+{
+    <script>
+        window.onload = function() {
+            alert("@TempData["LogoutMessage"]");
+        };
+    </script>
 }
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-5">
             <div class="card shadow-lg border-0 rounded-4">
-                <div class="card-header text-center py-3" style="background-color: #f44336; color: white; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+                <div class="card-header text-center py-3" style="background-color: var(--primary); color: white; border-top-left-radius: 15px; border-top-right-radius: 15px;">
                     <h3 class="mb-0">Login</h3>
                 </div>
                 <div class="card-body p-4">
@@ -45,28 +54,24 @@
                                     Remember me
                                 </label> *@
                             </div>
-                            <a href="#" class="small text-decoration-none" style="color: #f44336;">Forgot Password?</a>
+                            <a href="#" class="small text-decoration-none" style="color: var(--primary);">Forgot Password?</a>
                         </div>
 
                         <div class="d-grid gap-2 mb-3">
                             <button type="submit" class="btn py-2 fw-bold"
-                                    style="background-color: #f44336; color: white; border-radius: 30px;">
+                                    style="background-color: var(--primary); color: white; border-radius: 30px;">
                                 Login
                             </button>
                         </div>
 
                     </form>
-
-            
                 </div>
                 <div class="card-footer text-center py-3"
-                     style="background-color: #f8f9fa; border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                     style="background-color: var(--light); border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
                     <span class="text-muted">Don't have an account?</span>
                     <a asp-controller="User" asp-action="Register" class="text-decoration-none ms-1"
-                       style="color: #f44336; font-weight: 600;">Sign Up</a>
+                       style="color: var(--secondary); font-weight: 600;">Sign Up</a>
                 </div>
-
-               
             </div>
         </div>
     </div>

@@ -5,9 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using System.Net.Http;
 using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BBMS1MVC.Controllers
 {
@@ -22,13 +21,24 @@ namespace BBMS1MVC.Controllers
             this.context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             var token = HttpContext.Session.GetString("JWTToken");
             if (token != null)
             {
                 ViewBag.UserName = JwtHelper.GetUserName(token);
                 ViewBag.UserRole = JwtHelper.GetUserRole(token);
+                var ab = JwtHelper.GetUserId(token);
+                var client = clientFactory.CreateClient("MyApiClient");
+                var response = await client.GetAsync($"BloodBank/UnitsAvailable/{ab}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var json = await response.Content.ReadAsStringAsync();
+                    ViewBag.Units = await context.BloodStock.Where(a => a.BloodBankId == Convert.ToInt32(json)).SumAsync(a => a.Quantity);
+                    ViewBag.Bloodtypes = await context.BloodStock.Where(a => a.BloodBankId == Convert.ToInt32(json)).Select(a => a.BloodGroupId).Distinct().CountAsync();
+                    ViewBag.Donor = await context.Donations.Where(a => a.BloodBankId == Convert.ToInt32(json)).Select(a => a.DonorId).Distinct().CountAsync();
+                    ViewBag.Requests = await context.BloodRequest.Where(a => a.BloodBankId == Convert.ToInt32(json)).Select(a => a.RequestId).Distinct().CountAsync();
+                }
             }
             return View();
         }
@@ -65,15 +75,10 @@ namespace BBMS1MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var token = HttpContext.Session.GetString("JWTToken");
-                if(token!=null)
+                var id = HttpContext.Session.GetString("Userid");
+                if (id != null)
                 {
-                    var adminId = JwtHelper.GetUserId(token);
-
-                    if (!string.IsNullOrEmpty(adminId))
-                    {
-                        model.AdminId = Convert.ToInt32(adminId);
-                    }
+                    model.AdminId = Convert.ToInt32(id);
                 }
                 var client = clientFactory.CreateClient("MyApiClient");
                 var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
@@ -94,60 +99,50 @@ namespace BBMS1MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> GetBBbyAdminid()
         {
-            var token = HttpContext.Session.GetString("JWTToken");
-            if (token != null) 
+            var id = HttpContext.Session.GetString("Userid");
+            if (id != null)
             {
-                var adminId = JwtHelper.GetUserId(token);
+                var client = clientFactory.CreateClient("MyApiClient");
+                var response = await client.GetAsync($"BloodBank/GetBloodBankbyadminid/{id}");
 
-                if (!string.IsNullOrEmpty(adminId))
+                if (response.IsSuccessStatusCode)
                 {
-                    var client = clientFactory.CreateClient("MyApiClient");
-                    var response = await client.GetAsync($"BloodBank/GetBloodBankbyadminid/{adminId}");
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonData = await response.Content.ReadAsStringAsync();
-                        var bloodBank = JsonConvert.DeserializeObject<BloodBanks>(jsonData);
-                        return View(bloodBank);
-                    }
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var bloodBank = JsonConvert.DeserializeObject<BloodBanks>(jsonData);
+                    return View(bloodBank);
                 }
             }
-            
+
             return View(new List<BloodBanks>());
         }
 
         [HttpGet]
         public async Task<IActionResult> Updatebb()
         {
-            var token = HttpContext.Session.GetString("JWTToken");
-            if (!string.IsNullOrEmpty(token)) 
+            var id = HttpContext.Session.GetString("Userid");
+            if (!string.IsNullOrEmpty(id))
             {
+                var client = clientFactory.CreateClient("MyApiClient");
+                var response = await client.GetAsync($"BloodBank/GetBloodBankbyadminid/{id}");
 
-                var adminId = JwtHelper.GetUserId(token);
-
-                if (!string.IsNullOrEmpty(adminId))
+                if (response.IsSuccessStatusCode)
                 {
-                    var client = clientFactory.CreateClient("MyApiClient");
-                    var response = await client.GetAsync($"BloodBank/GetBloodBankbyadminid/{adminId}");
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonData = await response.Content.ReadAsStringAsync();
-                        var bloodBank = JsonConvert.DeserializeObject<BloodBanks>(jsonData);
-                        return View(bloodBank);
-                    }
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var bloodBank = JsonConvert.DeserializeObject<BloodBanks>(jsonData);
+                    return View(bloodBank);
                 }
+
             }
-           
+
             return View(new BloodBanks());
         }
 
-        [HttpPost] 
+        [HttpPost]
         public async Task<IActionResult> Updatebb([FromForm] BloodBanks model)
         {
             var client = clientFactory.CreateClient("MyApiClient");
             var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-            var response = await client.PutAsync("BloodBank/Update", jsonContent); 
+            var response = await client.PutAsync("BloodBank/Update", jsonContent);
 
             if (response.IsSuccessStatusCode)
             {

@@ -17,24 +17,20 @@ namespace BBMS1MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            var userid = HttpContext.Session.GetString("Userid");
+          
+            if (userid != null)
+            {       
+                var client = clientFactory.CreateClient("MyApiClient");
+                 var response = await client.GetAsync($"Notification/GetNotibyAdmin/{userid}");
 
-            var token = HttpContext.Session.GetString("JWTToken");
-            if (token != null)
-            {
-                var adminId = JwtHelper.GetUserId(token);
-
-                if (!string.IsNullOrEmpty(adminId))
+                if (response.IsSuccessStatusCode)
                 {
-                    var client = clientFactory.CreateClient("MyApiClient");
-                    var response = await client.GetAsync($"Notification/GetNotibyAdmin/{adminId}");
-
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonData = await response.Content.ReadAsStringAsync();
-                        var bloodstock = JsonConvert.DeserializeObject<List<Notification>>(jsonData);
-                        return View(bloodstock);
-                    }
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var bloodstock = JsonConvert.DeserializeObject<List<Notification>>(jsonData);
+                    return View(bloodstock);
                 }
+                
             }
             return View(new List<Notification>());
 
@@ -52,15 +48,12 @@ namespace BBMS1MVC.Controllers
 
             if (ModelState.IsValid)
             {
-                var token = HttpContext.Session.GetString("JWTToken");
-                if (token != null)
+                var id = HttpContext.Session.GetString("Userid");
+               // var token = HttpContext.Session.GetString("JWTToken");
+                if (id != null)
                 {
-                    var adminId = JwtHelper.GetUserId(token);
-
-                    if (!string.IsNullOrEmpty(adminId))
-                    {
-                        var client = clientFactory.CreateClient("MyApiClient");
-                        var response = await client.GetAsync($"Notification/BloodBankidfromadmin/{adminId}");
+                         var client = clientFactory.CreateClient("MyApiClient");
+                        var response = await client.GetAsync($"Notification/BloodBankidfromadmin/{id}");
                         if (response.IsSuccessStatusCode)
                         {
                             var bloodBankId = await response.Content.ReadAsStringAsync();
@@ -83,7 +76,7 @@ namespace BBMS1MVC.Controllers
                         {
                             ModelState.AddModelError(string.Empty, "Error while adding Blood Bank.");
                         }
-                    }
+                   
                 }
 
             }

@@ -1,6 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Index";
-    
+
 }
 
 <!DOCTYPE html>
@@ -13,18 +13,18 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --primary: #e63946;
-            --primary-light: #f8d7da;
-            --primary-dark: #c1121f;
-            --secondary: #457b9d;
-            --light: #f1faee;
-            --dark: #1d3557;
-            --gray: #6c757d;
+            --primary: #4a90e2;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --background: #f4f6f7;
         }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f8f9fa;
+            background-color: var(--background);
         }
 
         .navbar {
@@ -73,6 +73,7 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             border: none;
             transition: all 0.3s ease;
+            background-color: white;
         }
 
             .user-profile-card:hover {
@@ -81,8 +82,8 @@
             }
 
         .user-profile-header {
-            background-color: var(--primary-light);
-            color: var(--primary-dark);
+            background-color: var(--primary);
+            color: white;
             border-radius: 15px 15px 0 0;
             padding: 15px;
         }
@@ -91,7 +92,7 @@
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            background-color: var(--primary-light);
+            background-color: var(--light);
             color: var(--primary);
             display: flex;
             align-items: center;
@@ -105,6 +106,7 @@
             border-radius: 15px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
             border: none;
+            background-color: white;
         }
 
         .dashboard-title {
@@ -114,21 +116,23 @@
         }
 
         .dashboard-subtitle {
-            color: var(--gray);
+            color: var(--dark);
             font-weight: 400;
             margin-bottom: 30px;
         }
 
         .feature-card {
             border-radius: 12px;
-            border: 1px solid var(--primary);
+            border: 1px solid var(--light);
             transition: all 0.3s ease;
             height: 100%;
+            background-color: white;
         }
 
             .feature-card:hover {
                 transform: translateY(-5px);
-                box-shadow: 0 10px 20px rgba(230, 57, 70, 0.1);
+                box-shadow: 0 10px 20px rgba(74, 144, 226, 0.1);
+                border-color: var(--primary);
             }
 
         .feature-icon {
@@ -138,18 +142,18 @@
         }
 
         .feature-title {
-            color: var(--primary);
+            color: var(--dark);
             font-weight: 600;
             margin-bottom: 10px;
         }
 
         .feature-text {
-            color: var(--gray);
+            color: #6c757d;
             margin-bottom: 20px;
         }
 
         .btn-feature {
-            background-color: white;
+            background-color: var(--light);
             color: var(--primary);
             border: 1px solid var(--primary);
             border-radius: 50px;
@@ -172,26 +176,26 @@
         }
 
         .btn-edit {
-            background-color: white;
+            background-color: var(--light);
             color: var(--primary);
             border: 1px solid var(--primary);
         }
 
             .btn-edit:hover {
-                background-color: var(--primary-light);
-                color: var(--primary-dark);
-                border-color: var(--primary-dark);
+                background-color: var(--primary);
+                color: white;
+                border-color: var(--primary);
             }
 
         .btn-logout {
-            background-color: var(--primary);
+            background-color: var(--danger);
             color: white;
-            border: 1px solid var(--primary);
+            border: 1px solid var(--danger);
         }
 
             .btn-logout:hover {
-                background-color: var(--primary-dark);
-                border-color: var(--primary-dark);
+                background-color: #c0392b;
+                border-color: #c0392b;
             }
 
         .stats-counter {
@@ -214,43 +218,47 @@
 
         .counter-label {
             font-size: 14px;
-            color: var(--gray);
+            color: var(--dark);
             font-weight: 500;
         }
 
-           </style>
+        /* Additional styles for specific feature cards */
+        .feature-card.blood-stock .feature-icon {
+            color: var(--secondary);
+        }
+
+        .feature-card.requests .feature-icon {
+            color: var(--warning);
+        }
+
+        .feature-card.notifications .feature-icon {
+            color: var(--danger);
+        }
+
+        .feature-card.blood-bank .feature-icon {
+            color: var(--primary);
+        }
+
+        .feature-card.add-bank .feature-icon {
+            color: var(--secondary);
+        }
+
+        .feature-card.camps .feature-icon {
+            color: var(--warning);
+        }
+
+        .feature-card.reports .feature-icon {
+            color: var(--dark);
+        }
+
+        /* Critical shortage indicator */
+        .critical-shortage {
+            background-color: rgba(231, 76, 60, 0.15);
+            border-left: 4px solid var(--danger);
+        }
+    </style>
 </head>
 <body>
-  @*   <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white">
-        <div class="container">
-            <a class="navbar-brand" href="#">
-                <i class="fas fa-heartbeat me-2"></i>BloodBank
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto me-4">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-home me-1"></i> Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-info-circle me-1"></i> About Us</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#"><i class="fas fa-hospital me-1"></i> Blood Banks</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"><i class="fas fa-sign-in-alt me-1"></i> Login</a>
-                    </li>
-                </ul>
-                <a href="#" class="btn btn-donate">
-                    <i class="fas fa-hand-holding-heart me-1"></i> Donate Now
-                </a>
-            </div>
-        </div>
-    </nav> *@
 
     <!-- Dashboard Content -->
     <div class="dashboard-container">
@@ -273,7 +281,7 @@
                                 <a asp-action="UpdateUserprofile" asp-controller="User" class="btn btn-profile btn-edit">
                                     <i class="fas fa-user-edit me-1"></i> Edit Profile
                                 </a>
-                                <a href="/User/Logout" class="btn btn-profile btn-logout">
+                                <a asp-action="LogoutUser" asp-controller="User" class="btn btn-profile btn-logout">
                                     <i class="fas fa-sign-out-alt me-1"></i> Logout
                                 </a>
                             </div>
@@ -285,30 +293,31 @@
                         <div class="card-body">
                             <h5 class="text-primary mb-3"><i class="fas fa-chart-bar me-2"></i>Quick Stats</h5>
                             <div class="row">
+                                <div class="col-6">
+                                    <div class="counter-item">
+                                        <div class="counter-value">@ViewBag.Units</div>
+                                        <div class="counter-label">Units Available</div>
+                                    </div>
+                                </div>
                                 <div class="col-6 mb-3">
                                     <div class="counter-item">
-                                        <div class="counter-value">8</div>
+                                        <div class="counter-value">@ViewBag.Bloodtypes</div>
                                         <div class="counter-label">Blood Types</div>
                                     </div>
                                 </div>
                                 <div class="col-6 mb-3">
                                     <div class="counter-item">
-                                        <div class="counter-value">24</div>
+                                        <div class="counter-value">@ViewBag.Donor</div>
                                         <div class="counter-label">Donors</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="counter-item">
-                                        <div class="counter-value">12</div>
+                                        <div class="counter-value">@ViewBag.Requests</div>
                                         <div class="counter-label">Requests</div>
                                     </div>
                                 </div>
-                                <div class="col-6">
-                                    <div class="counter-item">
-                                        <div class="counter-value">5</div>
-                                        <div class="counter-label">Events</div>
-                                    </div>
-                                </div>
+                              
                             </div>
                         </div>
                     </div>
@@ -323,39 +332,11 @@
                                 Welcome to the Blood Bank Management System. Manage blood stocks, donor requests, and notifications efficiently from one central location.
                             </p>
 
-                            <!-- Summary Stats -->
-                            <div class="row stats-counter">
-                                <div class="col-md-3 col-6">
-                                    <div class="counter-item">
-                                        <div class="counter-value">125</div>
-                                        <div class="counter-label">Units Available</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="counter-item">
-                                        <div class="counter-value">18</div>
-                                        <div class="counter-label">Pending Requests</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="counter-item">
-                                        <div class="counter-value">45</div>
-                                        <div class="counter-label">Donations This Month</div>
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="counter-item">
-                                        <div class="counter-value">3</div>
-                                        <div class="counter-label">Critical Shortages</div>
-                                    </div>
-                                </div>
-                            </div>
-
                             <!-- Main Features -->
                             <div class="row">
                                 <div class="row">
                                     <div class="col-md-6 mb-4">
-                                        <div class="feature-card">
+                                        <div class="feature-card blood-bank">
                                             <div class="card-body text-center p-4">
                                                 <div class="feature-icon">
                                                     <i class="fas fa-hospital-alt"></i>
@@ -369,7 +350,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-6 mb-4">
-                                        <div class="feature-card">
+                                        <div class="feature-card add-bank">
                                             <div class="card-body text-center p-4">
                                                 <div class="feature-icon">
                                                     <i class="fas fa-plus-circle"></i>
@@ -384,42 +365,42 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-4">
-                                    <div class="feature-card">
+                                    <div class="feature-card blood-stock">
                                         <div class="card-body text-center p-4">
                                             <div class="feature-icon">
                                                 <i class="fas fa-vials"></i>
                                             </div>
                                             <h5 class="feature-title">Manage Blood Stock</h5>
                                             <p class="feature-text">View and update current blood stock availability, track inventory, and manage blood units.</p>
-                                            <a asp-controller="BloodStock" asp-action="GetByBloodBankId" class="btn btn-feature">
+                                            <a asp-controller="BloodStock" asp-action="GetByBloodBankId" class="btn btn-feature" style="border-color: var(--secondary); color: var(--secondary);">
                                                 <i class="fas fa-eye me-1"></i> View Details
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-4">
-                                    <div class="feature-card">
+                                    <div class="feature-card requests">
                                         <div class="card-body text-center p-4">
                                             <div class="feature-icon">
                                                 <i class="fas fa-user-friends"></i>
                                             </div>
                                             <h5 class="feature-title">Donor Requests</h5>
                                             <p class="feature-text">Manage donation requests from registered donors and schedule upcoming donations.</p>
-                                            <a href="#" class="btn btn-feature">
+                                            <a href="#" class="btn btn-feature" style="border-color: var(--warning); color: var(--warning);">
                                                 <i class="fas fa-list me-1"></i> View Requests
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-4 mb-4">
-                                    <div class="feature-card">
+                                    <div class="feature-card notifications">
                                         <div class="card-body text-center p-4">
                                             <div class="feature-icon">
                                                 <i class="fas fa-bell"></i>
                                             </div>
                                             <h5 class="feature-title">Notifications</h5>
                                             <p class="feature-text">Create and manage notifications for blood requirements, events, and emergency needs.</p>
-                                            <a asp-controller="Notification" asp-action="Index" class="btn btn-feature">
+                                            <a asp-controller="Notification" asp-action="Index" class="btn btn-feature" style="border-color: var(--danger); color: var(--danger);">
                                                 <i class="fas fa-cog me-1"></i> Manage Notifications
                                             </a>
                                         </div>
@@ -430,28 +411,28 @@
                             <!-- Additional Features -->
                             <div class="row">
                                 <div class="col-md-6 mb-4">
-                                    <div class="feature-card">
+                                    <div class="feature-card camps">
                                         <div class="card-body text-center p-4">
                                             <div class="feature-icon">
                                                 <i class="fas fa-calendar-alt"></i>
                                             </div>
                                             <h5 class="feature-title">Schedule Donation Camps</h5>
                                             <p class="feature-text">Plan and organize blood donation camps and manage registrations.</p>
-                                            <a href="#" class="btn btn-feature">
+                                            <a asp-action="Index" asp-controller="BloodCamp" class="btn btn-feature" style="border-color: var(--warning); color: var(--warning);">
                                                 <i class="fas fa-calendar-plus me-1"></i> Schedule Camp
                                             </a>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-4">
-                                    <div class="feature-card">
+                                    <div class="feature-card reports">
                                         <div class="card-body text-center p-4">
                                             <div class="feature-icon">
                                                 <i class="fas fa-chart-line"></i>
                                             </div>
                                             <h5 class="feature-title">Reports & Analytics</h5>
                                             <p class="feature-text">Generate reports and visualize data for better decision making.</p>
-                                            <a href="#" class="btn btn-feature">
+                                            <a href="#" class="btn btn-feature" style="border-color: var(--dark); color: var(--dark);">
                                                 <i class="fas fa-file-alt me-1"></i> View Reports
                                             </a>
                                         </div>

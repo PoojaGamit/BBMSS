@@ -1,16 +1,17 @@
 ﻿@model BBMSDATA1.Models.Users
 
 @{
-    ViewData["Title"] = "Donor Sign-Up";
+    ViewData["Title"] = "Register";
 }
 
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm border-0 rounded-3">
+                <div class="card-header bg-primary text-white py-3 rounded-top">
+                    <h2 class="card-title mb-0">Donor Sign-Up</h2>
+                </div>
                 <div class="card-body p-4">
-                    <h2 class="card-title text-danger mb-4">Donor Sign-Up</h2>
-
                     <form asp-action="Register">
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
@@ -23,9 +24,9 @@
                                     <span asp-validation-for="FullName" class="text-danger"></span>
                                 </div>
 
-                                <div class="form-group  mb-3">
+                                <div class="form-group mb-3">
                                     <label asp-for="PasswordHash" class="control-label fw-bold">Password:</label>
-                                    <input asp-for="PasswordHash" class="form-control" />
+                                    <input asp-for="PasswordHash" class="form-control" type="password" />
                                     <span asp-validation-for="PasswordHash" class="text-danger"></span>
                                 </div>
 
@@ -36,7 +37,7 @@
                                 </div>
                                 <div class="form-group mb-3">
                                     <label asp-for="R_ID" class="control-label fw-bold">Role:<span class="text-danger">*</span></label>
-                                    <select asp-for="R_ID" class="form-control  form-select" asp-items="ViewBag.Roles">
+                                    <select asp-for="R_ID" class="form-control form-select" asp-items="ViewBag.Roles">
                                         <option value="">Select Role</option>
                                     </select>
                                     <span asp-validation-for="R_ID" class="text-danger"></span>
@@ -87,21 +88,21 @@
 
                         <div class="row mt-3">
                             <div class="col-md-12">
-                                
-                                        <div class="form-group mb-3 text-center">
-                                            <div class="d-lg-inline-block bg-light py-2 px-4 border rounded">
-                                                <span class="text-danger fw-bold" style="letter-spacing:2px;font-style:italic;"></span>
-                                                <input  id="Latitude" name="Latitude" />
-                                                <input  id="Longitude" name="Longitude" />
-                                        <button type="button" class="btn btn-primary px-4" onclick="getLocation()">Get Location</button>
-
-                                            </div>
-
-                                  
+                                <div class="form-group mb-3 text-center">
+                                    <div class="d-lg-inline-block bg-light py-2 px-4 border rounded">
+                                        <span class="text-dark fw-bold" style="letter-spacing:2px;font-style:italic;">Your Location</span>
+                                        <input id="Latitude" name="Latitude" class="form-control d-inline-block mx-2" style="width: 150px;" placeholder="Latitude" readonly />
+                                        <input id="Longitude" name="Longitude" class="form-control d-inline-block mx-2" style="width: 150px;" placeholder="Longitude" readonly />
+                                        <button type="button" class="btn btn-secondary px-4" onclick="getLocation()">
+                                            <i class="bi bi-geo-alt me-1"></i> Get Location
+                                        </button>
+                                    </div>
                                 </div>
-                              
+
                                 <div class="form-group text-center mt-4">
-                                    <button type="submit" value="Submit" class="btn btn-primary px-4" />
+                                    <button type="submit" class="btn btn-primary px-5 py-2 rounded-pill">
+                                        <i class="bi bi-person-plus me-1"></i> Register
+                                    </button>
                                 </div>
                             </div>
                         </div>

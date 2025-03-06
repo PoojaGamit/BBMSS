@@ -1,7 +1,7 @@
 ﻿@model BBMSDATA1.Models.BloodBanks
 
 @{
-    ViewData["Title"] = "GetBBbyAdminid";
+    ViewData["Title"] = "Blood Bank Details";
 }
 
 <!DOCTYPE html>
@@ -14,56 +14,66 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
     <style>
         :root {
-            --primary: #e63946;
-            --secondary: #457b9d;
-            --light: #f1faee;
-            --dark: #1d3557;
-            --accent: #a8dadc;
+            --primary: #4a90e2;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --background: #f4f6f7;
         }
 
         body {
-            background-color: #f8f9fa;
+            background-color: var(--background);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #333;
+            color: var(--dark);
+            line-height: 1.6;
         }
 
         .page-header {
-            background-color: var(--dark);
+            background-color: var(--primary);
             color: white;
-            padding: 1.5rem 0;
-            margin-bottom: 2rem;
-            border-radius: 0 0 0.5rem 0.5rem;
+            padding: 2rem 0;
+            margin-bottom: 2.5rem;
+            border-radius: 0 0 1rem 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
+
+            .page-header h1 {
+                font-weight: 600;
+                margin-bottom: 0.5rem;
+            }
 
         .details-container {
             background-color: white;
-            border-radius: 0.5rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 0;
+            border-radius: 1rem;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
             overflow: hidden;
             margin-bottom: 2rem;
+            border: 1px solid rgba(0,0,0,0.05);
         }
 
         .details-header {
-            background-color: var(--primary);
+            background-color: var(--dark);
             color: white;
-            padding: 1.2rem 1.5rem;
-            border-bottom: 1px solid #eee;
+            padding: 1.5rem 2rem;
+            position: relative;
         }
 
             .details-header h4 {
                 margin: 0;
                 font-weight: 600;
+                font-size: 1.5rem;
             }
 
         .details-body {
-            padding: 1.5rem;
+            padding: 2rem;
         }
 
         .details-section {
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             padding-bottom: 1.5rem;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--light);
         }
 
             .details-section:last-child {
@@ -73,23 +83,27 @@
             }
 
         .section-title {
-            color: var(--secondary);
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
             font-weight: 600;
             display: flex;
             align-items: center;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--light);
         }
 
             .section-title i {
-                margin-right: 0.5rem;
+                margin-right: 0.75rem;
+                color: var(--primary);
             }
 
         .detail-row {
-            padding: 0.6rem 0;
+            padding: 0.8rem 0;
             display: flex;
             flex-wrap: wrap;
-            border-bottom: 1px solid #f5f5f5;
+            border-bottom: 1px solid var(--light);
+            align-items: center;
         }
 
             .detail-row:last-child {
@@ -108,82 +122,99 @@
             color: #555;
         }
 
+        /* .map-container {
+            margin-top: 1.5rem;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
         .map-placeholder {
-            height: 200px;
-            background-color: var(--accent);
+            height: 250px;
+            background-color: #eee;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
             position: relative;
             overflow: hidden;
         }
 
+        .map-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.08);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+ */
         .status-badge {
             display: inline-block;
-            border-radius: 20px;
-            padding: 0.25rem 1rem;
+            border-radius: 2rem;
+            padding: 0.4rem 1.2rem;
             font-size: 0.85rem;
             font-weight: 600;
         }
 
         .status-active {
-            background-color: #d4edda;
-            color: #155724;
+            background-color: rgba(46, 204, 113, 0.15);
+            color: var(--secondary);
         }
 
         .status-inactive {
-            background-color: #f8d7da;
-            color: #721c24;
+            background-color: rgba(231, 76, 60, 0.15);
+            color: var(--danger);
         }
 
         .action-buttons {
-            margin-top: 1rem;
+            margin-top: 1.5rem;
             display: flex;
-            gap: 0.5rem;
+            gap: 1rem;
         }
 
         .btn-action {
-            padding: 0.5rem 1.2rem;
-            border-radius: 0.25rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
             font-weight: 500;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
-        }
-
-            .btn-action i {
-                margin-right: 0.5rem;
-            }
-
-        .btn-edit {
-            background-color: var(--secondary);
-            color: white;
             border: none;
         }
 
+            .btn-action i {
+                margin-right: 0.75rem;
+            }
+
+        .btn-edit {
+            background-color: var(--primary);
+            color: white;
+        }
+
             .btn-edit:hover {
-                background-color: #3d6990;
+                background-color: #3a80d2;
                 color: white;
             }
 
         .btn-back {
-            background-color: #6c757d;
+            background-color: #95a5a6;
             color: white;
-            border: none;
         }
 
             .btn-back:hover {
-                background-color: #5a6268;
+                background-color: #7f8c8d;
                 color: white;
             }
 
         .coordinates-box {
-            background-color: #f8f9fa;
-            border-radius: 0.25rem;
-            padding: 0.75rem;
+            background-color: var(--light);
+            border-radius: 0.5rem;
+            padding: 1rem;
             margin-top: 0.5rem;
         }
 
@@ -193,24 +224,56 @@
         }
 
             .contact-value i {
-                width: 20px;
-                margin-right: 0.5rem;
-                color: var(--secondary);
+                width: 24px;
+                margin-right: 0.75rem;
+                color: var(--primary);
             }
+
+        .location-pin {
+            color: var(--danger);
+            animation: pulse 1.5s infinite;
+        }
+
+     
+
+        .bank-logo {
+            background-color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .bank-logo i {
+                color: var(--primary);
+                font-size: 2rem;
+            }
+
+     
     </style>
 </head>
 <body>
-    <div class="page-header">
+   @*  <div class="page-header">
         <div class="container">
-            <h1><i class="fas fa-heartbeat me-2"></i>Blood Bank Details</h1>
-            <p class="lead">View complete information about this blood bank</p>
+            <h1><i class="fas fa-tint me-2"></i>Blood Bank Details</h1>
+          
         </div>
-    </div>
+    </div> *@
 
     <div class="container">
         <div class="details-container">
             <div class="details-header">
                 <h4>@Model.BloodBankName</h4>
+                <div class="bank-logo">
+                    <i class="fas fa-heartbeat"></i>
+                </div>
             </div>
 
             <div class="details-body">
@@ -238,7 +301,7 @@
 
                 <div class="details-section">
                     <div class="section-title">
-                        <i class="fas fa-phone-alt"></i> Contact Information
+                        <i class="fas fa-address-card"></i> Contact Information
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">Phone Number</div>
@@ -258,7 +321,7 @@
 
                 <div class="details-section">
                     <div class="section-title">
-                        <i class="fas fa-map-marked-alt"></i> Location Information
+                        <i class="fas fa-map-marker-alt"></i> Location Information
                     </div>
                     <div class="detail-row">
                         <div class="detail-label">State</div>
@@ -292,14 +355,18 @@
                                 </div>
                             </div>
 
-                            <div class="map-placeholder">
-                                <img src="/api/placeholder/800/200" alt="Map location" />
-                                <div class="position-absolute top-50 start-50 translate-middle text-center">
-                                    <i class="fas fa-map-marker-alt fa-2x text-danger"></i>
-                                    <p class="mt-2 fw-bold">Map View</p>
-                                    <small class="d-block text-muted">Location coordinates: @Model.Latitude, @Model.Longitude</small>
+                          @*   <div class="map-container">
+                                <div class="map-placeholder">
+                                    <img src="/api/placeholder/800/250" alt="Map location" class="w-100 h-100 object-cover" />
+                                    <div class="map-overlay">
+                                        <i class="fas fa-map-marker-alt fa-3x location-pin"></i>
+                                        <p class="mt-2 fw-bold">Map Location</p>
+                                        <div class="bg-white px-3 py-1 rounded-pill shadow-sm">
+                                            <small class="d-block text-muted">@Model.Latitude, @Model.Longitude</small>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+                            </div> *@
                         </div>
                     </div>
                 </div>
@@ -308,7 +375,7 @@
 
         <div class="action-buttons">
             <a asp-action="Updatebb" asp-route-id="@Model?.BloodBankId" class="btn btn-action btn-edit">
-                <i class="fas fa-edit"></i> Edit
+                <i class="fas fa-edit"></i> Edit Details
             </a>
             <a asp-action="Index" class="btn btn-action btn-back">
                 <i class="fas fa-arrow-left"></i> Back to List

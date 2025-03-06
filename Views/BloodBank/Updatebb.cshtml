@@ -1,81 +1,269 @@
 ﻿@model BBMSDATA1.Models.BloodBanks
-
 @{
-    ViewData["Title"] = "Updatebb";
+    ViewData["Title"] = "Update Blood Bank";
 }
 
-<h1>Updatebb</h1>
+<style>
+    :root {
+        --primary: #4a90e2;
+        --secondary: #2ecc71;
+        --danger: #e74c3c;
+        --warning: #f39c12;
+        --dark: #2c3e50;
+        --light: #ecf0f1;
+        --background: #f4f6f7;
+    }
 
-<h4>BloodBanks</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Updatebb">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="BloodBankId" />
-            <div class="form-group">
-                <label asp-for="BloodBankName" class="control-label"></label>
-                <input asp-for="BloodBankName" class="form-control" />
-                <span asp-validation-for="BloodBankName" class="text-danger"></span>
+    body {
+        background-color: var(--background);
+        color: var(--dark);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .page-header {
+        background-color: var(--primary);
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+        .page-header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+
+        .page-header p {
+            margin: 0.5rem 0 0 0;
+            opacity: 0.9;
+        }
+
+    .form-container {
+        background-color: white;
+        border-radius: 8px;
+        padding: 2rem;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+        margin-bottom: 1.2rem;
+    }
+
+    .control-label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--dark);
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 0.6rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        transition: border-color 0.2s;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+    .text-danger {
+        color: var(--danger);
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
+        display: block;
+    }
+
+    .form-check {
+        display: flex;
+        align-items: center;
+    }
+
+    .form-check-input {
+        margin-right: 0.5rem;
+    }
+
+    .btn {
+        padding: 0.6rem 1.5rem;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #3a80d2;
+        }
+
+    .btn-secondary {
+        background-color: var(--light);
+        color: var(--dark);
+    }
+
+        .btn-secondary:hover {
+            background-color: #dde4e6;
+        }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 1.5rem;
+        color: var(--primary);
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+
+    .form-row {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 -10px;
+    }
+
+    .form-col {
+        flex: 1;
+        padding: 0 10px;
+        min-width: 200px;
+    }
+
+    .buttons-container {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 1.5rem;
+    }
+
+    /* Form section */
+    .form-section {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid var(--light);
+    }
+
+    .form-section-title {
+        font-size: 1.1rem;
+        color: var(--primary);
+        margin-bottom: 1rem;
+    }
+</style>
+
+<div class="page-header">
+    <h1>Update Blood Bank</h1>
+    <p>Edit the blood bank details below</p>
+</div>
+
+<div class="form-container">
+    <form asp-action="Updatebb">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="BloodBankId" />
+
+        <div class="form-section">
+            <div class="form-section-title">Basic Information</div>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="BloodBankName" class="control-label">Blood Bank Name</label>
+                        <input asp-for="BloodBankName" class="form-control" />
+                        <span asp-validation-for="BloodBankName" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="AdminId" class="control-label">Admin ID</label>
+                        <input asp-for="AdminId" class="form-control" />
+                        <span asp-validation-for="AdminId" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="ContactNumber" class="control-label"></label>
-                <input asp-for="ContactNumber" class="form-control" />
-                <span asp-validation-for="ContactNumber" class="text-danger"></span>
+
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="ContactNumber" class="control-label">Contact Number</label>
+                        <input asp-for="ContactNumber" class="form-control" />
+                        <span asp-validation-for="ContactNumber" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="Email" class="control-label">Email Address</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-section">
+            <div class="form-section-title">Location Details</div>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="StateId" class="control-label">State</label>
+                        <input asp-for="StateId" class="form-control" />
+                        <span asp-validation-for="StateId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="districtId" class="control-label">District</label>
+                        <input asp-for="districtId" class="form-control" />
+                        <span asp-validation-for="districtId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="CityId" class="control-label">City</label>
+                        <input asp-for="CityId" class="form-control" />
+                        <span asp-validation-for="CityId" class="text-danger"></span>
+                    </div>
+                </div>
             </div>
+
             <div class="form-group">
-                <label asp-for="StateId" class="control-label"></label>
-                <input asp-for="StateId" class="form-control" />
-                <span asp-validation-for="StateId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="districtId" class="control-label"></label>
-                <input asp-for="districtId" class="form-control" />
-                <span asp-validation-for="districtId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CityId" class="control-label"></label>
-                <input asp-for="CityId" class="form-control" />
-                <span asp-validation-for="CityId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Address" class="control-label"></label>
+                <label asp-for="Address" class="control-label">Full Address</label>
                 <input asp-for="Address" class="form-control" />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Latitude" class="control-label"></label>
-                <input asp-for="Latitude" class="form-control" />
-                <span asp-validation-for="Latitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Longitude" class="control-label"></label>
-                <input asp-for="Longitude" class="form-control" />
-                <span asp-validation-for="Longitude" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AdminId" class="control-label"></label>
-                <input asp-for="AdminId" class="form-control" />
-                <span asp-validation-for="AdminId" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
-                </label>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="Latitude" class="control-label">Latitude</label>
+                        <input asp-for="Latitude" class="form-control" />
+                        <span asp-validation-for="Latitude" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label asp-for="Longitude" class="control-label">Longitude</label>
+                        <input asp-for="Longitude" class="form-control" />
+                        <span asp-validation-for="Longitude" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
+        <div class="form-group form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" asp-for="IsActive" /> Active Status
+            </label>
+        </div>
+
+        <div class="buttons-container">
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+            <input type="submit" value="Save Changes" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

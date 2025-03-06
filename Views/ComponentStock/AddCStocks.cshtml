@@ -1,7 +1,7 @@
 ﻿@model BBMSDATA1.Models.ComponentStock
 
 @{
-    ViewData["Title"] = "AddCStocks";
+    ViewData["Title"] = "Add Component Stock";
 }
 
 <!DOCTYPE html>
@@ -13,110 +13,218 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --background: #f4f6f7;
+        }
+
+        body {
+            background-color: var(--background);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
         .card {
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(44, 62, 80, 0.1);
             margin-bottom: 20px;
+            background-color: white;
+            overflow: hidden;
         }
 
         .card-header {
-            background-color: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-            padding: 15px 20px;
-            border-radius: 10px 10px 0 0;
+            background-color: var(--light);
+            border-bottom: 2px solid var(--primary);
+            padding: 18px 25px;
         }
 
-        .btn-primary {
-            background-color: #0d6efd;
-            border: none;
-            padding: 10px 20px;
-        }
-
-            .btn-primary:hover {
-                background-color: #0b5ed7;
+            .card-header h3 {
+                color: var(--dark);
+                font-weight: 600;
+                margin: 0;
             }
 
-        .btn-secondary {
-            background-color: #6c757d;
-            border: none;
-            padding: 10px 20px;
+            .card-header i {
+                color: var(--primary);
+            }
+
+        .card-body {
+            padding: 30px;
+        }
+
+        .form-label {
+            color: var(--dark);
+            font-weight: 500;
+            margin-bottom: 8px;
         }
 
         .required-field::after {
             content: "*";
-            color: red;
+            color: var(--danger);
             margin-left: 4px;
         }
 
-        .form-label {
-            font-weight: 500;
+        .form-control, .form-select {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 15px;
+            transition: all 0.3s ease;
         }
 
-        .form-control, .form-select {
-            padding: 12px;
-            border-radius: 5px;
+            .form-control:focus, .form-select:focus {
+                border-color: var(--primary);
+                box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+            }
+
+        .btn {
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-weight: 500;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
+            .btn:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border: none;
+        }
+
+            .btn-primary:hover {
+                background-color: #3a80d2;
+            }
+
+        .btn-secondary {
+            background-color: var(--light);
+            border: none;
+            color: var(--dark);
+        }
+
+            .btn-secondary:hover {
+                background-color: #dce4e6;
+            }
+
+        .text-danger {
+            color: var(--danger) !important;
+            font-size: 0.85rem;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .alert-danger {
+            background-color: #fdecea;
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .input-group-text {
+            background-color: var(--light);
+            border-color: #ddd;
+            color: var(--dark);
+        }
+
+        /* Form section styles */
+        .form-section {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background-color: rgba(236, 240, 241, 0.3);
+        }
+
+        .form-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #e0e6e8;
+        }
+
     </style>
 </head>
-<body class="bg-light">
-    <div class="container py-5">
+<body>
+    <div class="container py-4 fade-in">
         <div class="row justify-content-center">
             <div class="col-lg-8">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="mb-0"><i class="fas fa-plus-circle text-primary me-2"></i> Add Blood Component Stock</h3>
+                        <h3 class="mb-0"><i class="fas fa-plus-circle me-2"></i> Add Blood Component Stock</h3>
                     </div>
-                    <div class="card-body p-4">
+                    <div class="card-body">
                         <form asp-action="AddCStocks">
-                            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                            <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4" role="alert"></div>
 
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label asp-for="BloodGroupId" class="form-label required-field">Blood Group</label>
-                                        <select asp-for="BloodGroupId" class="form-select" asp-items="ViewBag.BloodGroups">
-                                            <option value="">Select Blood Group</option>
-                                        </select>
-                                        <span asp-validation-for="BloodGroupId" class="text-danger"></span>
+                            <div class="form-section">
+                                <div class="form-section-title"><i class="fas fa-info-circle me-2"></i>Component Information</div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label asp-for="BloodGroupId" class="form-label required-field">Blood Group</label>
+                                            <select asp-for="BloodGroupId" class="form-select" asp-items="ViewBag.BloodGroups">
+                                                <option value="">Select Blood Group</option>
+                                            </select>
+                                            <span asp-validation-for="BloodGroupId" class="text-danger"></span>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label asp-for="ComponentTypeId" class="form-label required-field">Component Type</label>
-                                        <select asp-for="ComponentTypeId" class="form-select" asp-items="ViewBag.Component">
-                                            <option value="">Select Component Type</option>
-                                        </select>
-                                        <span asp-validation-for="ComponentTypeId" class="text-danger"></span>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label asp-for="ComponentTypeId" class="form-label required-field">Component Type</label>
+                                            <select asp-for="ComponentTypeId" class="form-select" asp-items="ViewBag.Component">
+                                                <option value="">Select Component Type</option>
+                                            </select>
+                                            <span asp-validation-for="ComponentTypeId" class="text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                         
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label asp-for="Quantity" class="form-label required-field">Quantity</label>
-                                        <input asp-for="Quantity" class="form-control" type="number" min="0" />
-                                        <span asp-validation-for="Quantity" class="text-danger"></span>
+                            <div class="form-section">
+                                <div class="form-section-title"><i class="fas fa-clipboard-list me-2"></i>Inventory Details</div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label asp-for="Quantity" class="form-label required-field">Quantity</label>
+                                            <div class="input-group">
+                                                <input asp-for="Quantity" class="form-control" type="number" min="0" />
+                                                <span class="input-group-text">units</span>
+                                            </div>
+                                            <span asp-validation-for="Quantity" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="mb-3">
+                                            <label asp-for="ExpiryDate" class="form-label required-field">Expiry Date</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-calendar-alt"></i></span>
+                                                <input asp-for="ExpiryDate" class="form-control" type="date" />
+                                            </div>
+                                            <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label asp-for="ExpiryDate" class="form-label required-field">Expiry Date</label>
-                                        <input asp-for="ExpiryDate" class="form-control" type="date" />
-                                        <span asp-validation-for="ExpiryDate" class="text-danger"></span>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="d-flex justify-content-between mt-4">
                                 <a asp-action="Index" class="btn btn-secondary">
                                     <i class="fas fa-arrow-left me-1"></i> Back to List
                                 </a>
                                 <button type="submit" class="btn btn-primary">
-                                    <i class="fas fa-save me-1"></i> Create
+                                    <i class="fas fa-save me-1"></i> Create Stock Entry
                                 </button>
                             </div>
                         </form>
@@ -125,5 +233,23 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Set default value for ExpiryDate (current date + 42 days, typical for blood components)
+        document.addEventListener('DOMContentLoaded', function() {
+            const expiryDateInput = document.querySelector('[asp-for="ExpiryDate"]');
+            if (!expiryDateInput.value) {
+                const today = new Date();
+                const defaultExpiry = new Date(today);
+                defaultExpiry.setDate(today.getDate() + 42); // 42 days is common for many blood components
+
+                const year = defaultExpiry.getFullYear();
+                const month = String(defaultExpiry.getMonth() + 1).padStart(2, '0');
+                const day = String(defaultExpiry.getDate()).padStart(2, '0');
+
+                expiryDateInput.value = `${year}-${month}-${day}`;
+            }
+        });
+    </script>
 </body>
 </html>

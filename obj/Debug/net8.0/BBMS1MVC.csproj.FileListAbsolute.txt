@@ -315,3 +315,4 @@ C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\refint\BBMS1MVC.dll
 C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\BBMS1MVC.pdb
 C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\BBMS1MVC.genruntimeconfig.cache
 C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\ref\BBMS1MVC.dll
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\BBMS1MVC.sourcelink.json

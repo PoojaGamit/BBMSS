@@ -3,6 +3,8 @@ using System.Text;
 using BBMS1MVC.Helper;
 using BBMSDATA1.Context;
 using BBMSDATA1.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -51,14 +53,16 @@ namespace BBMS1MVC.Controllers
                     Console.WriteLine(token);
                     var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
                     var jwtToken = handler.ReadJwtToken(token);
-                    var Role = jwtToken.Claims.FirstOrDefault(c =>c.Type == "role" || c.Type == "http://schemas.microsoft.com/ws/2008/06/identity/claims/role")?.Value;
+                    var Role = JwtHelper.GetUserRole(token);
+                   
+                    var userid=JwtHelper.GetUserId(token);
+                    if(userid!=null)
+                        HttpContext.Session.SetString("Userid", userid);
 
-
-                    // Set Authorization Header for future requests
                     client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                     Console.WriteLine(token);
-                    // Redirect based on role
+            
                     if (Role == "Admin")
                     {
                         return RedirectToAction("Index", "Admin");
@@ -73,7 +77,7 @@ namespace BBMS1MVC.Controllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "User");
+                        return RedirectToAction("Index", "Donor");
                     }
 
                 }
@@ -120,15 +124,12 @@ namespace BBMS1MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateUserprofile()
         {
-            var token = HttpContext.Session.GetString("JWTToken");
-            if (token != null)
+           // var token = HttpContext.Session.GetString("JWTToken");
+            var userid=HttpContext.Session.GetString("Userid");
+            if (userid!= null)
             {
-                var adminId = JwtHelper.GetUserId(token);
-
-                if (!string.IsNullOrEmpty(adminId))
-                {
-                    var client = clientFactory.CreateClient("MyApiClient");
-                    var response = await client.GetAsync($"Users/UsersById/{adminId}");
+                var client = clientFactory.CreateClient("MyApiClient");
+                    var response = await client.GetAsync($"Users/UsersById/{userid}");
 
                     if (response.IsSuccessStatusCode)
                     {
@@ -136,7 +137,7 @@ namespace BBMS1MVC.Controllers
                         var User= JsonConvert.DeserializeObject<Users>(jsonData);
                         return View(User);
                     }
-                }
+                
             }
             return View(new Users());
         }
@@ -158,6 +159,15 @@ namespace BBMS1MVC.Controllers
             }
             return View(model);
 
+        }
+
+        [HttpGet]
+        [HttpPost]
+        public IActionResult LogoutUser()
+        {
+            HttpContext.Session.Clear();
+            TempData["LogoutMessage"] = "You have successfully logged out.";
+            return RedirectToAction("Login", "User");
         }
     }
 }

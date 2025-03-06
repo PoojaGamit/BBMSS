@@ -48,6 +48,14 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvb2RCYW5rXFVwZGF0ZWJiLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/wsc/Desktop/Programmes/BBMS1MVC/Views/BloodCamp/AddBCamp.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvb2RDYW1wXEFkZEJDYW1wLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/wsc/Desktop/Programmes/BBMS1MVC/Views/BloodCamp/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvb2RDYW1wXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/wsc/Desktop/Programmes/BBMS1MVC/Views/BloodStock/AddBloodstock.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmxvb2RTdG9ja1xBZGRCbG9vZHN0b2NrLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -72,6 +80,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ29tcG9uZW50U3RvY2tcVXBkYXRlQ1N0b2NrLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/wsc/Desktop/Programmes/BBMS1MVC/Views/Donor/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9ub3JcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/wsc/Desktop/Programmes/BBMS1MVC/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
@@ -90,6 +102,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/wsc/Desktop/Programmes/BBMS1MVC/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/wsc/Desktop/Programmes/BBMS1MVC/Views/Shared/_Layout1.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQxLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/wsc/Desktop/Programmes/BBMS1MVC/Views/Shared/_ValidationScriptsPartial.cshtml]

@@ -1,61 +1,231 @@
 ﻿@model BBMSDATA1.Models.ComponentStock
-
 @{
-    ViewData["Title"] = "UpdateCStock";
+    ViewData["Title"] = "Update Component Stock";
 }
 
-<h1>UpdateCStock</h1>
+<style>
+    :root {
+        --primary: #4a90e2;
+        --secondary: #2ecc71;
+        --danger: #e74c3c;
+        --warning: #f39c12;
+        --dark: #2c3e50;
+        --light: #ecf0f1;
+        --background: #f4f6f7;
+    }
 
-<h4>ComponentStock</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
+    body {
+        background-color: var(--background);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .page-header {
+        border-bottom: 2px solid var(--primary);
+        padding-bottom: 15px;
+        margin-bottom: 25px;
+    }
+
+    .page-title {
+        color: var(--dark);
+        font-weight: 600;
+    }
+
+    .page-subtitle {
+        color: var(--primary);
+        font-weight: 500;
+    }
+
+    .form-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(44, 62, 80, 0.1);
+        padding: 25px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-control {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 10px;
+        width: 100%;
+        transition: border-color 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+            outline: none;
+        }
+
+    .control-label {
+        color: var(--dark);
+        display: block;
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .btn {
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 500;
+        padding: 10px 20px;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+    .btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #3a80d2;
+        }
+
+    .btn-secondary {
+        background-color: var(--light);
+        color: var(--dark);
+    }
+
+        .btn-secondary:hover {
+            background-color: #dce4e6;
+        }
+
+    .text-danger {
+        color: var(--danger);
+        font-size: 0.85em;
+        margin-top: 5px;
+    }
+
+    .back-link {
+        color: var(--primary);
+        display: inline-block;
+        margin-top: 20px;
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+        .back-link:hover {
+            color: #3a80d2;
+            text-decoration: underline;
+        }
+
+    .actions-row {
+        display: flex;
+        gap: 10px;
+        margin-top: 10px;
+    }
+
+    .required::after {
+        content: " *";
+        color: var(--danger);
+    }
+
+    .date-input {
+        position: relative;
+    }
+
+    /* Responsive design */
+  
+</style>
+
+<div class="container">
+    <div class="page-header">
+        <h1 class="page-title">Update Component Stock</h1>
+        <h4 class="page-subtitle">Manage blood component inventory</h4>
+    </div>
+
+    <div class="form-container">
         <form asp-action="UpdateCStock">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CId" />
-            <div class="form-group">
-                <label asp-for="BloodBankId" class="control-label"></label>
-                <input asp-for="BloodBankId" class="form-control" />
-                <span asp-validation-for="BloodBankId" class="text-danger"></span>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label asp-for="BloodBankId" class="control-label required">Blood Bank</label>
+                    <input asp-for="BloodBankId" class="form-control" />
+                    <span asp-validation-for="BloodBankId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="BloodGroupId" class="control-label required">Blood Group</label>
+                    <input asp-for="BloodGroupId" class="form-control" />
+                    <span asp-validation-for="BloodGroupId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ComponentTypeId" class="control-label required">Component Type</label>
+                    <input asp-for="ComponentTypeId" class="form-control" />
+                    <span asp-validation-for="ComponentTypeId" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Quantity" class="control-label required">Quantity</label>
+                    <input asp-for="Quantity" class="form-control" type="number" min="0" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="UpdatedBy" class="control-label required">Updated By</label>
+                    <input asp-for="UpdatedBy" class="form-control" />
+                    <span asp-validation-for="UpdatedBy" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="LastUpdated" class="control-label">Last Updated</label>
+                    <div class="date-input">
+                        <input asp-for="LastUpdated" class="form-control" type="datetime-local" />
+                    </div>
+                    <span asp-validation-for="LastUpdated" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ExpiryDate" class="control-label required">Expiry Date</label>
+                    <div class="date-input">
+                        <input asp-for="ExpiryDate" class="form-control" type="date" />
+                    </div>
+                    <span asp-validation-for="ExpiryDate" class="text-danger"></span>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="BloodGroupId" class="control-label"></label>
-                <input asp-for="BloodGroupId" class="form-control" />
-                <span asp-validation-for="BloodGroupId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ComponentTypeId" class="control-label"></label>
-                <input asp-for="ComponentTypeId" class="form-control" />
-                <span asp-validation-for="ComponentTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Quantity" class="control-label"></label>
-                <input asp-for="Quantity" class="form-control" />
-                <span asp-validation-for="Quantity" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="UpdatedBy" class="control-label"></label>
-                <input asp-for="UpdatedBy" class="form-control" />
-                <span asp-validation-for="UpdatedBy" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastUpdated" class="control-label"></label>
-                <input asp-for="LastUpdated" class="form-control" />
-                <span asp-validation-for="LastUpdated" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ExpiryDate" class="control-label"></label>
-                <input asp-for="ExpiryDate" class="form-control" />
-                <span asp-validation-for="ExpiryDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+
+            <div class="actions-row">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
             </div>
         </form>
     </div>
+
+    <a asp-action="Index" class="back-link">← Back to Component Stock List</a>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+<script>
+    // Set default value for LastUpdated to current date/time
+    document.addEventListener('DOMContentLoaded', function() {
+        var now = new Date();
+        var year = now.getFullYear();
+        var month = (now.getMonth() + 1).toString().padStart(2, '0');
+        var day = now.getDate().toString().padStart(2, '0');
+        var hours = now.getHours().toString().padStart(2, '0');
+        var minutes = now.getMinutes().toString().padStart(2, '0');
 
+        var dateTimeString = `${year}-${month}-${day}T${hours}:${minutes}`;
+
+        if (!document.querySelector('[asp-for="LastUpdated"]').value) {
+            document.querySelector('[asp-for="LastUpdated"]').value = dateTimeString;
+        }
+    });
+</script>
