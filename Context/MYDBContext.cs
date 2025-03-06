@@ -23,14 +23,14 @@ namespace BBMSDATA1.Context
         public DbSet<ComponentTypes> ComponentTypes { get; set; }
         public DbSet<Cities> Cities { get; set; }
         public DbSet<BloodStock> BloodStock { get; set; }
-        public DbSet<BloodRequest> BloodRequests { get; set; }
+        public DbSet<BloodRequest> BloodRequest { get; set; }
         public DbSet<BloodGroups> BloodGroups { get; set; }
         public DbSet<BloodBanks> BloodBanks { get; set; }
         public DbSet<BagTypes> BagTypes { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<ComponentStock> ComponentStock { get; set; }
 
-        public DbSet<BloodCamp> BloodCamp { get; set; }
+        public DbSet<BloodCamps> BloodCamps { get; set; }
         public DbSet<CampRegistration> CampRegistration { get; set; }
     }
 }

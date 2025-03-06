@@ -12,3 +12,4 @@ C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\refint\BBMSDATA1.dll
 C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.pdb
 C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.genruntimeconfig.cache
 C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\ref\BBMSDATA1.dll
+C:\Users\wsc\Desktop\Programmes\BBMSDATA1\obj\Debug\net8.0\BBMSDATA1.sourcelink.json

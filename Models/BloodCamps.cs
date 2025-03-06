@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace BBMSDATA1.Models
 {
-    public class BloodCamp
+    public class BloodCamps
     {
         [Key]
         public int CampId { get; set; }
