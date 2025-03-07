@@ -1,348 +1,348 @@
 ﻿@model BBMSDATA1.Models.BloodBanks
 
 @{
-    ViewData["Title"] = "BBDetails";
+	ViewData["Title"] = "BBDetails";
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blood Bank Management System - Blood Bank Details</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        .page-header {
-            background-color: #e63946;
-            color: white;
-            padding: 1.5rem 0;
-            margin-bottom: 2rem;
-            border-radius: 0 0 8px 8px;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Blood Bank Management System - Blood Bank Details</title>
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+	<style>
+		.page-header {
+			background-color: #e63946;
+			color: white;
+			padding: 1.5rem 0;
+			margin-bottom: 2rem;
+			border-radius: 0 0 8px 8px;
+		}
 
-        .content-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-        }
+		.content-card {
+			background-color: #fff;
+			border-radius: 8px;
+			box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+			padding: 2rem;
+			margin-bottom: 1.5rem;
+		}
 
-        .form-group {
-            margin-bottom: 1.25rem;
-        }
+		.form-group {
+			margin-bottom: 1.25rem;
+		}
 
-        .btn-blood {
-            background-color: #e63946;
-            border-color: #e63946;
-            color: white;
-        }
+		.btn-blood {
+			background-color: #e63946;
+			border-color: #e63946;
+			color: white;
+		}
 
-            .btn-blood:hover {
-                background-color: #d62b39;
-                border-color: #d62b39;
-                color: white;
-            }
+			.btn-blood:hover {
+				background-color: #d62b39;
+				border-color: #d62b39;
+				color: white;
+			}
 
-        .back-link {
-            color: #457b9d;
-            text-decoration: none;
-        }
+		.back-link {
+			color: #457b9d;
+			text-decoration: none;
+		}
 
-            .back-link:hover {
-                text-decoration: underline;
-                color: #1d3557;
-            }
+			.back-link:hover {
+				text-decoration: underline;
+				color: #1d3557;
+			}
 
-        .required::after {
-            content: " *";
-            color: #e63946;
-        }
+		.required::after {
+			content: " *";
+			color: #e63946;
+		}
 
-        .coordinate-section {
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
+		.coordinate-section {
+			background-color: #f8f9fa;
+			padding: 15px;
+			border-radius: 8px;
+			margin-top: 10px;
+		}
 
-        .section-title {
-            color: #1d3557;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #f1faee;
-        }
-    </style>
+		.section-title {
+			color: #1d3557;
+			margin-bottom: 1.5rem;
+			padding-bottom: 0.5rem;
+			border-bottom: 2px solid #f1faee;
+		}
+	</style>
 </head>
 <body class="bg-light">
-    <div class="container py-4">
-   @*      <div class="page-header text-center">
+	<div class="container py-4">
+		@*      <div class="page-header text-center">
             <h1><i class="fas fa-hospital-alt"></i> Blood Bank Details</h1>
             <p class="lead mb-0">Add or update blood bank information</p>
         </div> *@
 
-        <div class="row justify-content-center">
-            <div class="col-lg-8">
-                <div class="content-card">
-                    <form asp-action="BBDetails" method="post">
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+		<div class="row justify-content-center">
+			<div class="col-lg-8">
+				<div class="content-card">
+					<form asp-action="BBDetails" method="post">
+						<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-                        <h4 class="section-title"><i class="fas fa-info-circle"></i> General Information</h4>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="form-group">
-                                    <label asp-for="BloodBankName" class="form-label required">Blood Bank Name</label>
-                                    <input asp-for="BloodBankName" class="form-control" placeholder="Enter blood bank name" />
-                                    <span asp-validation-for="BloodBankName" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="ContactNumber" class="form-label required">Contact Number</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        <input asp-for="ContactNumber" class="form-control" placeholder="Enter contact number" />
-                                    </div>
-                                    <span asp-validation-for="ContactNumber" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="Email" class="form-label required">Email Address</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                        <input asp-for="Email" class="form-control" placeholder="Enter email address" />
-                                    </div>
-                                    <span asp-validation-for="Email" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
+						<h4 class="section-title"><i class="fas fa-info-circle"></i> General Information</h4>
+						<div class="row">
+							<div class="col-md-12">
+								<div class="form-group">
+									<label asp-for="BloodBankName" class="form-label required">Blood Bank Name</label>
+									<input asp-for="BloodBankName" class="form-control" placeholder="Enter blood bank name" />
+									<span asp-validation-for="BloodBankName" class="text-danger"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="ContactNumber" class="form-label required">Contact Number</label>
+									<div class="input-group">
+										<span class="input-group-text"><i class="fas fa-phone"></i></span>
+										<input asp-for="ContactNumber" class="form-control" placeholder="Enter contact number" />
+									</div>
+									<span asp-validation-for="ContactNumber" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="Email" class="form-label required">Email Address</label>
+									<div class="input-group">
+										<span class="input-group-text"><i class="fas fa-envelope"></i></span>
+										<input asp-for="Email" class="form-control" placeholder="Enter email address" />
+									</div>
+									<span asp-validation-for="Email" class="text-danger"></span>
+								</div>
+							</div>
+						</div>
 
-                        <h4 class="section-title mt-4"><i class="fas fa-map-marker-alt"></i> Location Information</h4>
-                        <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label asp-for="StateId" class="form-label required">State</label>
-                                    <select asp-for="StateId" class="form-select" id="stateDropdown">
-                                        <option value="">-- Select State --</option>
-                                        @foreach (var state in ViewBag.States)
-                                        {
-                                            <option value="@state.Value">@state.Text</option>
-                                        }
-                                    </select>
-                                    <span asp-validation-for="StateId" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label asp-for="districtId" class="form-label required">District</label>
-                                    <select asp-for="districtId" class="form-select" id="districtDropdown">
-                                        <option value="">-- Select District --</option>
-                                    </select>
-                                    <span asp-validation-for="districtId" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label asp-for="CityId" class="form-label required">City</label>
-                                    <select asp-for="CityId" class="form-select" id="cityDropdown">
-                                        <option value="">-- Select City --</option>
-                                    </select>
-                                    <span asp-validation-for="CityId" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label asp-for="Address" class="form-label required">Address</label>
-                                    <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter complete address with landmarks"></textarea>
-                                    <span asp-validation-for="Address" class="text-danger"></span>
-                                </div>
-                            </div>
-                        </div>
+						<h4 class="section-title mt-4"><i class="fas fa-map-marker-alt"></i> Location Information</h4>
+						<div class="row">
+							<div class="col-md-4">
+								<div class="form-group">
+									<label asp-for="StateId" class="form-label required">State</label>
+									<select asp-for="StateId" class="form-select" id="stateDropdown">
+										<option value="">-- Select State --</option>
+										@foreach (var state in ViewBag.States)
+										{
+											<option value="@state.Value">@state.Text</option>
+										}
+									</select>
+									<span asp-validation-for="StateId" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label asp-for="districtId" class="form-label required">District</label>
+									<select asp-for="districtId" class="form-select" id="districtDropdown">
+										<option value="">-- Select District --</option>
+									</select>
+									<span asp-validation-for="districtId" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="col-md-4">
+								<div class="form-group">
+									<label asp-for="CityId" class="form-label required">City</label>
+									<select asp-for="CityId" class="form-select" id="cityDropdown">
+										<option value="">-- Select City --</option>
+									</select>
+									<span asp-validation-for="CityId" class="text-danger"></span>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-12">
+								<div class="form-group">
+									<label asp-for="Address" class="form-label required">Address</label>
+									<textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter complete address with landmarks"></textarea>
+									<span asp-validation-for="Address" class="text-danger"></span>
+								</div>
+							</div>
+						</div>
 
-                        <div class="coordinate-section">
-                            <h5 class="mb-3"><i class="fas fa-location-arrow"></i> Geographic Coordinates</h5>
-                            <div class="row">
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label asp-for="Latitude" class="form-label">Latitude</label>
-                                        <input asp-for="Latitude" class="form-control" placeholder="e.g. 28.6139" />
-                                        <span asp-validation-for="Latitude" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-5">
-                                    <div class="form-group">
-                                        <label asp-for="Longitude" class="form-label">Longitude</label>
-                                        <input asp-for="Longitude" class="form-control" placeholder="e.g. 77.2090" />
-                                        <span asp-validation-for="Longitude" class="text-danger"></span>
-                                    </div>
-                                </div>
-                                <div class="col-md-2 d-flex align-items-end">
-                                    <button type="button" class="btn btn-outline-secondary mb-3 w-100" id="detectLocation">
-                                        <i class="fas fa-crosshairs"></i> Detect
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+						<div class="coordinate-section">
+							<h5 class="mb-3"><i class="fas fa-location-arrow"></i> Geographic Coordinates</h5>
+							<div class="row">
+								<div class="col-md-5">
+									<div class="form-group">
+										<label asp-for="Latitude" class="form-label">Latitude</label>
+										<input asp-for="Latitude" class="form-control" placeholder="e.g. 28.6139" />
+										<span asp-validation-for="Latitude" class="text-danger"></span>
+									</div>
+								</div>
+								<div class="col-md-5">
+									<div class="form-group">
+										<label asp-for="Longitude" class="form-label">Longitude</label>
+										<input asp-for="Longitude" class="form-control" placeholder="e.g. 77.2090" />
+										<span asp-validation-for="Longitude" class="text-danger"></span>
+									</div>
+								</div>
+								<div class="col-md-2 d-flex align-items-end">
+									<button type="button" class="btn btn-outline-secondary mb-3 w-100" id="detectLocation">
+										<i class="fas fa-crosshairs"></i> Detect
+									</button>
+								</div>
+							</div>
+						</div>
 
-                        <h4 class="section-title mt-4"><i class="fas fa-user-shield"></i> Administrative</h4>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label asp-for="AdminId" class="form-label">Admin ID</label>
-                                    <input asp-for="AdminId" class="form-control" readonly />
-                                    <div class="form-text text-muted">System-assigned identifier</div>
-                                    <span asp-validation-for="AdminId" class="text-danger"></span>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <div class="form-check form-switch mt-4">
-                                        <input class="form-check-input" asp-for="IsActive" id="isActiveSwitch" />
-                                        <label class="form-check-label" for="isActiveSwitch">
-                                            Blood Bank is currently active and operational
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+						<h4 class="section-title mt-4"><i class="fas fa-user-shield"></i> Administrative</h4>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="form-group">
+									<label asp-for="AdminId" class="form-label">Admin ID</label>
+									<input asp-for="AdminId" class="form-control" readonly />
+									<div class="form-text text-muted">System-assigned identifier</div>
+									<span asp-validation-for="AdminId" class="text-danger"></span>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="form-group">
+									<div class="form-check form-switch mt-4">
+										<input class="form-check-input" asp-for="IsActive" id="isActiveSwitch" />
+										<label class="form-check-label" for="isActiveSwitch">
+											Blood Bank is currently active and operational
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
 
-                        <div class="d-flex justify-content-between mt-4">
-                            <a asp-action="Index" class="back-link">
-                                <i class="fas fa-arrow-left"></i> Back to List
-                            </a>
-                            <button type="submit" class="btn btn-blood">
-                                <i class="fas fa-save"></i> Save Blood Bank
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+						<div class="d-flex justify-content-between mt-4">
+							<a asp-action="Index" class="back-link">
+								<i class="fas fa-arrow-left"></i> Back to List
+							</a>
+							<button type="submit" class="btn btn-blood">
+								<i class="fas fa-save"></i> Save Blood Bank
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            // Populate districts based on selected state
-            $("#stateDropdown").change(function() {
-                var stateId = $(this).val();
-                $("#districtDropdown").empty();
-                $("#districtDropdown").append('<option value="">-- Select District --</option>');
-                $("#cityDropdown").empty();
-                $("#cityDropdown").append('<option value="">-- Select City --</option>');
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.bundle.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			// Populate districts based on selected state
+			$("#stateDropdown").change(function() {
+				var stateId = $(this).val();
+				$("#districtDropdown").empty();
+				$("#districtDropdown").append('<option value="">-- Select District --</option>');
+				$("#cityDropdown").empty();
+				$("#cityDropdown").append('<option value="">-- Select City --</option>');
 
-                if (stateId) {
-                    $.ajax({
-                        url: '/BloodBank/GetDistricts',
-                        type: 'GET',
-                        data: { stateId: stateId },
-                        success: function(response) {
-                            $.each(response, function(i, district) {
-                                $("#districtDropdown").append('<option value="' + district.value + '">' + district.text + '</option>');
-                            });
-                        }
-                    });
-                }
-            });
+				if (stateId) {
+					$.ajax({
+						url: '/BloodBank/GetDistricts',
+						type: 'GET',
+						data: { stateId: stateId },
+						success: function(response) {
+							$.each(response, function(i, district) {
+								$("#districtDropdown").append('<option value="' + district.value + '">' + district.text + '</option>');
+							});
+						}
+					});
+				}
+			});
 
-            // Populate cities based on selected district
-            $("#districtDropdown").change(function() {
-                var districtId = $(this).val();
-                $("#cityDropdown").empty();
-                $("#cityDropdown").append('<option value="">-- Select City --</option>');
+			// Populate cities based on selected district
+			$("#districtDropdown").change(function() {
+				var districtId = $(this).val();
+				$("#cityDropdown").empty();
+				$("#cityDropdown").append('<option value="">-- Select City --</option>');
 
-                if (districtId) {
-                    $.ajax({
-                        url: '/BloodBank/GetCities',
-                        type: 'GET',
-                        data: { districtId: districtId },
-                        success: function(response) {
-                            $.each(response, function(i, city) {
-                                $("#cityDropdown").append('<option value="' + city.value + '">' + city.text + '</option>');
-                            });
-                        }
-                    });
-                }
-            });
+				if (districtId) {
+					$.ajax({
+						url: '/BloodBank/GetCities',
+						type: 'GET',
+						data: { districtId: districtId },
+						success: function(response) {
+							$.each(response, function(i, city) {
+								$("#cityDropdown").append('<option value="' + city.value + '">' + city.text + '</option>');
+							});
+						}
+					});
+				}
+			});
 
-            // Get location coordinates
-            $("#detectLocation").click(function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        $("#Latitude").val(position.coords.latitude.toFixed(6));
-                        $("#Longitude").val(position.coords.longitude.toFixed(6));
-                    }, function(error) {
-                        alert("Unable to retrieve your location. Please enter coordinates manually.");
-                    });
-                } else {
-                    alert("Geolocation is not supported by this browser.");
-                }
-            });
-        });
-    </script>
+			// Get location coordinates
+			$("#detectLocation").click(function() {
+				if (navigator.geolocation) {
+					navigator.geolocation.getCurrentPosition(function(position) {
+						$("#Latitude").val(position.coords.latitude.toFixed(6));
+						$("#Longitude").val(position.coords.longitude.toFixed(6));
+					}, function(error) {
+						alert("Unable to retrieve your location. Please enter coordinates manually.");
+					});
+				} else {
+					alert("Geolocation is not supported by this browser.");
+				}
+			});
+		});
+	</script>
 </body>
 </html>
 
 @section Scripts {
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script>
-                  $(document).ready(function () {
-            $('#stateDropdown').change(function () {
-                var stateId = $(this).val();
-                console.log("Selected State ID:", stateId); // Debugging
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script>
+				  $(document).ready(function () {
+			$('#stateDropdown').change(function () {
+				var stateId = $(this).val();
+				console.log("Selected State ID:", stateId); // Debugging
 
-                $('#districtDropdown').empty().append('<option value="">-- Select District --</option>');
-                $('#cityDropdown').empty().append('<option value="">-- Select City --</option>');
+				$('#districtDropdown').empty().append('<option value="">-- Select District --</option>');
+				$('#cityDropdown').empty().append('<option value="">-- Select City --</option>');
 
-                if (stateId) {
-                    $.ajax({
-                        url: 'https://localhost:7193/Location/GetDistricts/' + stateId, // Use the correct API URL
-                        type: 'GET',
-                        success: function (data) {
-                            console.log("Districts Data:", data); // Debugging
-                            $.each(data, function (i, district) {
-                                $('#districtDropdown').append($('<option></option>').val(district.id).text(district.districtName));
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("AJAX Error:", error); // Debugging
-                            console.error("Status:", xhr.status); // Debugging
-                            console.error("Response:", xhr.responseText); // Debugging
-                        }
-                    });
-                }
-            });
+				if (stateId) {
+					$.ajax({
+						url: 'https://localhost:7193/Location/GetDistricts/' + stateId, // Use the correct API URL
+						type: 'GET',
+						success: function (data) {
+							console.log("Districts Data:", data); // Debugging
+							$.each(data, function (i, district) {
+								$('#districtDropdown').append($('<option></option>').val(district.id).text(district.districtName));
+							});
+						},
+						error: function (xhr, status, error) {
+							console.error("AJAX Error:", error); // Debugging
+							console.error("Status:", xhr.status); // Debugging
+							console.error("Response:", xhr.responseText); // Debugging
+						}
+					});
+				}
+			});
 
-            $('#districtDropdown').change(function () {
-                var districtId = $(this).val();
-                console.log("Selected District ID:", districtId); // Debugging
+			$('#districtDropdown').change(function () {
+				var districtId = $(this).val();
+				console.log("Selected District ID:", districtId); // Debugging
 
-                $('#cityDropdown').empty().append('<option value="">-- Select City --</option>');
+				$('#cityDropdown').empty().append('<option value="">-- Select City --</option>');
 
-                if (districtId) {
-                    $.ajax({
-                        url: 'https://localhost:7193/Location/GetCities/' + districtId, // Use the correct API URL
-                        type: 'GET',
-                        success: function (data) {
-                            console.log("Cities Data:", data); // Debugging
-                            $.each(data, function (i, city) {
-                                $('#cityDropdown').append($('<option></option>').val(city.id).text(city.cityName));
-                            });
-                        },
-                        error: function (xhr, status, error) {
-                            console.error("AJAX Error:", error); // Debugging
-                            console.error("Status:", xhr.status); // Debugging
-                            console.error("Response:", xhr.responseText); // Debugging
-                        }
-                    });
-                }
-            });
-        });
-    </script>
+				if (districtId) {
+					$.ajax({
+						url: 'https://localhost:7193/Location/GetCities/' + districtId, // Use the correct API URL
+						type: 'GET',
+						success: function (data) {
+							console.log("Cities Data:", data); // Debugging
+							$.each(data, function (i, city) {
+								$('#cityDropdown').append($('<option></option>').val(city.id).text(city.cityName));
+							});
+						},
+						error: function (xhr, status, error) {
+							console.error("AJAX Error:", error); // Debugging
+							console.error("Status:", xhr.status); // Debugging
+							console.error("Response:", xhr.responseText); // Debugging
+						}
+					});
+				}
+			});
+		});
+	</script>
 }

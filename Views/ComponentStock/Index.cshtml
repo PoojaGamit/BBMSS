@@ -1,377 +1,385 @@
 ﻿@model IEnumerable<BBMSDATA1.Models.ComponentStock>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #e74c3c;
-            --success: #2ecc71;
-            --warning: #f39c12;
-            --dark: #34495e;
-            --light: #f5f6fa;
-            --border: #dcdde1;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f9f9f9;
-            color: #333;
-            line-height: 1.6;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 15px;
-        }
-        
-        .dashboard-title {
-            color: var(--dark);
-            margin: 0;
-            font-weight: 600;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 8px 16px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-        }
-        
-        .btn-primary:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-        
-        .btn-outline {
-            background-color: transparent;
-            color: var(--dark);
-            border: 1px solid var(--border);
-        }
-        
-        .btn-outline:hover {
-            background-color: #f1f1f1;
-        }
-        
-        .btn-danger {
-            background-color: var(--secondary);
-            color: white;
-        }
-        
-        .btn-danger:hover {
-            background-color: #c0392b;
-        }
-        
-        .filters {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-group {
-            flex: 1;
-            min-width: 200px;
-        }
-        
-        .filter-label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 5px;
-            color: var(--dark);
-        }
-        
-        .filter-select {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            background-color: white;
-        }
-        
-        .inventory-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            background-color: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .inventory-table th {
-            background-color: var(--primary);
-            color: white;
-            padding: 12px 15px;
-            text-align: left;
-            font-weight: 500;
-        }
-        
-        .inventory-table td {
-            padding: 12px 15px;
-            border-bottom: 1px solid var(--border);
-        }
-        
-        .inventory-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .inventory-table tr:hover {
-            background-color: #f5f5f5;
-        }
-        
-        .actions {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .action-link {
-            padding: 5px 10px;
-            border-radius: 4px;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        
-        .expiring-soon {
-            background-color: #fff3cd;
-        }
-        
-        .expired {
-            background-color: #f8d7da;
-        }
-        
-        .status-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .badge-low {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-        
-        .badge-medium {
-            background-color: #fff3cd;
-            color: #856404;
-        }
-        
-        .badge-good {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        
-        .dashboard-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
-            text-align: center;
-        }
-        
-        .stat-value {
-            font-size: 28px;
-            font-weight: 600;
-            margin: 10px 0;
-            color: var(--primary);
-        }
-        
-        .stat-label {
-            color: #777;
-            font-size: 14px;
-        }
-      
-    </style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<style>
+		:root {
+			--primary: #3498db;
+			--secondary: #e74c3c;
+			--success: #2ecc71;
+			--warning: #f39c12;
+			--dark: #34495e;
+			--light: #f5f6fa;
+			--border: #dcdde1;
+		}
+
+		body {
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+			background-color: #f9f9f9;
+			color: #333;
+			line-height: 1.6;
+		}
+
+		.container {
+			max-width: 1200px;
+			margin: 0 auto;
+			padding: 20px;
+		}
+
+		.dashboard-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			margin-bottom: 30px;
+			border-bottom: 2px solid var(--primary);
+			padding-bottom: 15px;
+		}
+
+		.dashboard-title {
+			color: var(--dark);
+			margin: 0;
+			font-weight: 600;
+		}
+
+		.btn {
+			display: inline-block;
+			padding: 8px 16px;
+			border-radius: 4px;
+			text-decoration: none;
+			font-weight: 500;
+			cursor: pointer;
+			transition: all 0.3s ease;
+		}
+
+		.btn-primary {
+			background-color: var(--primary);
+			color: white;
+			border: none;
+		}
+
+			.btn-primary:hover {
+				background-color: #2980b9;
+				transform: translateY(-2px);
+				box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+			}
+
+		.btn-outline {
+			background-color: transparent;
+			color: var(--dark);
+			border: 1px solid var(--border);
+		}
+
+			.btn-outline:hover {
+				background-color: #f1f1f1;
+			}
+
+		.btn-danger {
+			background-color: var(--secondary);
+			color: white;
+		}
+
+			.btn-danger:hover {
+				background-color: #c0392b;
+			}
+
+		.filters {
+			display: flex;
+			gap: 15px;
+			margin-bottom: 20px;
+			flex-wrap: wrap;
+		}
+
+		.filter-group {
+			flex: 1;
+			min-width: 200px;
+		}
+
+		.filter-label {
+			display: block;
+			font-weight: 500;
+			margin-bottom: 5px;
+			color: var(--dark);
+		}
+
+		.filter-select {
+			width: 100%;
+			padding: 8px 12px;
+			border: 1px solid var(--border);
+			border-radius: 4px;
+			background-color: white;
+		}
+
+		.inventory-table {
+			width: 100%;
+			border-collapse: collapse;
+			margin-top: 20px;
+			background-color: white;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+			border-radius: 8px;
+			overflow: hidden;
+		}
+
+			.inventory-table th {
+				background-color: var(--primary);
+				color: white;
+				padding: 12px 15px;
+				text-align: left;
+				font-weight: 500;
+			}
+
+			.inventory-table td {
+				padding: 12px 15px;
+				border-bottom: 1px solid var(--border);
+			}
+
+			.inventory-table tr:last-child td {
+				border-bottom: none;
+			}
+
+			.inventory-table tr:hover {
+				background-color: #f5f5f5;
+			}
+
+		.actions {
+			display: flex;
+			gap: 10px;
+		}
+
+		.action-link {
+			padding: 5px 10px;
+			border-radius: 4px;
+			text-decoration: none;
+			font-size: 14px;
+		}
+
+		.expiring-soon {
+			background-color: #fff3cd;
+		}
+
+		.expired {
+			background-color: #f8d7da;
+		}
+
+		.status-badge {
+			display: inline-block;
+			padding: 3px 10px;
+			border-radius: 12px;
+			font-size: 12px;
+			font-weight: 500;
+		}
+
+		.badge-low {
+			background-color: #f8d7da;
+			color: #721c24;
+		}
+
+		.badge-medium {
+			background-color: #fff3cd;
+			color: #856404;
+		}
+
+		.badge-good {
+			background-color: #d4edda;
+			color: #155724;
+		}
+
+		.dashboard-stats {
+			display: grid;
+			grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+			gap: 20px;
+			margin-bottom: 30px;
+		}
+
+		.stat-card {
+			background-color: white;
+			border-radius: 8px;
+			padding: 20px;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+			text-align: center;
+		}
+
+		.stat-value {
+			font-size: 28px;
+			font-weight: 600;
+			margin: 10px 0;
+			color: var(--primary);
+		}
+
+		.stat-label {
+			color: #777;
+			font-size: 14px;
+		}
+	</style>
 </head>
 <body>
-    <div class="container">
-        <div class="dashboard-header">
-            <h1 class="dashboard-title">Blood Component Inventory</h1>
-            <a asp-action="AddCStocks" asp-controller="ComponentStock" class="btn btn-primary">
-                <i class="fas fa-plus"></i> Add New Component
-            </a>
-        </div>
-        
-        <div class="dashboard-stats">
-            <div class="stat-card">
-                <div class="stat-label">Total Components</div>
-                <div class="stat-value">@Model.Count()</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Expiring in 7 Days</div>
-                <div class="stat-value">@Model.Count(c => (c.ExpiryDate - DateTime.Now).TotalDays <= 7 && (c.ExpiryDate - DateTime.Now).TotalDays > 0)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Expired Components</div>
-                <div class="stat-value">@Model.Count(c => c.ExpiryDate < DateTime.Now)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Units</div>
-                <div class="stat-value">@Model.Sum(c => c.Quantity)</div>
-            </div>
-        </div>
-        
-        <div class="filters">
-            <div class="filter-group">
-                <label class="filter-label">Blood Bank</label>
-                <select id="bloodBankFilter" class="filter-select">
-                    <option value="">All Blood Banks</option>
-                    @foreach (var bank in Model.Select(c => c.BloodBankId).Distinct()) {
-                        <option value="@bank">@bank</option>
-                    }
-                </select>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Blood Group</label>
-                <select id="bloodGroupFilter" class="filter-select">
-                    <option value="">All Blood Groups</option>
-                    @foreach (var group in Model.Select(c => c.BloodGroupId).Distinct()) {
-                        <option value="@group">@group</option>
-                    }
-                </select>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Component Type</label>
-                <select id="componentTypeFilter" class="filter-select">
-                    <option value="">All Component Types</option>
-                    @foreach (var type in Model.Select(c => c.ComponentTypeId).Distinct()) {
-                        <option value="@type">@type</option>
-                    }
-                </select>
-            </div>
-            <div class="filter-group">
-                <label class="filter-label">Status</label>
-                <select id="statusFilter" class="filter-select">
-                    <option value="">All Status</option>
-                    <option value="valid">Valid</option>
-                    <option value="expiring">Expiring Soon</option>
-                    <option value="expired">Expired</option>
-                </select>
-            </div>
-        </div>
-        
-        <table class="inventory-table" id="componentTable">
-            <thead>
-                <tr>
-                    <th>Blood Bank</th>
-                    <th>Blood Group</th>
-                    <th>Component Type</th>
-                    <th>Quantity</th>
-                    <th>Updated By</th>
-                    <th>Last Updated</th>
-                    <th>Expiry Date</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model) {
-                    var daysToExpiry = (item.ExpiryDate - DateTime.Now).TotalDays;
-                    var rowClass = daysToExpiry <= 0 ? "expired" : (daysToExpiry <= 7 ? "expiring-soon" : "");
-                    var statusBadge = "";
-                    var statusClass = "";
-                    
-                    if (daysToExpiry <= 0) {
-                        statusBadge = "Expired";
-                        statusClass = "badge-low";
-                    } else if (daysToExpiry <= 7) {
-                        statusBadge = "Expiring Soon";
-                        statusClass = "badge-medium";
-                    } else {
-                        statusBadge = "Valid";
-                        statusClass = "badge-good";
-                    }
-                    
-                    <tr class="@rowClass" data-bank="@item.BloodBankId" data-group="@item.BloodGroupId" data-type="@item.ComponentTypeId" data-status="@(daysToExpiry <= 0 ? "expired" : (daysToExpiry <= 7 ? "expiring" : "valid"))">
-                        <td>@item.BloodBankId</td>
-                        <td>@item.BloodGroupId</td>
-                        <td>@item.ComponentTypeId</td>
-                        <td>@item.Quantity</td>
-                        <td>@item.UpdatedBy</td>
-                        <td>@item.LastUpdated</td>
-                        <td>@item.ExpiryDate.ToString("MMM dd, yyyy")</td>
-                        <td><span class="status-badge @statusClass">@statusBadge</span></td>
-                        <td class="actions">
-                            <a href="@Url.Action("UpdateCStock", new { id = item.CId })" class="action-link btn-outline">Edit</a>
-                            <a href="@Url.Action("Details", new { id = item.CId })" class="action-link btn-outline">Details</a>
-                            <a href="@Url.Action("Delete", new { id = item.CId })" class="action-link btn-danger">Delete</a>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Filters functionality
-            const bloodBankFilter = document.getElementById('bloodBankFilter');
-            const bloodGroupFilter = document.getElementById('bloodGroupFilter');
-            const componentTypeFilter = document.getElementById('componentTypeFilter');
-            const statusFilter = document.getElementById('statusFilter');
-            const table = document.getElementById('componentTable');
-            const rows = table.querySelectorAll('tbody tr');
-            
-            function applyFilters() {
-                const bankValue = bloodBankFilter.value;
-                const groupValue = bloodGroupFilter.value;
-                const typeValue = componentTypeFilter.value;
-                const statusValue = statusFilter.value;
-                
-                rows.forEach(row => {
-                    const bankMatch = !bankValue || row.getAttribute('data-bank') === bankValue;
-                    const groupMatch = !groupValue || row.getAttribute('data-group') === groupValue;
-                    const typeMatch = !typeValue || row.getAttribute('data-type') === typeValue;
-                    const statusMatch = !statusValue || row.getAttribute('data-status') === statusValue;
-                    
-                    if (bankMatch && groupMatch && typeMatch && statusMatch) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
-                });
-            }
-            
-            bloodBankFilter.addEventListener('change', applyFilters);
-            bloodGroupFilter.addEventListener('change', applyFilters);
-            componentTypeFilter.addEventListener('change', applyFilters);
-            statusFilter.addEventListener('change', applyFilters);
-        });
-    </script>
+	<div class="container">
+		<div class="dashboard-header">
+			<h1 class="dashboard-title">Blood Component Inventory</h1>
+			<a asp-action="AddCStocks" asp-controller="ComponentStock" class="btn btn-primary">
+				<i class="fas fa-plus"></i> Add New Component
+			</a>
+		</div>
+
+		<div class="dashboard-stats">
+			<div class="stat-card">
+				<div class="stat-label">Total Components</div>
+				<div class="stat-value">@Model.Count()</div>
+			</div>
+			<div class="stat-card">
+				<div class="stat-label">Expiring in 7 Days</div>
+				<div class="stat-value">@Model.Count(c => (c.ExpiryDate - DateTime.Now).TotalDays <= 7 && (c.ExpiryDate - DateTime.Now).TotalDays > 0)</div>
+			</div>
+			<div class="stat-card">
+				<div class="stat-label">Expired Components</div>
+				<div class="stat-value">@Model.Count(c => c.ExpiryDate < DateTime.Now)</div>
+			</div>
+			<div class="stat-card">
+				<div class="stat-label">Total Units</div>
+				<div class="stat-value">@Model.Sum(c => c.Quantity)</div>
+			</div>
+		</div>
+
+		<div class="filters">
+			<div class="filter-group">
+				<label class="filter-label">Blood Bank</label>
+				<select id="bloodBankFilter" class="filter-select">
+					<option value="">All Blood Banks</option>
+					@foreach (var bank in Model.Select(c => c.BloodBankId).Distinct())
+					{
+						<option value="@bank">@bank</option>
+					}
+				</select>
+			</div>
+			<div class="filter-group">
+				<label class="filter-label">Blood Group</label>
+				<select id="bloodGroupFilter" class="filter-select">
+					<option value="">All Blood Groups</option>
+					@foreach (var group in Model.Select(c => c.BloodGroupId).Distinct())
+					{
+						<option value="@group">@group</option>
+					}
+				</select>
+			</div>
+			<div class="filter-group">
+				<label class="filter-label">Component Type</label>
+				<select id="componentTypeFilter" class="filter-select">
+					<option value="">All Component Types</option>
+					@foreach (var type in Model.Select(c => c.ComponentTypeId).Distinct())
+					{
+						<option value="@type">@type</option>
+					}
+				</select>
+			</div>
+			<div class="filter-group">
+				<label class="filter-label">Status</label>
+				<select id="statusFilter" class="filter-select">
+					<option value="">All Status</option>
+					<option value="valid">Valid</option>
+					<option value="expiring">Expiring Soon</option>
+					<option value="expired">Expired</option>
+				</select>
+			</div>
+		</div>
+
+		<table class="inventory-table" id="componentTable">
+			<thead>
+				<tr>
+					<th>Blood Bank</th>
+					<th>Blood Group</th>
+					<th>Component Type</th>
+					<th>Quantity</th>
+					<th>Updated By</th>
+					<th>Last Updated</th>
+					<th>Expiry Date</th>
+					<th>Status</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var item in Model)
+				{
+					var daysToExpiry = (item.ExpiryDate - DateTime.Now).TotalDays;
+					var rowClass = daysToExpiry <= 0 ? "expired" : (daysToExpiry <= 7 ? "expiring-soon" : "");
+					var statusBadge = "";
+					var statusClass = "";
+
+					if (daysToExpiry <= 0)
+					{
+						statusBadge = "Expired";
+						statusClass = "badge-low";
+					}
+					else if (daysToExpiry <= 7)
+					{
+						statusBadge = "Expiring Soon";
+						statusClass = "badge-medium";
+					}
+					else
+					{
+						statusBadge = "Valid";
+						statusClass = "badge-good";
+					}
+
+					<tr class="@rowClass" data-bank="@item.BloodBankId" data-group="@item.BloodGroupId" data-type="@item.ComponentTypeId" data-status="@(daysToExpiry <= 0 ? "expired" : (daysToExpiry <= 7 ? "expiring" : "valid"))">
+						<td>@item.BloodBankId</td>
+						<td>@item.BloodGroupId</td>
+						<td>@item.ComponentTypeId</td>
+						<td>@item.Quantity</td>
+						<td>@item.UpdatedBy</td>
+						<td>@item.LastUpdated</td>
+						<td>@item.ExpiryDate.ToString("MMM dd, yyyy")</td>
+						<td><span class="status-badge @statusClass">@statusBadge</span></td>
+						<td class="actions">
+							<a href="@Url.Action("UpdateCStock", new { id = item.CId })" class="action-link btn-outline">Edit</a>
+							<a href="@Url.Action("Details", new { id = item.CId })" class="action-link btn-outline">Details</a>
+							<a href="@Url.Action("Delete", new { id = item.CId })" class="action-link btn-danger">Delete</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+
+	<script>
+		document.addEventListener('DOMContentLoaded', function() {
+			// Filters functionality
+			const bloodBankFilter = document.getElementById('bloodBankFilter');
+			const bloodGroupFilter = document.getElementById('bloodGroupFilter');
+			const componentTypeFilter = document.getElementById('componentTypeFilter');
+			const statusFilter = document.getElementById('statusFilter');
+			const table = document.getElementById('componentTable');
+			const rows = table.querySelectorAll('tbody tr');
+
+			function applyFilters() {
+				const bankValue = bloodBankFilter.value;
+				const groupValue = bloodGroupFilter.value;
+				const typeValue = componentTypeFilter.value;
+				const statusValue = statusFilter.value;
+
+				rows.forEach(row => {
+					const bankMatch = !bankValue || row.getAttribute('data-bank') === bankValue;
+					const groupMatch = !groupValue || row.getAttribute('data-group') === groupValue;
+					const typeMatch = !typeValue || row.getAttribute('data-type') === typeValue;
+					const statusMatch = !statusValue || row.getAttribute('data-status') === statusValue;
+
+					if (bankMatch && groupMatch && typeMatch && statusMatch) {
+						row.style.display = '';
+					} else {
+						row.style.display = 'none';
+					}
+				});
+			}
+
+			bloodBankFilter.addEventListener('change', applyFilters);
+			bloodGroupFilter.addEventListener('change', applyFilters);
+			componentTypeFilter.addEventListener('change', applyFilters);
+			statusFilter.addEventListener('change', applyFilters);
+		});
+	</script>
 </body>
 </html>

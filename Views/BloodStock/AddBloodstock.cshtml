@@ -1,86 +1,86 @@
 ﻿@model BBMSDATA1.Models.BloodStock
 
 @{
-    ViewData["Title"] = "AddBloodstock";
+	ViewData["Title"] = "AddBloodstock";
 }
 
 <div class="container py-4">
-    <div class="card shadow border-0">
-        <div class="card-header bg-primary text-white">
-            <div class="d-flex justify-content-between align-items-center">
-                <h3 class="mb-0"><i class="bi bi-plus-circle-fill me-2"></i>Add New Blood Stock</h3>
-                <a asp-action="Index" class="btn btn-sm btn-light">
-                    <i class="bi bi-arrow-left me-1"></i>Back to List
-                </a>
-            </div>
-        </div>
-        <div class="card-body p-4">
-            <div class="row">
-                <div class="col-lg-8">
-                    <p class="text-muted mb-4">Enter blood stock details below. Fields marked with <span class="text-danger">*</span> are required.</p>
-                    
-                    <form asp-action="AddBloodstock" method="post" class="needs-validation" novalidate>
-                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                        
-                        <div class="row">
-                        
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="ComponentTypeId" class="form-label fw-bold">Component Type<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-layers-fill"></i></span>
-                                    <select asp-for="ComponentTypeId" class="form-control form-select" asp-items="ViewBag.Component" required>
-                                        <option value="">Select Component Type</option>
-                                    </select>
-                                </div>
-                                <span asp-validation-for="ComponentTypeId" class="text-danger small"></span>
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="BloodGroupId" class="form-label fw-bold">Blood Group<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-droplet-fill"></i></span>
-                                    <select asp-for="BloodGroupId" class="form-control form-select" asp-items="ViewBag.BloodGroups" required>
-                                        <option value="">Select Blood Group</option>
-                                    </select>
-                                </div>
-                                <span asp-validation-for="BloodGroupId" class="text-danger small"></span>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="ExpiryDate" class="form-label fw-bold">Expiry Date<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-calendar-event"></i></span>
-                                    <input asp-for="ExpiryDate" class="form-control" type="date" required />
-                                </div>
-                                <span asp-validation-for="ExpiryDate" class="text-danger small"></span>
-                            </div>
+	<div class="card shadow border-0">
+		<div class="card-header bg-primary text-white">
+			<div class="d-flex justify-content-between align-items-center">
+				<h3 class="mb-0"><i class="bi bi-plus-circle-fill me-2"></i>Add New Blood Stock</h3>
+				<a asp-action="Index" class="btn btn-sm btn-light">
+					<i class="bi bi-arrow-left me-1"></i>Back to List
+				</a>
+			</div>
+		</div>
+		<div class="card-body p-4">
+			<div class="row">
+				<div class="col-lg-8">
+					<p class="text-muted mb-4">Enter blood stock details below. Fields marked with <span class="text-danger">*</span> are required.</p>
 
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="Quantity" class="form-label fw-bold">Quantity<span class="text-danger">*</span></label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-calculator"></i></span>
-                                    <input asp-for="Quantity" class="form-control" type="number" min="1" placeholder="Enter quantity" required />
-                                </div>
-                                <span asp-validation-for="Quantity" class="text-danger small"></span>
-                            </div>
-                        </div>
-                        
-                        
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label asp-for="LastUpdated" class="form-label fw-bold">Last Updated</label>
-                                <div class="input-group">
-                                    <span class="input-group-text bg-light"><i class="bi bi-clock"></i></span>
-                                    <input asp-for="LastUpdated" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
-                                </div>
-                                <span asp-validation-for="LastUpdated" class="text-danger small"></span>
-                                <div class="form-text">If left empty, current date and time will be used</div>
-                            </div>
-                        </div>
-                        <div class="row">
+					<form asp-action="AddBloodstock" method="post" class="needs-validation" novalidate>
+						<div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
 
-                            @* <div class="col-md-6 mb-3">
+						<div class="row">
+
+							<div class="col-md-6 mb-3">
+								<label asp-for="ComponentTypeId" class="form-label fw-bold">Component Type<span class="text-danger">*</span></label>
+								<div class="input-group">
+									<span class="input-group-text bg-light"><i class="bi bi-layers-fill"></i></span>
+									<select asp-for="ComponentTypeId" class="form-control form-select" asp-items="ViewBag.Component" required>
+										<option value="">Select Component Type</option>
+									</select>
+								</div>
+								<span asp-validation-for="ComponentTypeId" class="text-danger small"></span>
+							</div>
+							<div class="col-md-6 mb-3">
+								<label asp-for="BloodGroupId" class="form-label fw-bold">Blood Group<span class="text-danger">*</span></label>
+								<div class="input-group">
+									<span class="input-group-text bg-light"><i class="bi bi-droplet-fill"></i></span>
+									<select asp-for="BloodGroupId" class="form-control form-select" asp-items="ViewBag.BloodGroups" required>
+										<option value="">Select Blood Group</option>
+									</select>
+								</div>
+								<span asp-validation-for="BloodGroupId" class="text-danger small"></span>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<label asp-for="ExpiryDate" class="form-label fw-bold">Expiry Date<span class="text-danger">*</span></label>
+								<div class="input-group">
+									<span class="input-group-text bg-light"><i class="bi bi-calendar-event"></i></span>
+									<input asp-for="ExpiryDate" class="form-control" type="date" required />
+								</div>
+								<span asp-validation-for="ExpiryDate" class="text-danger small"></span>
+							</div>
+
+							<div class="col-md-6 mb-3">
+								<label asp-for="Quantity" class="form-label fw-bold">Quantity<span class="text-danger">*</span></label>
+								<div class="input-group">
+									<span class="input-group-text bg-light"><i class="bi bi-calculator"></i></span>
+									<input asp-for="Quantity" class="form-control" type="number" min="1" placeholder="Enter quantity" required />
+								</div>
+								<span asp-validation-for="Quantity" class="text-danger small"></span>
+							</div>
+						</div>
+
+
+						<div class="row">
+							<div class="col-md-6 mb-3">
+								<label asp-for="LastUpdated" class="form-label fw-bold">Last Updated</label>
+								<div class="input-group">
+									<span class="input-group-text bg-light"><i class="bi bi-clock"></i></span>
+									<input asp-for="LastUpdated" class="form-control" type="datetime-local" value="@DateTime.Now.ToString("yyyy-MM-ddTHH:mm")" />
+								</div>
+								<span asp-validation-for="LastUpdated" class="text-danger small"></span>
+								<div class="form-text">If left empty, current date and time will be used</div>
+							</div>
+						</div>
+						<div class="row">
+
+							@* <div class="col-md-6 mb-3">
                                 <label asp-for="UpdatedBy" class="form-label fw-bold">Updated By<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light"><i class="bi bi-person-fill"></i></span>
@@ -88,7 +88,7 @@
                                 </div>
                                 <span asp-validation-for="UpdatedBy" class="text-danger small"></span>
                             </div> *@
-                            @*  <div class="col-md-6 mb-3">
+							@*  <div class="col-md-6 mb-3">
                                 <label asp-for="BloodBankId" class="form-label fw-bold">Blood Bank<span class="text-danger">*</span></label>
                                 <div class="input-group">
                                     <span class="input-group-text bg-light"><i class="bi bi-hospital"></i></span>
@@ -96,75 +96,77 @@
                                 </div>
                                 <span asp-validation-for="BloodBankId" class="text-danger small"></span>
                             </div> *@
-                        </div>
-                        
-                        <div class="row mt-4">
-                            <div class="col-12 d-flex gap-2">
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-check-circle me-1"></i>Save Blood Stock
-                                </button>
-                                <a asp-action="Index" class="btn btn-outline-secondary">
-                                    <i class="bi bi-x-circle me-1"></i>Cancel
-                                </a>
-                                <a asp-controller="ComponentStock" asp-action="AddCStocks" class="btn btn-success ms-auto">
-                                    <i class="bi bi-plus-circle me-1"></i>Add Component Stock
-                                </a>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                
-                <div class="col-lg-4 d-none d-lg-block">
-                    <div class="card bg-light border-0 h-100">
-                        <div class="card-body">
-                            <h5 class="card-title mb-3">
-                                <i class="bi bi-info-circle-fill text-primary me-2"></i>Information
-                            </h5>
-                            <p class="card-text small">Adding new blood stock requires the following information:</p>
-                            <ul class="small ps-3">
-                                <li>Blood Bank ID where the stock is located</li>
-                                <li>Blood Group (A+, B+, AB+, O+, etc.)</li>
-                                <li>Component Type (Whole Blood, Plasma, etc.)</li>
-                                <li>Quantity available in stock</li>
-                                <li>Expiry Date of the blood stock</li>
-                            </ul>
-                            <hr>
-                            <h6 class="mb-2">Quick Tips:</h6>
-                            <ul class="small ps-3">
-                                <li>Check expiry date carefully</li>
-                                <li>Verify blood group information</li>
-                                <li>Ensure the quantity is accurate</li>
-                            </ul>
-                            <div class="alert alert-warning mt-3 small" role="alert">
-                                <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                                All stock entries are logged and audited for compliance with safety regulations.
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+						</div>
+
+						<div class="row mt-4">
+							<div class="col-12 d-flex gap-2">
+								<button type="submit" class="btn btn-primary">
+									<i class="bi bi-check-circle me-1"></i>Save Blood Stock
+								</button>
+								<a asp-action="Index" class="btn btn-outline-secondary">
+									<i class="bi bi-x-circle me-1"></i>Cancel
+								</a>
+								<a asp-controller="ComponentStock" asp-action="AddCStocks" class="btn btn-success ms-auto">
+									<i class="bi bi-plus-circle me-1"></i>Add Component Stock
+								</a>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="col-lg-4 d-none d-lg-block">
+					<div class="card bg-light border-0 h-100">
+						<div class="card-body">
+							<h5 class="card-title mb-3">
+								<i class="bi bi-info-circle-fill text-primary me-2"></i>Information
+							</h5>
+							<p class="card-text small">Adding new blood stock requires the following information:</p>
+							<ul class="small ps-3">
+								<li>Blood Bank ID where the stock is located</li>
+								<li>Blood Group (A+, B+, AB+, O+, etc.)</li>
+								<li>Component Type (Whole Blood, Plasma, etc.)</li>
+								<li>Quantity available in stock</li>
+								<li>Expiry Date of the blood stock</li>
+							</ul>
+							<hr>
+							<h6 class="mb-2">Quick Tips:</h6>
+							<ul class="small ps-3">
+								<li>Check expiry date carefully</li>
+								<li>Verify blood group information</li>
+								<li>Ensure the quantity is accurate</li>
+							</ul>
+							<div class="alert alert-warning mt-3 small" role="alert">
+								<i class="bi bi-exclamation-triangle-fill me-2"></i>
+								All stock entries are logged and audited for compliance with safety regulations.
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
 
 @section Scripts {
-    <script>
-    $(document).ready(function() {
-        // Set today's date as default for LastUpdated if empty
-        if (!$("#LastUpdated").val()) {
-            var now = new Date();
-            var localISOTime = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
-            $("#LastUpdated").val(localISOTime);
-        }
-        
-        // Set default expiry date to 35 days from now if empty
-        if (!$("#ExpiryDate").val()) {
-            var expiryDate = new Date();
-            expiryDate.setDate(expiryDate.getDate() + 35);
-            var formattedDate = expiryDate.toISOString().split('T')[0];
-            $("#ExpiryDate").val(formattedDate);
-        }
-    });
-    </script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	<script>
+		$(document).ready(function() {
+			// Set today's date as default for LastUpdated if empty
+			if (!$("#LastUpdated").val()) {
+				var now = new Date();
+				var localISOTime = new Date(now.getTime() - (now.getTimezoneOffset() * 60000)).toISOString().slice(0, 16);
+				$("#LastUpdated").val(localISOTime);
+			}
+
+			// Set default expiry date to 35 days from now if empty
+			if (!$("#ExpiryDate").val()) {
+				var expiryDate = new Date();
+				expiryDate.setDate(expiryDate.getDate() + 35);
+				var formattedDate = expiryDate.toISOString().split('T')[0];
+				$("#ExpiryDate").val(formattedDate);
+			}
+		});
+	</script>
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
 }

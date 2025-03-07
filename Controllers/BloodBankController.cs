@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Text;
+using NuGet.Common;
 
 
 namespace BBMS1MVC.Controllers
@@ -21,9 +22,11 @@ namespace BBMS1MVC.Controllers
             this.context = context;
         }
 
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             var token = HttpContext.Session.GetString("JWTToken");
+           
             if (token != null)
             {
                 ViewBag.UserName = JwtHelper.GetUserName(token);
@@ -38,6 +41,7 @@ namespace BBMS1MVC.Controllers
                     ViewBag.Bloodtypes = await context.BloodStock.Where(a => a.BloodBankId == Convert.ToInt32(json)).Select(a => a.BloodGroupId).Distinct().CountAsync();
                     ViewBag.Donor = await context.Donations.Where(a => a.BloodBankId == Convert.ToInt32(json)).Select(a => a.DonorId).Distinct().CountAsync();
                     ViewBag.Requests = await context.BloodRequest.Where(a => a.BloodBankId == Convert.ToInt32(json)).Select(a => a.RequestId).Distinct().CountAsync();
+
                 }
             }
             return View();
@@ -63,10 +67,12 @@ namespace BBMS1MVC.Controllers
         }
 
         [HttpGet]
-        public IActionResult BBDetails()
+        public async Task<IActionResult> BBDetails()
         {
-            ViewBag.States = new SelectList(context.States.ToList(), "Id", "StateName");
-            return View();
+           
+                        ViewBag.States = new SelectList(context.States.ToList(), "Id", "StateName");
+                        return View();
+                    
         }
 
         [HttpPost]
@@ -102,15 +108,24 @@ namespace BBMS1MVC.Controllers
             var id = HttpContext.Session.GetString("Userid");
             if (id != null)
             {
-                var client = clientFactory.CreateClient("MyApiClient");
-                var response = await client.GetAsync($"BloodBank/GetBloodBankbyadminid/{id}");
-
-                if (response.IsSuccessStatusCode)
+                var bid=await context.BloodBanks.Where(a=>a.AdminId==Convert.ToInt32(id)).Select(a=>a.BloodBankId).FirstOrDefaultAsync();
+                if(bid==0)
                 {
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    var bloodBank = JsonConvert.DeserializeObject<BloodBanks>(jsonData);
-                    return View(bloodBank);
+                    return RedirectToAction("BBDetails");
                 }
+                else {
+
+                    var client = clientFactory.CreateClient("MyApiClient");
+                    var response = await client.GetAsync($"BloodBank/GetBloodBankbyadminid/{id}");
+
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var jsonData = await response.Content.ReadAsStringAsync();
+                        var bloodBank = JsonConvert.DeserializeObject<BloodBanks>(jsonData);
+                        return View(bloodBank);
+                    }
+                }
+              
             }
 
             return View(new List<BloodBanks>());

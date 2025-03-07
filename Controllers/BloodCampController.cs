@@ -21,19 +21,19 @@ namespace BBMS1MVC.Controllers
             var id = HttpContext.Session.GetString("Userid");
             if (id != null)
             {
-                    var client = clientFactory.CreateClient("MyApiClient");
-                    var response = await client.GetAsync($"BloodCamps/GetcampByBloodbankId/{id}");
+                var client = clientFactory.CreateClient("MyApiClient");
+                var response = await client.GetAsync($"BloodCamps/GetcampByBloodbankId/{id}");
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonData = await response.Content.ReadAsStringAsync();
-                        var bloodstock = JsonConvert.DeserializeObject<List<BloodCamps>>(jsonData);
-                        return View(bloodstock);
-                    }
-                
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var bloodstock = JsonConvert.DeserializeObject<List<BloodCamps>>(jsonData);
+                    return View(bloodstock);
+                }
+
             }
             return View(new List<BloodCamps>());
-           
+
         }
 
         [HttpGet]
@@ -43,32 +43,31 @@ namespace BBMS1MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddBCamp([FromForm] BloodCamps model) 
+        public async Task<IActionResult> AddBCamp([FromForm] BloodCamps model)
         {
-            if (ModelState.IsValid)
+
+            var id = HttpContext.Session.GetString("Userid");
+            if (id != null)
             {
-                var id = HttpContext.Session.GetString("Userid");
-                if (id != null)
+                model.CreatedBy = Convert.ToInt32(id);
+                var client = clientFactory.CreateClient("MyApiClient");
+                var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+                var response = await client.PostAsync("BloodCamps/AddCamp", jsonContent);
+                if (response.IsSuccessStatusCode)
                 {
-                    model.CreatedBy = Convert.ToInt32(id);
-                    var client = clientFactory.CreateClient("MyApiClient");
-                   var jsonContent=new StringContent(JsonConvert.SerializeObject(model),Encoding.UTF8,"application/json");
-                    var response = await client.PostAsync("BloodCamps/AddCamp", jsonContent);
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return RedirectToAction("Index");
-                    }
-                    else
-                    {
-                        ModelState.AddModelError(string.Empty, "Error while adding Blood Bank.");
-                    }
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Error while adding Blood Bank.");
                 }
             }
 
 
 
+
             return View(model);
-        
+
         }
     }
 }

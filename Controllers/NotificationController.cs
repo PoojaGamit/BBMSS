@@ -18,11 +18,11 @@ namespace BBMS1MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var userid = HttpContext.Session.GetString("Userid");
-          
+
             if (userid != null)
-            {       
+            {
                 var client = clientFactory.CreateClient("MyApiClient");
-                 var response = await client.GetAsync($"Notification/GetNotibyAdmin/{userid}");
+                var response = await client.GetAsync($"Notification/GetNotibyAdmin/{userid}");
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -30,7 +30,7 @@ namespace BBMS1MVC.Controllers
                     var bloodstock = JsonConvert.DeserializeObject<List<Notification>>(jsonData);
                     return View(bloodstock);
                 }
-                
+
             }
             return View(new List<Notification>());
 
@@ -38,45 +38,45 @@ namespace BBMS1MVC.Controllers
 
         [HttpGet]
         public IActionResult AddNoti()
-        { 
-          return View();
+        {
+            return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddNoti([FromForm]Notification model)
+        public async Task<IActionResult> AddNoti([FromForm] Notification model)
         {
 
             if (ModelState.IsValid)
             {
                 var id = HttpContext.Session.GetString("Userid");
-               // var token = HttpContext.Session.GetString("JWTToken");
+                // var token = HttpContext.Session.GetString("JWTToken");
                 if (id != null)
                 {
-                         var client = clientFactory.CreateClient("MyApiClient");
-                        var response = await client.GetAsync($"Notification/BloodBankidfromadmin/{id}");
-                        if (response.IsSuccessStatusCode)
-                        {
-                            var bloodBankId = await response.Content.ReadAsStringAsync();
-                            model.BloodBankId = Convert.ToInt32(bloodBankId);
-                          
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, "Error fetching BloodBank ID.");
-                            return View(model);
-                        }
-                        var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-                        var response1 = await client.PostAsync("Notification/AddNoti", jsonContent);
+                    var client = clientFactory.CreateClient("MyApiClient");
+                    var response = await client.GetAsync($"Notification/BloodBankidfromadmin/{id}");
+                    if (response.IsSuccessStatusCode)
+                    {
+                        var bloodBankId = await response.Content.ReadAsStringAsync();
+                        model.BloodBankId = Convert.ToInt32(bloodBankId);
 
-                        if (response1.IsSuccessStatusCode)
-                        {
-                             return RedirectToAction("Index");
-                        }
-                        else
-                        {
-                            ModelState.AddModelError(string.Empty, "Error while adding Blood Bank.");
-                        }
-                   
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Error fetching BloodBank ID.");
+                        return View(model);
+                    }
+                    var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+                    var response1 = await client.PostAsync("Notification/AddNoti", jsonContent);
+
+                    if (response1.IsSuccessStatusCode)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Error while adding Blood Bank.");
+                    }
+
                 }
 
             }
@@ -120,6 +120,6 @@ namespace BBMS1MVC.Controllers
 
             return View(model);
         }
-       
+
     }
 }

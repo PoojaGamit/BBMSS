@@ -1,140 +1,141 @@
 ﻿@model IEnumerable<BBMSDATA1.Models.BloodCamps>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css">
 <style>
-    :root {
-        --primary: #4a90e2;
-        --secondary: #2ecc71;
-        --danger: #e74c3c;
-        --warning: #f39c12;
-        --dark: #2c3e50;
-        --light: #ecf0f1;
-        --background: #f4f6f7;
-    }
+	:root {
+		--primary: #4a90e2;
+		--secondary: #2ecc71;
+		--danger: #e74c3c;
+		--warning: #f39c12;
+		--dark: #2c3e50;
+		--light: #ecf0f1;
+		--background: #f4f6f7;
+	}
 
-    body {
-        background-color: var(--background);
-    }
+	body {
+		background-color: var(--background);
+	}
 
-    .table th {
-        font-weight: 600;
-    }
+	.table th {
+		font-weight: 600;
+	}
 
-    .create-btn {
-        background-color: var(--secondary);
-        color: white;
-    }
+	.create-btn {
+		background-color: var(--secondary);
+		color: white;
+	}
 
-        .create-btn:hover {
-            background-color: #27ae60;
-            color: white;
-        }
+		.create-btn:hover {
+			background-color: #27ae60;
+			color: white;
+		}
 
-    .edit-btn {
-        background-color: var(--primary);
-        color: white;
-    }
+	.edit-btn {
+		background-color: var(--primary);
+		color: white;
+	}
 
-        .edit-btn:hover {
-            background-color: #357abd;
-            color: white;
-        }
+		.edit-btn:hover {
+			background-color: #357abd;
+			color: white;
+		}
 
-    .details-btn {
-        background-color: var(--warning);
-        color: white;
-    }
+	.details-btn {
+		background-color: var(--warning);
+		color: white;
+	}
 
-        .details-btn:hover {
-            background-color: #e67e22;
-            color: white;
-        }
+		.details-btn:hover {
+			background-color: #e67e22;
+			color: white;
+		}
 
-    .delete-btn {
-        background-color: var(--danger);
-        color: white;
-    }
+	.delete-btn {
+		background-color: var(--danger);
+		color: white;
+	}
 
-        .delete-btn:hover {
-            background-color: #c0392b;
-            color: white;
-        }
+		.delete-btn:hover {
+			background-color: #c0392b;
+			color: white;
+		}
 
-    .table-hover tbody tr:hover {
-        background-color: rgba(74, 144, 226, 0.1) !important;
-    }
+	.table-hover tbody tr:hover {
+		background-color: rgba(74, 144, 226, 0.1) !important;
+	}
 </style>
 
 <div class="container py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <div>
-            <h1 class="display-4 fw-bold" style="color: var(--primary);">Blood Donation Camps</h1>
-            <p class="text-muted">Manage upcoming blood donation events</p>
-        </div>
-        <a asp-action="AddBCamp" asp-controller="BloodCamp" class="btn create-btn">
-            <i class="bi bi-plus-circle me-2"></i>Create New Camp
-        </a>
-    </div>
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<div>
+			<h1 class="display-4 fw-bold" style="color: var(--primary);">Blood Donation Camps</h1>
+			<p class="text-muted">Manage upcoming blood donation events</p>
+		</div>
+		<a asp-action="AddBCamp" asp-controller="BloodCamp" class="btn create-btn">
+			<i class="bi bi-plus-circle me-2"></i>Create New Camp
+		</a>
+	</div>
 
-    <div class="card shadow-sm" style="background-color: var(--light);">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-hover">
-                    <thead style="background-color: var(--dark); color: var(--light);">
-                        <tr>
-                            <th>@Html.DisplayNameFor(model => model.Name)</th>
-                            <th>@Html.DisplayNameFor(model => model.Location)</th>
-                            <th>@Html.DisplayNameFor(model => model.Date)</th>
-                            <th>Time</th>
-                            <th>@Html.DisplayNameFor(model => model.Organizer)</th>
-                            <th>@Html.DisplayNameFor(model => model.VisibilityUntil)</th>
-                            <th class="text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var item in Model) {
-                        <tr style="background-color: white;">
-                            <td class="fw-semibold">@Html.DisplayFor(modelItem => item.Name)</td>
-                            <td>
-                                <i class="bi bi-geo-alt text-muted me-1"></i>
-                                @Html.DisplayFor(modelItem => item.Location)
-                            </td>
-                            <td>
-                                <i class="bi bi-calendar-event text-muted me-1"></i>
-                                @Html.DisplayFor(modelItem => item.Date)
-                            </td>
-                            <td>
-                                <i class="bi bi-clock text-muted me-1"></i>
-                                @Html.DisplayFor(modelItem => item.StartTime) - @Html.DisplayFor(modelItem => item.EndTime)
-                            </td>
-                            <td>@Html.DisplayFor(modelItem => item.Organizer)</td>
-                            <td>@Html.DisplayFor(modelItem => item.VisibilityUntil)</td>
-                            <td>
-                                <div class="d-flex justify-content-center gap-2">
-                                    <a asp-action="Edit" asp-route-id="@item.CampId" class="btn btn-sm edit-btn" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <a asp-action="Details" asp-route-id="@item.CampId" class="btn btn-sm details-btn" title="Details">
-                                        <i class="bi bi-info-circle"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@item.CampId" class="btn btn-sm delete-btn" title="Delete">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                </div>
-                            </td>
-                        </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+	<div class="card shadow-sm" style="background-color: var(--light);">
+		<div class="card-body">
+			<div class="table-responsive">
+				<table class="table table-hover">
+					<thead style="background-color: var(--dark); color: var(--light);">
+						<tr>
+							<th>@Html.DisplayNameFor(model => model.Name)</th>
+							<th>@Html.DisplayNameFor(model => model.Location)</th>
+							<th>@Html.DisplayNameFor(model => model.Date)</th>
+							<th>Time</th>
+							<th>@Html.DisplayNameFor(model => model.Organizer)</th>
+							<th>@Html.DisplayNameFor(model => model.VisibilityUntil)</th>
+							<th class="text-center">Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach (var item in Model)
+						{
+							<tr style="background-color: white;">
+								<td class="fw-semibold">@Html.DisplayFor(modelItem => item.Name)</td>
+								<td>
+									<i class="bi bi-geo-alt text-muted me-1"></i>
+									@Html.DisplayFor(modelItem => item.Location)
+								</td>
+								<td>
+									<i class="bi bi-calendar-event text-muted me-1"></i>
+									@Html.DisplayFor(modelItem => item.Date)
+								</td>
+								<td>
+									<i class="bi bi-clock text-muted me-1"></i>
+									@Html.DisplayFor(modelItem => item.StartTime) - @Html.DisplayFor(modelItem => item.EndTime)
+								</td>
+								<td>@Html.DisplayFor(modelItem => item.Organizer)</td>
+								<td>@Html.DisplayFor(modelItem => item.VisibilityUntil)</td>
+								<td>
+									<div class="d-flex justify-content-center gap-2">
+										<a asp-action="Edit" asp-route-id="@item.CampId" class="btn btn-sm edit-btn" title="Edit">
+											<i class="bi bi-pencil"></i>
+										</a>
+										<a asp-action="Details" asp-route-id="@item.CampId" class="btn btn-sm details-btn" title="Details">
+											<i class="bi bi-info-circle"></i>
+										</a>
+										<a asp-action="Delete" asp-route-id="@item.CampId" class="btn btn-sm delete-btn" title="Delete">
+											<i class="bi bi-trash"></i>
+										</a>
+									</div>
+								</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 
-    <div class="mt-4 text-muted small">
-        <p>* Displaying all blood donation camps. Admin access only.</p>
-    </div>
+	<div class="mt-4 text-muted small">
+		<p>* Displaying all blood donation camps. Admin access only.</p>
+	</div>
 </div>
 

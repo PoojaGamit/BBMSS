@@ -1,277 +1,327 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lifeline Blood Bank</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --primary: #4a90e2;
-            --secondary: #2ecc71;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-            --background: #f4f6f7;
-        }
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Lifeline Blood Bank</title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+	<style>
+		:root {
+			--primary: #4a90e2;
+			--secondary: #2ecc71;
+			--danger: #e74c3c;
+			--warning: #f39c12;
+			--dark: #2c3e50;
+			--light: #ecf0f1;
+			--background: #f4f6f7;
+		}
 
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: var(--background);
-            color: var(--dark);
-            line-height: 1.6;
-        }
+		body {
+			font-family: 'Nunito', sans-serif;
+			background-color: var(--background);
+			color: var(--dark);
+			line-height: 1.6;
+		}
 
-        .hero-section {
-            background: linear-gradient( 135deg, rgba(74, 144, 226, 0.9), rgba(46, 204, 113, 0.7) ), url('https://images.unsplash.com/photo-1615461469775-55103de93a7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 6rem 0;
-            position: relative;
-            overflow: hidden;
-        }
+		.hero-section {
+			background: linear-gradient( 135deg, rgba(74, 144, 226, 0.9), rgba(46, 204, 113, 0.7) ), url('https://images.unsplash.com/photo-1615461469775-55103de93a7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+			background-size: cover;
+			background-position: center;
+			color: white;
+			padding: 6rem 0;
+			position: relative;
+			overflow: hidden;
+		}
 
-            .hero-section::before {
-                content: '';
-                position: absolute;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(74, 144, 226, 0.6);
-            }
+			.hero-section::before {
+				content: '';
+				position: absolute;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background: rgba(74, 144, 226, 0.6);
+			}
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-        }
+		.hero-content {
+			position: relative;
+			z-index: 2;
+		}
 
-        .notification-banner {
-            background-color: var(--warning);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-            font-weight: 600;
-        }
+		.notification-banner {
+			background-color: var(--warning);
+			color: white;
+			padding: 1rem;
+			text-align: center;
+			font-weight: 600;
+		}
 
-        .statistics-section {
-            margin-top: -50px;
-            position: relative;
-            z-index: 3;
-        }
+		.statistics-section {
+			margin-top: -50px;
+			position: relative;
+			z-index: 3;
+		}
 
-        .statistics-card {
-            background-color: white;
-            border: none;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-            padding: 2rem;
-        }
+		.statistics-card {
+			background-color: white;
+			border: none;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+			transition: transform 0.3s ease;
+			padding: 2rem;
+		}
 
-            .statistics-card:hover {
-                transform: translateY(-10px);
-            }
+			.statistics-card:hover {
+				transform: translateY(-10px);
+			}
 
-        .blood-compatibility-section {
-            background-color: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            padding: 3rem;
-            margin-top: 2rem;
-        }
+		.blood-compatibility-section {
+			background-color: white;
+			border-radius: 15px;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+			padding: 3rem;
+			margin-top: 2rem;
+		}
 
-        .blood-table {
-            border-radius: 15px;
-            overflow: hidden;
-        }
+		.blood-table {
+			border-radius: 15px;
+			overflow: hidden;
+		}
 
-            .blood-table thead {
-                background-color: var(--primary);
-                color: white;
-            }
+			.blood-table thead {
+				background-color: var(--primary);
+				color: white;
+			}
 
-        .donate-btn {
-            background-color: var(--danger);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-        }
+		.donate-btn {
+			background-color: var(--danger);
+			color: white;
+			border: none;
+			padding: 12px 24px;
+			font-weight: 600;
+			text-transform: uppercase;
+			letter-spacing: 1px;
+			transition: all 0.3s ease;
+		}
 
-            .donate-btn:hover {
-                background-color: #c0392b;
-                transform: translateY(-3px);
-                box-shadow: 0 6px 12px rgba(0,0,0,0.2);
-            }
+			.donate-btn:hover {
+				background-color: #c0392b;
+				transform: translateY(-3px);
+				box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+			}
 
-        .notifications-card {
-            border-radius: 15px;
-            border: none;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-        }
+		.notifications-card {
+			border-radius: 15px;
+			border: none;
+			box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+		}
 
-        .card-header {
-            background-color: var(--primary);
-        }
-    </style>
+		.card-header {
+			background-color: var(--primary);
+		}
+	</style>
 </head>
 <body>
-   @*  <div class="notification-banner">
+	@*  <div class="notification-banner">
         <i class="fas fa-bell me-2"></i>Urgent: Blood Donation Drive - Your Support Saves Lives!
     </div>
  *@
-    <section class="hero-section text-center">
-        <div class="container hero-content">
-            <h1 class="display-4 fw-bold mb-4 text-white">Donate Blood, Save Lives</h1>
-            <p class="lead mb-5 text-white">Every Drop Counts - Be a Lifeline for Someone in Need</p>
-            <a href="#" class="btn btn-lg donate-btn">
-                <i class="fas fa-heart me-2"></i>Become a Donor
-            </a>
-        </div>
-    </section>
+	<section class="hero-section text-center">
+		<div class="container hero-content">
+			<h1 class="display-4 fw-bold mb-4 text-white">Donate Blood, Save Lives</h1>
+			<p class="lead mb-5 text-white">Every Drop Counts - Be a Lifeline for Someone in Need</p>
+			<a href="#" class="btn btn-lg donate-btn">
+				<i class="fas fa-heart me-2"></i>Become a Donor
+			</a>
+		</div>
+	</section>
 
-    <section class="container statistics-section">
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="statistics-card h-100">
-                    <div class="text-center">
-                        <h3 class="display-5 text-primary">@ViewBag.DonorId</h3>
-                        <p class="h5 text-muted">Donors Registered</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 mb-4">
-                <div class="statistics-card h-100">
-                    <div class="text-center">
-                        <h3 class="display-5 text-success">@ViewBag.TotalBloodUnits</h3>
-                        <p class="h5 text-muted">Blood Units Collected</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+	<section class="container statistics-section">
+		<div class="row">
+			<div class="col-md-6 mb-4">
+				<div class="statistics-card h-100">
+					<div class="text-center">
+						<h3 class="display-5 text-primary">@ViewBag.DonorId</h3>
+						<p class="h5 text-muted">Donors Registered</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6 mb-4">
+				<div class="statistics-card h-100">
+					<div class="text-center">
+						<h3 class="display-5 text-success">@ViewBag.TotalBloodUnits</h3>
+						<p class="h5 text-muted">Blood Units Collected</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
 
-    <section class="container">
-        <div class="blood-compatibility-section">
-            <h2 class="text-center mb-5" style="color: var(--primary);">
-                <i class="fas fa-tint me-3"></i>Blood Type Compatibility
-            </h2>
+	<section class="container">
+		<div class="blood-compatibility-section">
+			<h2 class="text-center mb-5" style="color: var(--primary);">
+				<i class="fas fa-tint me-3"></i>Blood Type Compatibility
+			</h2>
 
-            <div class="table-responsive">
-                <table class="table blood-table">
-                    <thead>
-                        <tr>
-                            <th>Blood Type</th>
-                            <th>Can Donate To</th>
-                            <th>Can Receive From</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>A+</td>
-                            <td>A+ AB+</td>
-                            <td>A+ A- O+ O-</td>
-                        </tr>
-                        <tr>
-                            <td>A-</td>
-                            <td>A+ A-</td>
-                            <td>A- O-</td>
-                        </tr>
-                        <tr>
-                            <td>B+</td>
-                            <td>B+ AB+</td>
-                            <td>B+ B- O+ O-</td>
-                        </tr>
-                        <tr>
-                            <td>B-</td>
-                            <td>B+ B-</td>
-                            <td>B- O-</td>
-                        </tr>
-                        <tr>
-                            <td>O+</td>
-                            <td>O+ A+ B+ AB+</td>
-                            <td>O+ O-</td>
-                        </tr>
-                        <tr>
-                            <td>O-</td>
-                            <td>All blood types</td>
-                            <td>O-</td>
-                        </tr>
-                        <tr>
-                            <td>AB+</td>
-                            <td>AB+</td>
-                            <td>All blood types</td>
-                        </tr>
-                        <tr>
-                            <td>AB-</td>
-                            <td>AB+ AB-</td>
-                            <td>A- B- O- AB-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </section>
+			<div class="table-responsive">
+				<table class="table blood-table">
+					<thead>
+						<tr>
+							<th>Blood Type</th>
+							<th>Can Donate To</th>
+							<th>Can Receive From</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>A+</td>
+							<td>A+ AB+</td>
+							<td>A+ A- O+ O-</td>
+						</tr>
+						<tr>
+							<td>A-</td>
+							<td>A+ A-</td>
+							<td>A- O-</td>
+						</tr>
+						<tr>
+							<td>B+</td>
+							<td>B+ AB+</td>
+							<td>B+ B- O+ O-</td>
+						</tr>
+						<tr>
+							<td>B-</td>
+							<td>B+ B-</td>
+							<td>B- O-</td>
+						</tr>
+						<tr>
+							<td>O+</td>
+							<td>O+ A+ B+ AB+</td>
+							<td>O+ O-</td>
+						</tr>
+						<tr>
+							<td>O-</td>
+							<td>All blood types</td>
+							<td>O-</td>
+						</tr>
+						<tr>
+							<td>AB+</td>
+							<td>AB+</td>
+							<td>All blood types</td>
+						</tr>
+						<tr>
+							<td>AB-</td>
+							<td>AB+ AB-</td>
+							<td>A- B- O- AB-</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</section>
 
-    <section class="container my-5">
-        <div class="card notifications-card">
-            <div class="card-header text-white">
-                <h3 class="mb-0">
-                    <i class="fas fa-bell me-2"></i>Recent Notifications
-                </h3>
-            </div>
-            <div class="card-body">
-                <div class="list-group" id="notificationList">
-                    <p class="text-muted">Loading notifications...</p>
-                </div>
-            </div>
-        </div>
-    </section>
+	<section class="container my-5">
+		<div class="card notifications-card">
+			<div class="card-header text-white">
+				<h3 class="mb-0">
+					<i class="fas fa-bell me-2"></i>Recent Notifications
+				</h3>
+			</div>
+			<div class="card-body">
+				<div class="list-group" id="notificationList">
+					<p class="text-muted">Loading notifications...</p>
+				</div>
+			</div>
+		</div>
+	</section>
+	<section class="container my-5">
+		<div class="card notifications-card">
+			<div class="card-header text-white">
+				<h3 class="mb-0">
+					<i class="fas fa-bell me-2"></i>Camps
+				</h3>
+			</div>
+			<div class="card-body">
+				<div class="list-group" id="CampList">
+					<p class="text-muted">Loading Camps Detail...</p>
+				</div>
+			</div>
+		</div>
+	</section>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $.ajax({
-                url: "https://localhost:7193/Notification/GetActiveNotifications",
-                type: "GET",
-                success: function (data) {
-                    var notificationList = $("#notificationList");
-                    notificationList.empty();
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+	<script>
+		   $(document).ready(function () {
+			   $.ajax({
+				   url: "https://localhost:7193/Notification/GetActiveNotifications",
+				   type: "GET",
+				   success: function (data) {
+					   var notificationList = $("#notificationList");
+					   notificationList.empty();
 
-                    if (data.length === 0) {
-                        notificationList.append('<p class="text-muted">No notifications available.</p>');
-                        return;
-                    }
+					   if (data.length === 0) {
+						   notificationList.append('<p class="text-muted">No notifications available.</p>');
+						   return;
+					   }
 
-                    data.forEach(function (notification) {
-                        var title = notification.Title || notification.title || "No Title";
-                        var startDate = notification.StartDate || notification.startDate || "N/A";
-                        var message = notification.Message || notification.message || "No message";
+					   data.forEach(function (notification) {
+						   var title = notification.Title || notification.title || "No Title";
+						   var startDate = notification.StartDate || notification.startDate || "N/A";
+						   var message = notification.Message || notification.message || "No message";
 
-                        var notificationItem = `
-                            <a href="#" class="list-group-item list-group-item-action">
-                                <div class="d-flex w-100 justify-content-between">
-                                    <h5 class="mb-1">${title}</h5>
-                                    <small class="text-muted">${startDate}</small>
-                                </div>
-                                <p class="mb-1">${message}</p>
-                            </a>`;
-                        $("#notificationList").append(notificationItem);
-                    });
-                },
-                error: function () {
-                    $("#notificationList").html('<p class="text-danger">Failed to load notifications.</p>');
-                }
-            });
-        });
-    </script>
+						   var notificationItem = `
+							   <a href="#" class="list-group-item list-group-item-action">
+								   <div class="d-flex w-100 justify-content-between">
+									   <h5 class="mb-1">${title}</h5>
+									   <small class="text-muted">${startDate}</small>
+								   </div>
+								   <p class="mb-1">${message}</p>
+							   </a>`;
+						   $("#notificationList").append(notificationItem);
+					   });
+				   },
+				   error: function () {
+					   $("#notificationList").html('<p class="text-danger">Failed to load notifications.</p>');
+				   }
+			   });
+
+		$.ajax({
+			   url: "https://localhost:7193/BloodCamps/GetActiveCamps",
+			   type: "GET",
+			   success: function (data) {
+				   var CampList = $("#CampList");
+				   CampList.empty();
+
+				   if (data.length === 0) {
+					   CampList.append('<p class="text-muted">No Camps available.</p>');
+					   return;
+				   }
+
+				   data.forEach(function (camp) {
+					   var title = camp.Name || "No Title";
+					   var location = camp.Location || "No location";
+					   var date = camp.Date || "N/A";
+					   var startTime = camp.StartTime || "No time";
+					   var endTime = camp.EndTime || "No Time";
+
+					   var CampItem = `
+						   <a href="#" class="list-group-item list-group-item-action">
+							   <div class="d-flex w-100 justify-content-between">
+								   <h5 class="mb-1">${title}</h5>
+								   <span class="text-muted">${date} | ${startTime} - ${endTime}</span>
+							   </div>
+							   <p class="mb-1"><i class="fas fa-map-marker-alt"></i> ${location}</p>
+						   </a>`;
+					   CampList.append(CampItem);
+				   });
+			   },
+			   error: function () {
+				   $("#CampList").html('<p class="text-danger">Failed to load blood camps.</p>');
+			   }
+		   });
+
+		   });
+	</script>
 </body>
 </html>

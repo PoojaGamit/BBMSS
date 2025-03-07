@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace BBMS1MVC.Controllers
 {
@@ -35,58 +36,73 @@ namespace BBMS1MVC.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromForm]LoginRequest model)
+        public async Task<IActionResult> Login([FromForm] LoginRequest model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var client = clientFactory.CreateClient("MyApiClient");
-
-                var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
-                Console.WriteLine(JsonConvert.SerializeObject(model));
-
-                var response = await client.PostAsync("Users/Login", jsonContent);
-
-                if (response.IsSuccessStatusCode)
-                {
-                    var token = await response.Content.ReadAsStringAsync();
-                    HttpContext.Session.SetString("JWTToken", token);
-                    Console.WriteLine(token);
-                    var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-                    var jwtToken = handler.ReadJwtToken(token);
-                    var Role = JwtHelper.GetUserRole(token);
-                   
-                    var userid=JwtHelper.GetUserId(token);
-                    if(userid!=null)
-                        HttpContext.Session.SetString("Userid", userid);
-
-                    client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-                    Console.WriteLine(token);
-            
-                    if (Role == "Admin")
-                    {
-                        return RedirectToAction("Index", "Admin");
-                    }
-                    else if (Role == "BAdmin")
-                    {
-                        return RedirectToAction("Index", "BloodBank");
-                    }
-                    else if (Role == "Donor")
-                    {
-                        return RedirectToAction("Index", "Donor");
-                    }
-                    else
-                    {
-                        return RedirectToAction("Index", "Donor");
-                    }
-
-                }
-                else
-                {
-                    ModelState.AddModelError(string.Empty, "Invalid username or password.");
-                }
+                return View(model);
             }
-            return View(model);
+
+            var client = clientFactory.CreateClient("MyApiClient");
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("Users/Login", jsonContent);
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine("API Response: " + responseBody); // Debugging
+
+            if (!response.IsSuccessStatusCode)
+            {
+                ModelState.AddModelError(string.Empty, "Invalid credentials. Please try again.");
+                return View(model);
+            }
+
+            // Extract token safely
+            var tokenObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
+            var token = "";
+            if (tokenObject != null)
+            {
+                // Try both lowercase and uppercase property names
+                token = (string?)tokenObject.token ?? (string?)tokenObject.Token;
+            }
+
+
+            if (string.IsNullOrWhiteSpace(token) || !token.Contains("."))
+            {
+                ModelState.AddModelError(string.Empty, "Invalid token received from server.");
+                return View(model);
+            }
+
+            HttpContext.Session.SetString("JWTToken", token);
+
+            var handler = new JwtSecurityTokenHandler();
+            try
+            {
+                var jwtToken = handler.ReadJwtToken(token);
+                var role = JwtHelper.GetUserRole(token);
+                var userId = JwtHelper.GetUserId(token);
+
+                if (!string.IsNullOrEmpty(userId))
+                {
+                    HttpContext.Session.SetString("Userid", userId);
+                }
+
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+                return role switch
+                {
+                    "Admin" => RedirectToAction("Index", "Admin"),
+                    "BAdmin" => RedirectToAction("Index", "BloodBank"),
+                    "Donor" => RedirectToAction("Index", "Donor"),
+                    _ => RedirectToAction("Index", "Home")
+                };
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, "Error parsing JWT token.");
+                Console.WriteLine($"JWT Parsing Error: {ex.Message}");
+                return View(model);
+            }
         }
 
         [HttpGet]
@@ -101,7 +117,7 @@ namespace BBMS1MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(Users model)
         {
-          
+
             var client = clientFactory.CreateClient("MyApiClient");
 
             var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
@@ -110,7 +126,7 @@ namespace BBMS1MVC.Controllers
             if (response.IsSuccessStatusCode)
             {
                 context.Users.Add(model);
-               // await context.SaveChangesAsync();
+                // await context.SaveChangesAsync();
                 return RedirectToAction("Login", "User");
             }
             else
@@ -124,26 +140,26 @@ namespace BBMS1MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateUserprofile()
         {
-           // var token = HttpContext.Session.GetString("JWTToken");
-            var userid=HttpContext.Session.GetString("Userid");
-            if (userid!= null)
+            // var token = HttpContext.Session.GetString("JWTToken");
+            var userid = HttpContext.Session.GetString("Userid");
+            if (userid != null)
             {
                 var client = clientFactory.CreateClient("MyApiClient");
-                    var response = await client.GetAsync($"Users/UsersById/{userid}");
+                var response = await client.GetAsync($"Users/UsersById/{userid}");
 
-                    if (response.IsSuccessStatusCode)
-                    {
-                        var jsonData = await response.Content.ReadAsStringAsync();
-                        var User= JsonConvert.DeserializeObject<Users>(jsonData);
-                        return View(User);
-                    }
-                
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var User = JsonConvert.DeserializeObject<Users>(jsonData);
+                    return View(User);
+                }
+
             }
             return View(new Users());
         }
-        
+
         [HttpPost]
-        public async Task<IActionResult> UpdateUserprofile([FromForm]Users model)
+        public async Task<IActionResult> UpdateUserprofile([FromForm] Users model)
         {
             var client = clientFactory.CreateClient("MyApiClient");
             var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
