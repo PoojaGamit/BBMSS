@@ -1,0 +1,306 @@
+﻿@model IEnumerable<BBMSDATA1.Models.BloodBanks>
+
+@{
+    ViewData["Title"] = "BloodBanks";
+    Layout = "_Layout1";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blood Banks Management - Admin Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .bg-blood {
+            background-color: #e63946;
+            color: white;
+        }
+        .card-dashboard {
+            border-left: 4px solid #e63946;
+            transition: transform 0.3s;
+        }
+        .card-dashboard:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .status-active {
+            color: #2a9d8f;
+            font-weight: bold;
+        }
+        .status-inactive {
+            color: #e76f51;
+            font-weight: bold;
+        }
+        .table-actions a {
+            margin: 0 3px;
+        }
+        .dashboard-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #dee2e6;
+            padding: 15px 0;
+            margin-bottom: 25px;
+        }
+        .search-container {
+            position: relative;
+        }
+        .search-container i {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: #6c757d;
+        }
+        .search-input {
+            padding-left: 35px;
+        }
+        .pagination {
+            margin-top: 20px;
+        }
+        .table-responsive {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+      <div class="dashboard-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2><i class="fas fa-hospital me-2 text-danger"></i> Blood Banks Management</h2>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb justify-content-md-end mb-0">
+                            <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Blood Banks</li>
+                        </ol>
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Summary Cards -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted">Total Blood Banks</h6>
+                                <h3>@Model.Count()</h3>
+                            </div>
+                            <i class="fas fa-hospital-alt fa-2x text-muted"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted">Active Banks</h6>
+                                <h3>@Model.Count(x => x.IsActive)</h3>
+                            </div>
+                            <i class="fas fa-check-circle fa-2x text-success"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted">Inactive Banks</h6>
+                                <h3>@Model.Count(x => !x.IsActive)</h3>
+                            </div>
+                            <i class="fas fa-times-circle fa-2x text-danger"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card card-dashboard">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="text-muted">Total States</h6>
+                                <h3>@Model.Select(x => x.StateId).Distinct().Count()</h3>
+                            </div>
+                            <i class="fas fa-map-marked-alt fa-2x text-primary"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Bar -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+              @*   <a href="@Url.Action("Create")" class="btn btn-danger">
+                    <i class="fas fa-plus-circle me-1"></i> Add New Blood Bank
+                </a> *@
+                <button class="btn btn-outline-secondary ms-2">
+                    <i class="fas fa-file-export me-1"></i> Export
+                </button>
+            </div>
+            <div class="col-md-6">
+                <div class="search-container float-md-end">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="bankSearch" class="form-control search-input" placeholder="Search blood banks...">
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <select class="form-select" id="stateFilter">
+                    <option selected>Filter by State</option>
+                    @foreach (var state in Model.Select(x => x.StateId).Distinct())
+                    {
+                        <option value="@state">@state</option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="statusFilter">
+                    <option selected>Filter by Status</option>
+                    <option value="true">Active</option>
+                    <option value="false">Inactive</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-select" id="sortBy">
+                    <option selected>Sort by</option>
+                    <option value="name">Name</option>
+                    <option value="state">State</option>
+                    <option value="status">Status</option>
+                </select>
+            </div>
+            <div class="col-md-3 text-md-end">
+                <button class="btn btn-primary" id="applyFilters">
+                    <i class="fas fa-filter me-1"></i> Apply Filters
+                </button>
+                <button class="btn btn-outline-secondary ms-1" id="resetFilters">
+                    <i class="fas fa-undo me-1"></i> Reset
+                </button>
+            </div>
+        </div>
+
+        <!-- Blood Banks Table -->
+        <div class="card">
+            <div class="card-header bg-blood">
+                <h5 class="mb-0"><i class="fas fa-list me-2"></i> Blood Bank List</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped" id="bloodBanksTable">
+                        <thead>
+                            <tr>
+                                <th>Blood Bank Name</th>
+                                <th>Contact Info</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model) {
+                                <tr>
+                                    <td>
+                                        <div class="fw-bold">@item.BloodBankName</div>
+                                        <small class="text-muted">ID: @item.BloodBankId</small>
+                                    </td>
+                                    <td>
+                                        <div><i class="fas fa-phone-alt me-1 text-secondary"></i> @item.ContactNumber</div>
+                                        <div><i class="fas fa-envelope me-1 text-secondary"></i> @item.Email</div>
+                                    </td>
+                                    <td>
+                                        <div>@item.Address</div>
+                                        <small class="text-muted">State: @item.StateId, District: @item.districtId, City: @item.CityId</small>
+                                        <div>
+                                            <a href="https://maps.google.com/?q=@item.Latitude,@item.Longitude" target="_blank" class="text-decoration-none">
+                                                <i class="fas fa-map-marker-alt me-1 text-danger"></i> View on Map
+                                            </a>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        @if(item.IsActive) {
+                                            <span class="badge bg-success">Active</span>
+                                        } else {
+                                            <span class="badge bg-danger">Inactive</span>
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group">
+                                            <a href="@Url.Action("Edit", new { id = item.BloodBankId })" class="btn btn-sm btn-outline-primary" title="Edit">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <a href="@Url.Action("Details", new { id = item.BloodBankId })" class="btn btn-sm btn-outline-info" title="Details">
+                                                <i class="fas fa-info-circle"></i>
+                                            </a>
+                                            <a href="@Url.Action("Delete", new { id = item.BloodBankId })" class="btn btn-sm btn-outline-danger" title="Delete">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
+                                            <button class="btn btn-sm btn-outline-success" title="Toggle Status">
+                                                <i class="fas fa-power-off"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Search functionality
+            $("#bankSearch").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#bloodBanksTable tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+            
+            // Apply filters button - placeholder functionality
+            $("#applyFilters").click(function() {
+                alert("Filter functionality would be implemented with backend logic");
+            });
+            
+            // Reset filters
+            $("#resetFilters").click(function() {
+                $("#stateFilter").val($("#stateFilter option:first").val());
+                $("#statusFilter").val($("#statusFilter option:first").val());
+                $("#sortBy").val($("#sortBy option:first").val());
+                $("#bloodBanksTable tbody tr").show();
+            });
+        });
+    </script>
+</body>
+</html>

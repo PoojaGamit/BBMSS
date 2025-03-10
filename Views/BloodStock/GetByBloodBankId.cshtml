@@ -239,10 +239,10 @@
 										<a asp-action="UpdateBloodstock" asp-route-id="@item.StockId" class="btn btn-sm me-1" title="Edit" style="background-color: var(--primary); color: white;">
 											<i class="bi bi-pencil"></i>
 										</a>
-										<a asp-action="Details" asp-route-id="@item.StockId" class="btn btn-sm me-1" title="Details" style="background-color: var(--dark); color: white;">
+									@* 	<a asp-action="Details" asp-route-id="@item.StockId" class="btn btn-sm me-1" title="Details" style="background-color: var(--dark); color: white;">
 											<i class="bi bi-eye"></i>
-										</a>
-										<a asp-action="Delete" asp-route-id="@item.StockId" class="btn btn-sm" title="Delete" style="background-color: var(--danger); color: white;">
+										</a> *@
+										<a asp-action="InActiveBloodstock" asp-route-id="@item.StockId" class="btn btn-sm" title="Delete" style="background-color: var(--danger); color: white;">
 											<i class="bi bi-trash"></i>
 										</a>
 									</div>

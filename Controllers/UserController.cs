@@ -3,11 +3,9 @@ using System.Text;
 using BBMS1MVC.Helper;
 using BBMSDATA1.Context;
 using BBMSDATA1.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 
@@ -49,7 +47,7 @@ namespace BBMS1MVC.Controllers
             var response = await client.PostAsync("Users/Login", jsonContent);
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            Console.WriteLine("API Response: " + responseBody); // Debugging
+            Console.WriteLine("API Response: " + responseBody); 
 
             if (!response.IsSuccessStatusCode)
             {
@@ -57,12 +55,11 @@ namespace BBMS1MVC.Controllers
                 return View(model);
             }
 
-            // Extract token safely
+           
             var tokenObject = JsonConvert.DeserializeObject<dynamic>(responseBody);
             var token = "";
             if (tokenObject != null)
             {
-                // Try both lowercase and uppercase property names
                 token = (string?)tokenObject.token ?? (string?)tokenObject.Token;
             }
 
@@ -81,10 +78,20 @@ namespace BBMS1MVC.Controllers
                 var jwtToken = handler.ReadJwtToken(token);
                 var role = JwtHelper.GetUserRole(token);
                 var userId = JwtHelper.GetUserId(token);
+               var userName = JwtHelper.GetUserName(token);
 
+                if(!string.IsNullOrEmpty(userName))
+                {
+                    HttpContext.Session.SetString("UserName", userName);
+                }
                 if (!string.IsNullOrEmpty(userId))
                 {
                     HttpContext.Session.SetString("Userid", userId);
+                   
+                }
+                if (!string.IsNullOrEmpty(role))
+                { 
+                  HttpContext.Session.SetString("Role", role);
                 }
 
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -140,7 +147,6 @@ namespace BBMS1MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> UpdateUserprofile()
         {
-            // var token = HttpContext.Session.GetString("JWTToken");
             var userid = HttpContext.Session.GetString("Userid");
             if (userid != null)
             {

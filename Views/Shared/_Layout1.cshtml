@@ -1,13 +1,519 @@
-﻿<!DOCTYPE html>
-
-<html>
+﻿@{
+    var id = Context.Session.Get("Userid");
+    var Name = Context.Session.GetString("UserName");
+}
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <meta name="viewport" content="width=device-width" />
-    <title>@ViewBag.Title</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Blood Bank Management System Admin Panel">
+    <meta name="author" content="BBMS">
+    <title>@ViewData["Title"] - Blood Bank Management System</title>
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" rel="stylesheet">
+
+    <style>
+                body {
+                    font-family: 'Nunito', sans-serif;
+                    background-color: #f8f9fc;
+                }
+                .sidebar {
+                    background: linear-gradient(45deg, #dc3545, #9f1f2e);
+                    min-height: 100vh;
+                    position: fixed;
+                    top: 0;
+                    bottom: 0;
+                    left: 0;
+                    z-index: 1000;
+                    padding: 0;
+                    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+                    width: 225px;
+                    transition: all 0.3s;
+                }
+
+                .sidebar-toggled .sidebar {
+                    width: 6.5rem;
+                }
+
+                    .sidebar-toggled .sidebar .sidebar-heading,
+                    .sidebar-toggled .sidebar .nav-item .nav-link span {
+                        display: none;
+                    }
+
+                    .sidebar-toggled .sidebar .nav-item .nav-link {
+                        text-align: center;
+                        padding: 0.75rem 1rem;
+                    }
+
+                        .sidebar-toggled .sidebar .nav-item .nav-link i {
+                            margin-right: 0;
+                            font-size: 1.1rem;
+                        }
+
+                .sidebar-toggled .sidebar-brand .sidebar-brand-text {
+                    display: none;
+                }
+
+                .sidebar .sidebar-brand {
+                    height: 4.375rem;
+                    text-decoration: none;
+                    font-size: 0.9rem;
+                    font-weight: 700;
+                    padding: 1.5rem 1rem;
+                    text-align: center;
+                    letter-spacing: 0.05rem;
+                    z-index: 1;
+                }
+
+                .sidebar .nav-item .nav-link {
+                    color: rgba(255, 255, 255, 0.8);
+                    padding: 0.75rem 1rem;
+                    font-weight: 600;
+                }
+
+                    .sidebar .nav-item .nav-link:hover,
+                    .sidebar .nav-item.active .nav-link {
+                        color: #fff;
+                        background-color: rgba(255, 255, 255, 0.1);
+                    }
+
+                    .sidebar .nav-item .nav-link i {
+                        margin-right: 0.5rem;
+                        width: 1.25rem;
+                        text-align: center;
+                    }
+
+                .sidebar-heading {
+                    padding: 0.75rem 1rem;
+                    font-size: 0.55rem;
+                    color: rgba(255, 255, 255, 0.5);
+                    text-transform: uppercase;
+                    font-weight: 800;
+                    letter-spacing: 0.05rem;
+                }
+
+                .sidebar .collapse-inner {
+                    border-radius: 0.35rem;
+                    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+                }
+
+                .sidebar .collapse-header {
+                    color: #6e707e;
+                    font-weight: 700;
+                    font-size: 0.6rem;
+                    text-transform: uppercase;
+                    margin-bottom: 0.5rem;
+                    padding: 0.5rem 1rem;
+                }
+
+                .sidebar .collapse-item {
+                    padding: 0.5rem 1rem;
+                    margin: 0 0.5rem;
+                    display: block;
+                    color: #3a3b45;
+                    text-decoration: none;
+                    border-radius: 0.25rem;
+                    white-space: nowrap;
+                }
+
+                    .sidebar .collapse-item:hover {
+                        background-color: #f8f9fc;
+                    }
+
+             /* Add this to your CSS */
+        #content-wrapper {
+            margin-left: 225px; /* Adjust this to match your sidebar width */
+            width: calc(100% - 225px);
+            transition: all 0.3s;
+            overflow-x: hidden; /* Prevent horizontal scrolling */
+        }
+
+
+
+                .sidebar-toggled #content-wrapper {
+                    margin-left: 6.5rem;
+                    width: calc(100% - 6.5rem);
+                }
+
+                .topbar {
+                    height: 4.375rem;
+                    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+                }
+
+                    .topbar .navbar-search {
+                        width: 25rem;
+                    }
+
+                .topbar-divider {
+                    width: 0;
+                    border-right: 1px solid #e3e6f0;
+                    height: calc(4.375rem - 2rem);
+                    margin: auto 1rem;
+                }
+
+                .img-profile {
+                    height: 2rem;
+                    width: 2rem;
+                }
+
+                .icon-circle {
+                    height: 2.5rem;
+                    width: 2.5rem;
+                    border-radius: 100%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+
+                .rotate-n-15 {
+                    transform: rotate(-15deg);
+                }
+
+                .rounded-circle {
+                    border-radius: 50% !important;
+                }
+
+                .dropdown-list {
+                    width: 20rem !important;
+                }
+
+                .card-header {
+                    background-color: #f8f9fc;
+                    border-bottom: 1px solid #e3e6f0;
+                }
+
+                .card-body {
+                    flex: 1 1 auto;
+                    min-height: 1px;
+                    padding: 1.25rem;
+                }
+
+    </style>
+
+    @await RenderSectionAsync("Styles", required: false)
 </head>
-<body>
-    <div>
-        @RenderBody()
+
+<body id="page-top">
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="sidebar col-md-2 col-lg-2 d-md-block">
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center text-white" href="/Admin/Dashboard">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-tint fa-2x"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">BBMS Admin</div>
+            </a>
+
+            <hr class="bg-light my-2 opacity-50">
+
+            <!-- Nav Item - Dashboard -->
+            <div class="nav-item active">
+                <a class="nav-link" asp-action="Index" asp-controller="Admin" >
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </div>
+
+            <hr class="bg-light my-2 opacity-50">
+
+            <!-- Heading -->
+        @*     <div class="sidebar-heading">
+                Blood Management
+            </div> *@
+
+            <!-- Nav Item - Blood Stock -->
+            <div class="nav-item">
+                <a class="nav-link" asp-action="Bloodstock" asp-controller="Admin" >
+                    <i class="fas fa-fw fa-tint"></i>
+                    <span>Blood Stock</span>
+                </a>
+            </div>
+
+            <!-- Nav Item - Component Stock -->
+            <div class="nav-item">
+                <a class="nav-link" asp-action="Componentstock" asp-controller="Admin">
+                    <i class="fas fa-fw fa-vials"></i>
+                    <span>Component Stock</span>
+                </a>
+            </div>
+
+            <!-- Nav Item - Blood Requests -->
+            <div class="nav-item">
+                <a class="nav-link" href="/BloodRequest/Index">
+                    <i class="fas fa-fw fa-clipboard-list"></i>
+                    <span>Blood Requests</span>
+                </a>
+            </div>
+
+            <!-- Nav Item - Donations -->
+            <div class="nav-item">
+                <a class="nav-link" href="/Donations/Index">
+                    <i class="fas fa-fw fa-hand-holding-heart"></i>
+                    <span>Donations</span>
+                </a>
+            </div>
+
+          @*   <hr class="bg-light my-2 opacity-50">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Camps & Events
+            </div> *@
+
+            <!-- Nav Item - Blood Camps -->
+            <div class="nav-item">
+                <a class="nav-link" asp-action="BloodCamps" asp-controller="Admin">
+                    <i class="fas fa-fw fa-calendar-alt" ></i>
+                    <span>Blood Camps</span>
+                </a>
+            </div>
+
+            <!-- Nav Item - Camp Registrations -->
+            <div class="nav-item">
+                <a class="nav-link" href="/CampRegistrations/Index">
+                    <i class="fas fa-fw fa-clipboard-check"></i>
+                    <span>Camp Registrations</span>
+                </a>
+            </div>
+
+          @*   <hr class="bg-light my-2 opacity-50">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Management
+            </div>
+ *@
+            <!-- Nav Item - Users -->
+            <div class="nav-item">
+                <a class="nav-link" asp-action="Users" asp-contoller="Admin">
+                    <i class="fas fa-fw fa-users"></i>
+                    <span>Users</span>
+                </a>
+               @*  <div id="collapseUsers" class="collapse" aria-labelledby="headingUsers">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">User Management:</h6>
+                        <a class="collapse-item" href="/Users/Index">All Users</a>
+                        <a class="collapse-item" href="/Users/Donors">Donors</a>
+                        <a class="collapse-item" href="/Users/Admins">Administrators</a>
+                    </div>
+                </div> *@
+            </div>
+
+            <!-- Nav Item - Blood Banks -->
+            <div class="nav-item">
+                <a class="nav-link" asp-action="BloodBanks" asp-controller="Admin" >
+                    <i class="fas fa-fw fa-hospital"></i>
+                    <span>Blood Banks</span>
+                </a>
+            </div>
+
+            <!-- Nav Item - Location -->
+            <div class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLocation" aria-expanded="false" aria-controls="collapseLocation">
+                    <i class="fas fa-fw fa-map-marker-alt"></i>
+                    <span>Locations</span>
+                </a>
+           @*      <div id="collapseLocation" class="collapse" aria-labelledby="headingLocation">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Location Management:</h6>
+                        <a class="collapse-item" href="/States/Index">States</a>
+                        <a class="collapse-item" href="/Districts/Index">Districts</a>
+                        <a class="collapse-item" href="/Cities/Index">Cities</a>
+                    </div>
+                </div> *@
+            </div>
+
+            <!-- Nav Item - Configuration -->
+          @*   <div class="nav-item">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseConfig" aria-expanded="false" aria-controls="collapseConfig">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Configuration</span>
+                </a>
+                <div id="collapseConfig" class="collapse" aria-labelledby="headingConfig">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">System Configuration:</h6>
+                        <a class="collapse-item" href="/BloodGroups/Index">Blood Groups</a>
+                        <a class="collapse-item" href="/ComponentTypes/Index">Component Types</a>
+                        <a class="collapse-item" href="/DonationTypes/Index">Donation Types</a>
+                        <a class="collapse-item" href="/BagTypes/Index">Bag Types</a>
+                        <a class="collapse-item" href="/Roles/Index">User Roles</a>
+                    </div>
+                </div>
+            </div> *@
+        </div>
+        <!-- End of Sidebar -->
+        <!-- Main Content -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Topbar -->
+            <nav class="topbar navbar navbar-expand navbar-light bg-white mb-4 shadow">
+                <!-- Sidebar Toggle (Topbar) -->
+                <button id="sidebarToggleTop" class="btn btn-link rounded-circle mr-3">
+                    <i class="fa fa-bars"></i>
+                </button>
+
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-bell fa-fw"></i>
+                            <span class="badge rounded-pill bg-danger">3+</span>
+                        </a>
+
+                        <div class="dropdown-list dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="alertsDropdown">
+                            <h6 class="dropdown-header bg-danger text-white">
+                                Alerts Center
+                            </h6>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="me-3">
+                                    <div class="icon-circle bg-primary">
+                                        <i class="fas fa-file-alt text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">March 10, 2025</div>
+                                    <span class="fw-bold">New blood request received from City Hospital!</span>
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="me-3">
+                                    <div class="icon-circle bg-success">
+                                        <i class="fas fa-donate text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">March 9, 2025</div>
+                                    10 new donations recorded today!
+                                </div>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <div class="me-3">
+                                    <div class="icon-circle bg-warning">
+                                        <i class="fas fa-exclamation-triangle text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="small text-gray-500">March 8, 2025</div>
+                                    Low stock alert: O- blood group below threshold
+                                </div>
+                            </a>
+                            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+                        </div>
+                    </li>
+
+                  @*   <div class="topbar-divider d-none d-sm-block"></div>
+ *@
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="me-2 d-none d-lg-inline text-gray-600 small">@Name</span>
+                            <img class="img-profile rounded-circle" src="/api/placeholder/40/40" alt="Profile">
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end shadow animated--grow-in" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#profileModal">
+                                <i class="fas fa-user fa-sm fa-fw me-2 text-gray-400"></i>
+                                Profile
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal">
+                                <i class="fas fa-sign-out-alt fa-sm fa-fw me-2 text-gray-400"></i>
+                                Logout
+                            </a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+            <footer class="sticky-footer bg-white mt-auto">
+                <div class="container-fluid">
+                    <div class="copyright text-center my-3">
+                        <span>Copyright &copy; Blood Bank Management System 2025</span>
+                    </div>
+                </div>
+            </footer>
+        </div>
     </div>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" asp-action="LogoutUser" asp-controller="User">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel1">User Profile</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                @if (Name != null)
+                {
+                    <div class="modal-body">@Name</div>
+                }
+
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <a class="btn btn-danger" asp-action="LogoutUser" asp-controller="User">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+
+    <!-- Custom scripts for sidebar toggle -->
+    <script>
+               // Add this JavaScript to handle the toggle properly
+        $(document).ready(function() {
+            $("#sidebarToggleTop").click(function(e) {
+                e.preventDefault();
+                $("#wrapper").toggleClass("sidebar-toggled");
+
+                // Force recalculation of content area
+                setTimeout(function() {
+                    $(window).trigger('resize');
+                }, 300);
+            });
+
+                    // Handle responsive behavior
+                    function checkScreenSize() {
+                        if ($(window).width() < 768) {
+                            $("body").addClass("sidebar-toggled");
+                        } else {
+                            $("body").removeClass("sidebar-toggled");
+                        }
+                    }
+
+                    // Check on load and window resize
+                    checkScreenSize();
+                    $(window).resize(function() {
+                        checkScreenSize();
+                    });
+                });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

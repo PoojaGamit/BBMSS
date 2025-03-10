@@ -124,5 +124,19 @@ namespace BBMS1MVC.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public async Task<IActionResult>InActiveBloodstock(int id)
+        {
+            var client = clientFactory.CreateClient("MyApiClient");
+            var response = await client.GetAsync($"BloodStock/DeleteBloodStock/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var jsondata = await response.Content.ReadAsStringAsync();
+                var bloodstock=JsonConvert.DeserializeObject<BloodStock>(jsondata);
+                return RedirectToAction("GetByBloodBankId");
+            }
+            return BadRequest();
+        }
+
     }
 }

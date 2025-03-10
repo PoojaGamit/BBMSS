@@ -1,0 +1,615 @@
+﻿@model IEnumerable<BBMSDATA1.Models.ComponentStock>
+@{
+    ViewData["Title"] = "Blood Component Inventory";
+    Layout = "_Layout1";
+}
+
+<!-- Dashboard Overview Section -->
+<div class="container-fluid px-4">
+    <!-- Summary Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-primary text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">@Model.Sum(x => x.Quantity)</h5>
+                            <div class="small">Total Units</div>
+                        </div>
+                        <div>
+                            <i class="fas fa-tint fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-warning text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">@Model.Count(x => x.ExpiryDate < DateTime.Now.AddDays(7) && x.ExpiryDate >= DateTime.Now)</h5>
+                            <div class="small">Expiring Soon</div>
+                        </div>
+                        <div>
+                            <i class="fas fa-exclamation-triangle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-danger text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">@Model.Count(x => x.Quantity <= 5)</h5>
+                            <div class="small">Low Stock Items</div>
+                        </div>
+                        <div>
+                            <i class="fas fa-battery-quarter fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-md-6">
+            <div class="card bg-success text-white mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="mb-0">@Model.Count(x => x.ExpiryDate >= DateTime.Now.AddDays(30))</h5>
+                            <div class="small">Long Shelf Life</div>
+                        </div>
+                        <div>
+                            <i class="fas fa-check-circle fa-2x"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer d-flex align-items-center justify-content-between">
+                    <a class="small text-white stretched-link" href="#">View Details</a>
+                    <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ @*    <!-- Quick Actions Bar -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-light">
+                    <i class="fas fa-bolt me-1"></i> Quick Actions
+                </div>
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a href="#" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-plus-circle mb-2 d-block fa-2x"></i>
+                                New Donation
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a href="#" class="btn btn-outline-danger w-100">
+                                <i class="fas fa-ambulance mb-2 d-block fa-2x"></i>
+                                Emergency Request
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a href="#" class="btn btn-outline-info w-100">
+                                <i class="fas fa-exchange-alt mb-2 d-block fa-2x"></i>
+                                Transfer Components
+                            </a>
+                        </div>
+                        <div class="col-md-3 col-sm-6 mb-3">
+                            <a href="#" class="btn btn-outline-dark w-100">
+                                <i class="fas fa-print mb-2 d-block fa-2x"></i>
+                                Print Labels
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+
+    <!-- Inventory Management Card -->
+    <div class="card mb-4">
+        <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
+            <div>
+                <i class="fas fa-flask me-1"></i>
+                Blood Component Inventory Management
+            </div>
+            <div>
+                <a asp-action="Create" class="btn btn-light">
+                    <i class="fas fa-plus me-1"></i> Add New Component
+                </a>
+            </div>
+        </div>
+
+        <!-- Filter Tab Navigation -->
+        <div class="card-body border-bottom pb-0">
+            <ul class="nav nav-tabs" id="inventoryTabs" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="all-tab" data-bs-toggle="tab" data-bs-target="#all" type="button" role="tab" aria-controls="all" aria-selected="true">All Components</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="critical-tab" data-bs-toggle="tab" data-bs-target="#critical" type="button" role="tab" aria-controls="critical" aria-selected="false">Critical Stock</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="expiring-tab" data-bs-toggle="tab" data-bs-target="#expiring" type="button" role="tab" aria-controls="expiring" aria-selected="false">Expiring Soon</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="expired-tab" data-bs-toggle="tab" data-bs-target="#expired" type="button" role="tab" aria-controls="expired" aria-selected="false">Expired</button>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Advanced Filter Options -->
+        <div class="card-body bg-light border-bottom">
+            <div class="mb-3">
+                <button class="btn btn-sm btn-outline-secondary mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse" aria-expanded="false" aria-controls="filterCollapse">
+                    <i class="fas fa-filter me-1"></i> Advanced Filters
+                </button>
+
+                <div class="collapse" id="filterCollapse">
+                    <div class="card card-body">
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <label for="bloodBankFilter" class="form-label">Blood Bank</label>
+                                <select id="bloodBankFilter" class="form-select">
+                                    <option value="">All Blood Banks</option>
+                                    @foreach (var bank in ViewBag.BloodBanks ?? new List<dynamic>())
+                                    {
+                                        <option value="@bank.Id">@bank.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label for="bloodGroupFilter" class="form-label">Blood Group</label>
+                                <select id="bloodGroupFilter" class="form-select">
+                                    <option value="">All Blood Groups</option>
+                                    <option value="1">A+</option>
+                                    <option value="2">A-</option>
+                                    <option value="3">B+</option>
+                                    <option value="4">B-</option>
+                                    <option value="5">AB+</option>
+                                    <option value="6">AB-</option>
+                                    <option value="7">O+</option>
+                                    <option value="8">O-</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label for="componentTypeFilter" class="form-label">Component Type</label>
+                                <select id="componentTypeFilter" class="form-select">
+                                    <option value="">All Component Types</option>
+                                    <option value="1">Whole Blood</option>
+                                    <option value="2">Red Blood Cells</option>
+                                    <option value="3">Platelets</option>
+                                    <option value="4">Plasma</option>
+                                    <option value="5">Cryoprecipitate</option>
+                                </select>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <label for="dateRangeFilter" class="form-label">Expiry Date Range</label>
+                                <input type="text" id="dateRangeFilter" class="form-control" placeholder="Select date range">
+                            </div>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="col-12 text-end">
+                                <button id="applyFilters" class="btn btn-primary">
+                                    <i class="fas fa-search me-1"></i> Apply Filters
+                                </button>
+                                <button id="resetFilters" class="btn btn-outline-secondary">
+                                    <i class="fas fa-undo me-1"></i> Reset
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Inventory Table -->
+        <div class="card-body">
+            <div class="tab-content" id="inventoryTabContent">
+                <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="all-tab">
+                    <div class="table-responsive">
+                        <table id="componentsDataTable" class="table table-striped table-bordered">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>
+                                        <i class="fas fa-hospital me-1"></i> Blood Bank
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-tint me-1"></i> Blood Group
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-vial me-1"></i> Component Type
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-cubes me-1"></i> Quantity
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-calendar-alt me-1"></i> Expiry Date
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-exclamation-triangle me-1"></i> Status
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-user-edit me-1"></i> Updated By
+                                    </th>
+                                    <th>
+                                        <i class="fas fa-clock me-1"></i> Last Updated
+                                    </th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model)
+                                {
+                                    var expiryStatus = "";
+                                    var statusClass = "";
+
+                                    @if (item.ExpiryDate < DateTime.Now)
+                                    {
+                                        expiryStatus = "Expired";
+                                        statusClass = "badge bg-danger";
+                                    }
+                                    else if (item.ExpiryDate < DateTime.Now.AddDays(7))
+                                    {
+                                        expiryStatus = "Expiring Soon";
+                                        statusClass = "badge bg-warning text-dark";
+                                    }
+                                    else
+                                    {
+                                        expiryStatus = "Valid";
+                                        statusClass = "badge bg-success";
+                                    }
+
+                                    <tr>
+                                        <td>
+                                            @{
+                                                string bankName = item.BloodBankId.ToString();
+                                                if (ViewBag.BloodBanks != null)
+                                                {
+                                                    foreach (var bank in ViewBag.BloodBanks)
+                                                    {
+                                                        if (bank.Id == item.BloodBankId)
+                                                        {
+                                                            bankName = bank.Name;
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            @bankName
+                                        </td>
+                                        <td>
+                                            @{
+                                                var bloodGroups = new Dictionary<int, string> {
+                                        {1, "A+"}, {2, "A-"}, {3, "B+"}, {4, "B-"},
+                                        {5, "AB+"}, {6, "AB-"}, {7, "O+"}, {8, "O-"}
+                                        };
+                                            }
+                                            @(bloodGroups.ContainsKey(item.BloodGroupId) ? bloodGroups[item.BloodGroupId] : item.BloodGroupId.ToString())
+                                        </td>
+                                        <td>
+                                            @{
+                                                var componentTypes = new Dictionary<int, string> {
+                                        {1, "Whole Blood"}, {2, "Red Blood Cells"},
+                                        {3, "Platelets"}, {4, "Plasma"}, {5, "Cryoprecipitate"}
+                                        };
+                                            }
+                                            @(componentTypes.ContainsKey(item.ComponentTypeId) ? componentTypes[item.ComponentTypeId] : item.ComponentTypeId.ToString())
+                                        </td>
+                                        <td>
+                                            @if (item.Quantity <= 5)
+                                            {
+                                                <span class="badge bg-danger">Low</span>
+                                            }
+                                            @item.Quantity units
+                                        </td>
+                                        <td>
+                                            @item.ExpiryDate.ToString("MMM dd, yyyy")
+                                            <div class="progress mt-1" style="height: 4px;">
+                                                @{
+                                                    int daysLeft = (item.ExpiryDate - DateTime.Now).Days;
+                                                    int totalShelfDays = 42; // Assuming standard shelf life is 42 days
+                                                    int percentLeft = Math.Max(0, Math.Min(100, (daysLeft * 100) / totalShelfDays));
+                                                    string progressColor = "bg-success";
+
+                                                    if (percentLeft < 25) progressColor = "bg-danger";
+                                                    else if (percentLeft < 50) progressColor = "bg-warning";
+                                                }
+                                                <div class="progress-bar @progressColor" role="progressbar" style="width: @percentLeft%" aria-valuenow="@percentLeft" aria-valuemin="0" aria-valuemax="100"></div>
+                                            </div>
+                                            <small class="text-muted">@Math.Max(0, (item.ExpiryDate - DateTime.Now).Days) days left</small>
+                                        </td>
+                                        <td>
+                                            <span class="@statusClass">@expiryStatus</span>
+                                        </td>
+                                        <td>
+                                            @item.UpdatedBy
+                                        </td>
+                                        <td>
+                                            @item.LastUpdated.ToString("MMM dd, yyyy HH:mm")
+                                        </td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    Actions
+                                                </button>
+                                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                                    <li><a class="dropdown-item" asp-action="Edit" asp-route-id="@item.CId"><i class="fas fa-edit me-2"></i>Edit</a></li>
+                                                    <li><a class="dropdown-item" asp-action="Details" asp-route-id="@item.CId"><i class="fas fa-info-circle me-2"></i>Details</a></li>
+                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reserveModal" data-id="@item.CId"><i class="fas fa-bookmark me-2"></i>Reserve</a></li>
+                                                    <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#transferModal" data-id="@item.CId"><i class="fas fa-exchange-alt me-2"></i>Transfer</a></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li><a class="dropdown-item text-danger" asp-action="Delete" asp-route-id="@item.CId"><i class="fas fa-trash me-2"></i>Delete</a></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Other tabs would have similar content but filtered -->
+                <div class="tab-pane fade" id="critical" role="tabpanel" aria-labelledby="critical-tab">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> This tab will show only components with critical stock levels (5 units or less).
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="expiring" role="tabpanel" aria-labelledby="expiring-tab">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> This tab will show only components expiring within the next 7 days.
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="expired" role="tabpanel" aria-labelledby="expired-tab">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle me-2"></i> This tab will show only expired components.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer with Actions -->
+        <div class="card-footer bg-light">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="text-muted">Showing @Model.Count() components</span>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-cog me-1"></i> Actions
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-file-excel me-2"></i>Export to Excel</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-file-pdf me-2"></i>Export to PDF</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-print me-2"></i>Print Inventory</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-chart-bar me-2"></i>Generate Report</a></li>
+                        <li><a class="dropdown-item" href="#"><i class="fas fa-envelope me-2"></i>Email Report</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blood Inventory Distribution Chart -->
+    <div class="row mb-4">
+        <div class="col-xl-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-chart-pie me-1"></i>
+                    Blood Group Distribution
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <img src="/api/placeholder/520/300" alt="Blood group distribution chart" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-6">
+            <div class="card h-100">
+                <div class="card-header">
+                    <i class="fas fa-chart-bar me-1"></i>
+                    Component Expiry Timeline
+                </div>
+                <div class="card-body">
+                    <div class="text-center">
+                        <img src="/api/placeholder/520/300" alt="Component expiry timeline" class="img-fluid" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reserve Modal -->
+<div class="modal fade" id="reserveModal" tabindex="-1" aria-labelledby="reserveModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="reserveModalLabel">Reserve Blood Component</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" id="componentId" value="" />
+                    <div class="mb-3">
+                        <label for="patientId" class="form-label">Patient ID</label>
+                        <input type="text" class="form-control" id="patientId" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="patientName" class="form-label">Patient Name</label>
+                        <input type="text" class="form-control" id="patientName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="doctorName" class="form-label">Requesting Doctor</label>
+                        <input type="text" class="form-control" id="doctorName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="reservationDate" class="form-label">Reservation Date</label>
+                        <input type="date" class="form-control" id="reservationDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="requiredUnits" class="form-label">Required Units</label>
+                        <input type="number" class="form-control" id="requiredUnits" min="1" value="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="priority" class="form-label">Priority</label>
+                        <select class="form-select" id="priority" required>
+                            <option value="normal">Normal</option>
+                            <option value="urgent">Urgent</option>
+                            <option value="emergency">Emergency</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary">Reserve Component</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Transfer Modal -->
+<div class="modal fade" id="transferModal" tabindex="-1" aria-labelledby="transferModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+                <h5 class="modal-title" id="transferModalLabel">Transfer Blood Component</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <input type="hidden" id="transferComponentId" value="" />
+                    <div class="mb-3">
+                        <label for="destinationBank" class="form-label">Destination Blood Bank</label>
+                        <select class="form-select" id="destinationBank" required>
+                            <option value="">Select Blood Bank</option>
+                            @foreach (var bank in ViewBag.BloodBanks ?? new List<dynamic>())
+                            {
+                                <option value="@bank.Id">@bank.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transferUnits" class="form-label">Units to Transfer</label>
+                        <input type="number" class="form-control" id="transferUnits" min="1" value="1" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transferDate" class="form-label">Transfer Date</label>
+                        <input type="date" class="form-control" id="transferDate" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transportMethod" class="form-label">Transport Method</label>
+                        <select class="form-select" id="transportMethod" required>
+                            <option value="internal">Internal Transport</option>
+                            <option value="courier">Medical Courier</option>
+                            <option value="emergency">Emergency Transport</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="transferNotes" class="form-label">Notes</label>
+                        <textarea class="form-control" id="transferNotes" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-info">Process Transfer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // Initialize DataTable
+            $('#componentsDataTable').DataTable({
+                responsive: true,
+                order: [[4, 'asc']], // Sort by expiry date by default
+                pageLength: 25
+            });
+
+            // Initialize date range picker (needs daterangepicker plugin)
+            $('#dateRangeFilter').daterangepicker({
+                opens: 'left',
+                autoUpdateInput: false,
+                locale: {
+                    cancelLabel: 'Clear'
+                }
+            });
+
+            $('#dateRangeFilter').on('apply.daterangepicker', function(ev, picker) {
+                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+            });
+
+            $('#dateRangeFilter').on('cancel.daterangepicker', function(ev, picker) {
+                $(this).val('');
+            });
+
+            // Apply filters button
+            $('#applyFilters').click(function() {
+                var bloodBank = $('#bloodBankFilter').val();
+                var bloodGroup = $('#bloodGroupFilter').val();
+                var componentType = $('#componentTypeFilter').val();
+                var dateRange = $('#dateRangeFilter').val();
+
+                var url = '@Url.Action("Index")';
+                var params = [];
+
+                if (bloodBank) params.push('bloodBankId=' + bloodBank);
+                if (bloodGroup) params.push('bloodGroupId=' + bloodGroup);
+                if (componentType) params.push('componentTypeId=' + componentType);
+                if (dateRange) params.push('dateRange=' + encodeURIComponent(dateRange));
+
+                if (params.length > 0) {
+                    url += '?' + params.join('&');
+                }
+
+                window.location.href = url;
+            });
+
+            // Reset filters button
+            $('#resetFilters').click(function() {
+                window.location.href = '@Url.Action("Index")';
+            });
+
+            // Modal data passing
+            $('#reserveModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var componentId = button.data('id');
+                var modal = $(this);
+                modal.find('#componentId').val(componentId);
+            });
+
+            $('#transferModal').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var componentId = button.data('id');
+                var modal = $(this);
+                modal.find('#transferComponentId').val(componentId);
+            });
+        });
+    </script>
+}

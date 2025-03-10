@@ -67,12 +67,11 @@ namespace BBMS1MVC.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BBDetails()
+        public IActionResult BBDetails()
         {
-           
-                        ViewBag.States = new SelectList(context.States.ToList(), "Id", "StateName");
-                        return View();
-                    
+           ViewBag.States = new SelectList(context.States.ToList(), "Id", "StateName");
+           return View();
+                   
         }
 
         [HttpPost]
@@ -169,6 +168,9 @@ namespace BBMS1MVC.Controllers
             }
             return View(model);
         }
+
+        //[HttpGet]
+       
 
     }
 }

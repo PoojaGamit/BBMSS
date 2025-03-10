@@ -1,5 +1,6 @@
 ﻿@{
     var id = Context.Session.Get("Userid");
+    var role = Context.Session.GetString("Role");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -185,19 +186,82 @@
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <i class="bi bi-house-door me-1"></i>Home
-                            </a>
+                            @if (role == null)
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house-door me-1"></i>Home
+                                </a>
+                            }
+                            else if (role == "Admin")
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house-door me-1"></i>Home
+                                </a>
+                            }
+                            else if (role == "BAdmin")
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="BloodBank" asp-action="Index">
+                                    <i class="bi bi-house-door me-1"></i>Home
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                    <i class="bi bi-house-door me-1"></i>Home
+                                </a>
+                            }
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">
-                                <i class="bi bi-info-circle me-1"></i>About Us
-                            </a>
+                            @if (role == null)
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">
+                                    <i class="bi bi-info-circle me-1"></i>About Us
+                                </a>
+                            }
+                            else if (role == "Admin")
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="BloodStock" asp-action="GetByBloodBankId">
+                                    <i class="bi bi-info-circle me-1"></i>BloodBank
+                                </a>
+                            }
+                            else if (role == "BAdmin")
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="BloodBank" asp-action="GetBBbyAdminid">
+                                    <i class="bi bi-building me-1"></i>BloodBank
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="Home" asp-action="About">
+                                    <i class="bi bi-info-circle me-1"></i>About Us
+                                </a>
+                            }
+
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="BloodBank" asp-action="GetAllBloodbank">
-                                <i class="bi bi-building me-1"></i>Blood Banks
-                            </a>
+                            @if (role == null)
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="BloodBank" asp-action="GetAllBloodbank">
+                                    <i class="bi bi-building me-1"></i>Blood Banks
+                                </a>
+                            }
+                            else if (role == "Admin")
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="BloodBank" asp-action="GetAllBloodbank">
+                                    <i class="bi bi-building me-1"></i>Blood Banks
+                                </a>
+                            }
+                            else if (role == "BAdmin")
+                            {
+                                <a class="nav-link" asp-area="" asp-controller="BloodStock" asp-action="GetByBloodBankId">
+                                    <i class="bi bi-info-circle me-1"></i>Blood Stock
+                                </a>
+                            }
+                            else{
+                                <a class="nav-link" asp-area="" asp-controller="BloodBank" asp-action="GetAllBloodbank">
+                                    <i class="bi bi-building me-1"></i>Blood Banks
+                                </a>
+                            }
                         </li>
                         @if (id == null)
                         {
@@ -217,7 +281,7 @@
                             </li>
 
                         }
-                                               <li class="nav-item ms-2">
+                        <li class="nav-item ms-2">
                             <a class="btn btn-donate" asp-area="" asp-controller="Donation" asp-action="Donate">
                                 <i class="bi bi-heart-fill me-1"></i>Donate Now
                             </a>
@@ -234,6 +298,64 @@
         </main>
     </div>
 
+    @if (id == null)
+    {
+        <footer class="text-center text-lg-start" style="background-color: #4a90e2;">
+            <div class="container py-5">
+                <div class="row justify-content-center">
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-white mb-4">Quick Links</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-2">
+                                <a asp-area="" asp-controller="Home" asp-action="Index" class="text-white" style="text-decoration: none; transition: color 0.3s;">Home</a>
+                            </li>
+                            <li class="mb-2">
+                                <a asp-area="" asp-controller="Home" asp-action="About" class="text-white" style="text-decoration: none; transition: color 0.3s;">About</a>
+                            </li>
+                            <li class="mb-2">
+                                <a asp-area="" asp-controller="BloodBank" asp-action="GetAllBloodbank" class="text-white" style="text-decoration: none; transition: color 0.3s;">Blood Banks</a>
+                            </li>
+                            </ul>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-white mb-4">Contact Us</h5>
+                        <ul class="list-unstyled mb-0">
+                            <li class="mb-3">
+                                <i class="bi bi-geo-alt me-2"></i>
+                                <span class="text-white">123 Street, City, Country</span>
+                            </li>
+                            <li class="mb-3">
+                                <i class="bi bi-telephone me-2"></i>
+                                <span class="text-white">+1 234 567 890</span>
+                            </li>
+                          @*   <li class="mb-3">
+                                <i class="bi bi-envelope me-2"></i>
+                                <span class="text-white">contact@bloodbankhub.com</span>
+                            </li> *@
+                        </ul>
+                        <div class="mt-4 social-icons">
+                            <a href="#" class="text-white me-2"><i class="bi bi-facebook"></i></a>
+                            <a href="#" class="text-white me-2"><i class="bi bi-twitter"></i></a>
+                            <a href="#" class="text-white me-2"><i class="bi bi-instagram"></i></a>
+                            <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-4 col-md-6 mb-4 mb-md-0">
+                        <h5 class="text-white mb-4">Admin</h5>
+                        <p class="text-white mb-3">Access admin portal to manage blood bank operations</p>
+                        <a asp-area="" asp-controller="User" asp-action="Login" class="btn btn-light px-4 py-2">Admin Login</a>
+                    </div>
+                </div>
+            </div>
+           @*  <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.1);">
+                <span class="text-white">© 2025 BloodBankHub. All rights reserved.</span>
+            </div> *@       
+</footer>
+    }
+   
+  
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

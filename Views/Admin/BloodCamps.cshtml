@@ -1,0 +1,525 @@
+﻿@model IEnumerable<BBMSDATA1.Models.BloodCamps>
+@{
+    ViewData["Title"] = "Blood Donation Camps Management";
+    Layout = "_Layout1";
+}
+
+	<div class="container-fluid py-4">
+		<div class="card shadow-sm">
+			<div class="card-header bg-danger text-white d-flex justify-content-between align-items-center">
+				<h4 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Blood Donation Camps</h4>
+				<div>
+					<button type="button" class="btn btn-light btn-sm me-2" id="exportBtn">
+						<i class="fas fa-file-export me-1"></i>Export
+					</button>
+					@* <a asp-action="Create" class="btn btn-success btn-sm">
+						<i class="fas fa-plus-circle me-1"></i>Schedule New Camp
+					</a> *@
+				</div>
+			</div>
+			
+			<div class="card-body">
+				<div class="row mb-3">
+					<div class="col-md-3">
+						<div class="input-group">
+							<span class="input-group-text"><i class="fas fa-search"></i></span>
+							<input type="text" id="searchInput" class="form-control" placeholder="Search camps...">
+						</div>
+					</div>
+					<div class="col-md-3">
+						<select class="form-select" id="statusFilter">
+							<option value="">All Camps</option>
+							<option value="upcoming">Upcoming Camps</option>
+							<option value="ongoing">Ongoing Camps</option>
+							<option value="completed">Completed Camps</option>
+						</select>
+					</div>
+					<div class="col-md-3">
+						<select class="form-select" id="organizerFilter">
+							<option value="">All Organizers</option>
+							@foreach (var organizer in Model.Select(c => c.Organizer).Distinct())
+							{
+								<option value="@organizer">@organizer</option>
+							}
+						</select>
+					</div>
+					<div class="col-md-3">
+						<div class="input-group">
+							<span class="input-group-text"><i class="fas fa-calendar"></i></span>
+							<input type="month" id="monthFilter" class="form-control">
+						</div>
+					</div>
+				</div>
+	
+				<div class="table-responsive">
+					<table class="table table-hover table-bordered" id="bloodCampsTable">
+						<thead class="table-light">
+							<tr>
+								<th class="sortable" data-sort="name">
+									<div class="d-flex justify-content-between align-items-center">
+										@Html.DisplayNameFor(model => model.Name)
+										<i class="fas fa-sort text-muted"></i>
+									</div>
+								</th>
+								<th>
+									<div class="d-flex justify-content-between align-items-center">
+										@Html.DisplayNameFor(model => model.Location)
+									</div>
+								</th>
+								<th class="sortable" data-sort="date">
+									<div class="d-flex justify-content-between align-items-center">
+										@Html.DisplayNameFor(model => model.Date)
+										<i class="fas fa-sort text-muted"></i>
+									</div>
+								</th>
+								<th>Time</th>
+								<th>
+									<div class="d-flex justify-content-between align-items-center">
+										@Html.DisplayNameFor(model => model.Organizer)
+									</div>
+								</th>
+								<th>Status</th>
+								<th>Visibility</th>
+								<th>Actions</th>
+							</tr>
+						</thead>
+						<tbody>
+						@foreach (var item in Model) 
+						{
+							var today = DateTime.Now.Date;
+							var campDate = item.Date.Date;
+							var campStartTime = item.StartTime;
+							var campEndTime = item.EndTime;
+							
+							var campStartDateTime = campDate.Add(campStartTime);
+							var campEndDateTime = campDate.Add(campEndTime);
+							var now = DateTime.Now;
+							
+							string statusClass = "";
+							string statusText = "";
+							
+							if (campDate > today)
+							{
+								statusClass = "bg-primary";
+								statusText = "Upcoming";
+							}
+							else if (campDate == today && now >= campStartDateTime && now <= campEndDateTime)
+							{
+								statusClass = "bg-success";
+								statusText = "Ongoing";
+							}
+							else if (campDate == today && now < campStartDateTime)
+							{
+								statusClass = "bg-warning";
+								statusText = "Today";
+							}
+							else
+							{
+								statusClass = "bg-secondary";
+								statusText = "Completed";
+							}
+							
+							var isVisible = item.VisibilityUntil >= today;
+							var rowClass = !isVisible ? "text-muted" : "";
+							
+							var daysUntil = (campDate - today).Days;
+							string timeInfo = "";
+							
+							if (daysUntil > 0)
+							{
+								timeInfo = $"in {daysUntil} day{(daysUntil == 1 ? "" : "s")}";
+							}
+							else if (daysUntil == 0)
+							{
+								timeInfo = "today";
+							}
+							else
+							{
+								timeInfo = $"{Math.Abs(daysUntil)} day{(Math.Abs(daysUntil) == 1 ? "" : "s")} ago";
+							}
+							
+							<tr class="@rowClass">
+								<td>
+									<span class="fw-bold">@item.Name</span>
+								</td>
+								<td>
+									<div class="d-flex align-items-center">
+										<i class="fas fa-map-marker-alt text-danger me-2"></i>
+										@item.Location
+									</div>
+								</td>
+								<td>
+									<div>
+										<i class="fas fa-calendar-day me-1 text-primary"></i>
+										@item.Date.ToString("MMM dd, yyyy")
+									</div>
+									<div class="small text-muted">@timeInfo</div>
+								</td>
+								<td>
+									<div class="d-flex align-items-center">
+										<i class="fas fa-clock text-info me-1"></i>
+										@item.StartTime.ToString(@"hh\:mm") - @item.EndTime.ToString(@"hh\:mm")
+									</div>
+									<div class="small text-muted">
+										@{
+											var duration = item.EndTime - item.StartTime;
+											@($"{Math.Floor(duration.TotalHours)}h {duration.Minutes}m")
+										}
+									</div>
+								</td>
+								<td>
+									<div>@item.Organizer</div>
+									<div class="small text-muted">Created by: @item.CreatedBy</div>
+								</td>
+								<td>
+									<span class="badge @statusClass">@statusText</span>
+								</td>
+								<td>
+									@if (isVisible)
+									{
+										<span class="badge bg-success">Visible until @item.VisibilityUntil.ToString("MMM dd")</span>
+									}
+									else
+									{
+										<span class="badge bg-secondary">Not visible</span>
+									}
+								</td>
+								<td>
+									<div class="btn-group">
+										<a asp-action="Edit" asp-route-id="@item.CampId" class="btn btn-sm btn-primary" data-bs-toggle="tooltip" title="Edit">
+											<i class="fas fa-edit"></i>
+										</a>
+										<a asp-action="Details" asp-route-id="@item.CampId" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Details">
+											<i class="fas fa-info-circle"></i>
+										</a>
+										<button type="button" class="btn btn-sm btn-danger delete-btn" data-id="@item.CampId" data-bs-toggle="tooltip" title="Delete">
+											<i class="fas fa-trash"></i>
+										</button>
+									</div>
+								</td>
+							</tr>
+						}
+						</tbody>
+					</table>
+				</div>
+				
+				<div class="d-flex justify-content-between align-items-center mt-3">
+					<div>
+						<span class="text-muted">Showing @Model.Count() entries</span>
+					</div>
+					<nav aria-label="Page navigation">
+						<ul class="pagination pagination-sm">
+							<li class="page-item disabled">
+								<a class="page-link" href="#" tabindex="-1">Previous</a>
+							</li>
+							<li class="page-item active"><a class="page-link" href="#">1</a></li>
+							<li class="page-item"><a class="page-link" href="#">2</a></li>
+							<li class="page-item"><a class="page-link" href="#">3</a></li>
+							<li class="page-item">
+								<a class="page-link" href="#">Next</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Dashboard Cards -->
+		<div class="row mt-4">
+			<div class="col-xl-3 col-md-6">
+				<div class="card bg-primary text-white mb-4">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<h5 class="mb-0">Upcoming Camps</h5>
+								<h2 class="mb-0">@Model.Count(x => x.Date > DateTime.Now.Date)</h2>
+							</div>
+							<i class="fas fa-calendar-plus fa-3x opacity-50"></i>
+						</div>
+					</div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" href="#" onclick="$('#statusFilter').val('upcoming').change(); return false;">View All</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6">
+				<div class="card bg-success text-white mb-4">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<h5 class="mb-0">Today's Camps</h5>
+								<h2 class="mb-0">@Model.Count(x => x.Date.Date == DateTime.Now.Date)</h2>
+							</div>
+							<i class="fas fa-heartbeat fa-3x opacity-50"></i>
+						</div>
+					</div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" href="#" onclick="$('#statusFilter').val('ongoing').change(); return false;">View All</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6">
+				<div class="card bg-warning text-white mb-4">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<h5 class="mb-0">This Month</h5>
+								<h2 class="mb-0">@Model.Count(x => x.Date.Month == DateTime.Now.Month && x.Date.Year == DateTime.Now.Year)</h2>
+							</div>
+							<i class="fas fa-calendar-week fa-3x opacity-50"></i>
+						</div>
+					</div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" href="#" onclick="$('#monthFilter').val('@DateTime.Now.ToString("yyyy-MM")').change(); return false;">View All</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-3 col-md-6">
+				<div class="card bg-info text-white mb-4">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<div>
+								<h5 class="mb-0">Total Camps</h5>
+								<h2 class="mb-0">@Model.Count()</h2>
+							</div>
+							<i class="fas fa-clipboard-list fa-3x opacity-50"></i>
+						</div>
+					</div>
+					<div class="card-footer d-flex align-items-center justify-content-between">
+						<a class="small text-white stretched-link" href="#" onclick="$('#statusFilter').val('').change(); return false;">View All</a>
+						<div class="small text-white"><i class="fas fa-angle-right"></i></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Calendar View -->
+		<div class="card shadow-sm mt-4">
+			<div class="card-header bg-light d-flex justify-content-between align-items-center">
+				<h5 class="mb-0"><i class="fas fa-calendar me-2"></i>Monthly Calendar View</h5>
+				<div>
+					<button class="btn btn-sm btn-outline-secondary" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+					<span class="mx-2" id="currentMonthDisplay">March 2025</span>
+					<button class="btn btn-sm btn-outline-secondary" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+				</div>
+			</div>
+			<div class="card-body">
+				<div class="table-responsive">
+					<table class="table table-bordered" id="calendarTable">
+						<thead>
+							<tr>
+								<th class="text-center">Sun</th>
+								<th class="text-center">Mon</th>
+								<th class="text-center">Tue</th>
+								<th class="text-center">Wed</th>
+								<th class="text-center">Thu</th>
+								<th class="text-center">Fri</th>
+								<th class="text-center">Sat</th>
+							</tr>
+						</thead>
+						<tbody>
+							<!-- Calendar will be generated via JavaScript -->
+							<tr>
+								<td class="text-muted">23</td>
+								<td class="text-muted">24</td>
+								<td class="text-muted">25</td>
+								<td class="text-muted">26</td>
+								<td class="text-muted">27</td>
+								<td class="text-muted">28</td>
+								<td>1</td>
+							</tr>
+							<tr>
+								<td>2</td>
+								<td>3</td>
+								<td>4</td>
+								<td>5</td>
+								<td>6</td>
+								<td>7</td>
+								<td>8</td>
+							</tr>
+							<tr>
+								<td>9</td>
+								<td class="bg-light border-primary">
+									<div class="fw-bold">10</div>
+									<div class="p-1 mb-1 bg-danger text-white rounded small">Community Center</div>
+									<div class="p-1 bg-primary text-white rounded small">University</div>
+								</td>
+								<td>11</td>
+								<td>12</td>
+								<td>13</td>
+								<td>14</td>
+								<td>15</td>
+							</tr>
+							<tr>
+								<td>16</td>
+								<td>17</td>
+								<td>18</td>
+								<td>19</td>
+								<td>20</td>
+								<td>21</td>
+								<td>22</td>
+							</tr>
+							<tr>
+								<td>23</td>
+								<td>24</td>
+								<td>25</td>
+								<td>26</td>
+								<td>27</td>
+								<td>28</td>
+								<td>29</td>
+							</tr>
+							<tr>
+								<td>30</td>
+								<td>31</td>
+								<td class="text-muted">1</td>
+								<td class="text-muted">2</td>
+								<td class="text-muted">3</td>
+								<td class="text-muted">4</td>
+								<td class="text-muted">5</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- Delete Confirmation Modal -->
+	<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header bg-danger text-white">
+					<h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					Are you sure you want to delete this blood donation camp? This action cannot be undone.
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+					<a href="#" id="confirmDeleteBtn" class="btn btn-danger">Delete</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            // Initialize tooltips
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            });
+            
+            // Setup delete confirmation
+            $('.delete-btn').click(function() {
+                var id = $(this).data('id');
+                $('#confirmDeleteBtn').attr('href', '@Url.Action("Delete")/' + id);
+                $('#deleteModal').modal('show');
+            });
+            
+            // Search functionality
+            $("#searchInput").on("keyup", function() {
+                var value = $(this).val().toLowerCase();
+                $("#bloodCampsTable tbody tr").filter(function() {
+                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                });
+            });
+            
+            // Status filter
+            $("#statusFilter").change(function() {
+                var value = $(this).val();
+                if (value === "") {
+                    $("#bloodCampsTable tbody tr").show();
+                } else {
+                    $("#bloodCampsTable tbody tr").hide();
+                    if (value === "upcoming") {
+                        $("#bloodCampsTable tbody tr:has(.badge.bg-primary)").show();
+                        $("#bloodCampsTable tbody tr:has(.badge.bg-warning)").show();
+                    } else if (value === "ongoing") {
+                        $("#bloodCampsTable tbody tr:has(.badge.bg-success)").show();
+                    } else if (value === "completed") {
+                        $("#bloodCampsTable tbody tr:has(.badge.bg-secondary)").show();
+                    }
+                }
+            });
+            
+            // Organizer filter
+            $("#organizerFilter").change(function() {
+                var value = $(this).val();
+                if (value === "") {
+                    $("#bloodCampsTable tbody tr").show();
+                } else {
+                    $("#bloodCampsTable tbody tr").hide();
+                    $("#bloodCampsTable tbody tr").each(function() {
+                        if ($(this).find("td:eq(4)").text().indexOf(value) > -1) {
+                            $(this).show();
+                        }
+                    });
+                }
+            });
+            
+            // Month filter
+            $("#monthFilter").change(function() {
+                var value = $(this).val();
+                if (value === "") {
+                    $("#bloodCampsTable tbody tr").show();
+                } else {
+                    var year = value.split("-")[0];
+                    var month = value.split("-")[1];
+                    $("#bloodCampsTable tbody tr").hide();
+                    $("#bloodCampsTable tbody tr").each(function() {
+                        var dateText = $(this).find("td:eq(2)").text();
+                        if (dateText.indexOf(year) > -1 && dateText.indexOf(getMonthName(month)) > -1) {
+                            $(this).show();
+                        }
+                    });
+                }
+            });
+            
+            function getMonthName(monthNumber) {
+                const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                return monthNames[parseInt(monthNumber) - 1];
+            }
+            
+            // Export functionality
+            $("#exportBtn").click(function() {
+                alert("Export functionality will be implemented here");
+            });
+            
+            // Sorting functionality
+            $(".sortable").click(function() {
+                var table = $("#bloodCampsTable");
+                var rows = table.find("tbody tr").toArray();
+                var column = $(this).index();
+                var sortOrder = $(this).hasClass("asc") ? -1 : 1;
+                
+                $(this).toggleClass("asc");
+                $(this).find("i").removeClass("fa-sort").addClass(sortOrder === 1 ? "fa-sort-up" : "fa-sort-down");
+                
+                rows.sort(function(a, b) {
+                    var aValue = $(a).find("td").eq(column).text().trim();
+                    var bValue = $(b).find("td").eq(column).text().trim();
+                    
+                    if (column === 2) { // Date column
+                        aValue = new Date(aValue.split("(")[0].trim());
+                        bValue = new Date(bValue.split("(")[0].trim());
+                    }
+                    
+                    if (aValue < bValue) return -1 * sortOrder;
+                    if (aValue > bValue) return 1 * sortOrder;
+                    return 0;
+                });
+                
+                $.each(rows, function(index, row) {
+                    table.children("tbody").append(row);
+                });
+            });
+        });
+    </script>
+}

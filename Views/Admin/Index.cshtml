@@ -1,0 +1,648 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+        // Initialize the dashboard charts when the DOM is fully loaded
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize blood stock bar chart
+        initBloodStockChart();
+
+        // Initialize blood group distribution pie chart
+        initBloodGroupPieChart();
+
+        // Set up event listeners for additional charts
+        setupChartOptions();
+    });
+
+    // Blood Stock Chart - Bar Chart showing quantities by blood group
+    function initBloodStockChart() {
+        var ctx = document.getElementById('bloodStockChart');
+
+        // Get the data from the controller (passed via ViewBag)
+        var bloodStockData = @Html.Raw(Json.Serialize(ViewBag.BloodStockData));
+        var bloodGroupLabels = @Html.Raw(Json.Serialize(ViewBag.BloodGroupLabels));
+
+        var bloodStockChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: bloodGroupLabels,
+                datasets: [{
+                    label: 'Units Available',
+                    data: bloodStockData,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(199, 199, 199, 0.7)',
+                        'rgba(83, 102, 255, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(199, 199, 199, 1)',
+                        'rgba(83, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Units'
+                        }
+                    },
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Blood Group'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                return `Units: ${context.raw}`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Blood Group Distribution - Pie Chart showing distribution by percentage
+    function initBloodGroupPieChart() {
+        var ctx = document.getElementById('bloodGroupPieChart');
+
+        // Get the data from the controller (passed via ViewBag)
+        var bloodGroupDistribution = @Html.Raw(Json.Serialize(ViewBag.BloodGroupDistribution));
+        var bloodGroupLabels = @Html.Raw(Json.Serialize(ViewBag.BloodGroupLabels));
+
+        // Calculate total for percentage
+        var total = bloodGroupDistribution.reduce((a, b) => a + b, 0);
+
+        var bloodGroupPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: bloodGroupLabels,
+                datasets: [{
+                    data: bloodGroupDistribution,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.7)',
+                        'rgba(54, 162, 235, 0.7)',
+                        'rgba(255, 206, 86, 0.7)',
+                        'rgba(75, 192, 192, 0.7)',
+                        'rgba(153, 102, 255, 0.7)',
+                        'rgba(255, 159, 64, 0.7)',
+                        'rgba(199, 199, 199, 0.7)',
+                        'rgba(83, 102, 255, 0.7)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(199, 199, 199, 1)',
+                        'rgba(83, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'right',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var label = context.label || '';
+                                var value = context.raw || 0;
+                                var percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                return `${label}: ${value} units (${percentage}%)`;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Function to load blood stock by component data
+    function loadBloodStockByComponent() {
+        fetch('/Dashboard/BloodStockByComponent')
+            .then(response => response.json())
+            .then(data => {
+                var ctx = document.getElementById('bloodStockChart');
+
+                // Destroy existing chart if it exists
+                Chart.getChart(ctx)?.destroy();
+
+                // Create stacked bar chart for components
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: data.datasets.map((dataset, index) => {
+                            const colors = [
+                                'rgba(255, 99, 132, 0.7)',
+                                'rgba(54, 162, 235, 0.7)',
+                                'rgba(255, 206, 86, 0.7)',
+                                'rgba(75, 192, 192, 0.7)',
+                                'rgba(153, 102, 255, 0.7)'
+                            ];
+
+                            return {
+                                label: dataset.label,
+                                data: dataset.data,
+                                backgroundColor: colors[index % colors.length],
+                                borderColor: colors[index % colors.length].replace('0.7', '1'),
+                                borderWidth: 1
+                            };
+                        })
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                title: {
+                                    display: true,
+                                    text: 'Blood Group'
+                                }
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Units'
+                                }
+                            }
+                        },
+                        plugins: {
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return `${context.dataset.label}: ${context.raw} units`;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading component data:', error));
+    }
+
+    // Function to load donation trend data
+    function loadDonationTrend(days = 30) {
+        fetch(`/Dashboard/GetDonationTrend?days=${days}`)
+            .then(response => response.json())
+            .then(data => {
+                var ctx = document.getElementById('bloodStockChart');
+
+                // Destroy existing chart if it exists
+                Chart.getChart(ctx)?.destroy();
+
+                // Create line chart for donation trend
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: data.map(item => item.Date),
+                        datasets: [
+                            {
+                                label: 'Number of Donations',
+                                data: data.map(item => item.Count),
+                                borderColor: 'rgba(54, 162, 235, 1)',
+                                backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                                yAxisID: 'y',
+                                tension: 0.3,
+                                fill: true
+                            },
+                            {
+                                label: 'Volume Collected (units)',
+                                data: data.map(item => item.Volume),
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                                yAxisID: 'y1',
+                                tension: 0.3,
+                                fill: true
+                            }
+                        ]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: 'Date'
+                                }
+                            },
+                            y: {
+                                type: 'linear',
+                                display: true,
+                                position: 'left',
+                                title: {
+                                    display: true,
+                                    text: 'Number of Donations'
+                                }
+                            },
+                            y1: {
+                                type: 'linear',
+                                display: true,
+                                position: 'right',
+                                title: {
+                                    display: true,
+                                    text: 'Volume (units)'
+                                },
+                                grid: {
+                                    drawOnChartArea: false
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading donation trend data:', error));
+    }
+
+    // Function to load blood bank comparison data
+    function loadBloodBankComparison() {
+        fetch('/Dashboard/GetBloodBankComparison')
+            .then(response => response.json())
+            .then(data => {
+                var ctx = document.getElementById('bloodStockChart');
+
+                // Destroy existing chart if it exists
+                Chart.getChart(ctx)?.destroy();
+
+                // Create horizontal bar chart for blood bank comparison
+                new Chart(ctx, {
+                    type: 'bar',
+                    indexAxis: 'y',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            label: 'Total Stock (units)',
+                            data: data.data,
+                            backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        maintainAspectRatio: false,
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Units'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: 'Blood Bank'
+                                }
+                            }
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading blood bank comparison data:', error));
+    }
+
+    // Setup event listeners for the dropdown options
+    function setupChartOptions() {
+        // Get all dropdown items
+        const dropdownItems = document.querySelectorAll('.dropdown-item');
+
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+
+                const option = this.textContent;
+
+                // Update the chart based on the selected option
+                if (option === 'By Blood Group') {
+                    initBloodStockChart();
+                } else if (option === 'By Component Type') {
+                    loadBloodStockByComponent();
+                } else if (option === 'By Blood Bank') {
+                    loadBloodBankComparison();
+                } else if (option === 'By Stock') {
+                    initBloodGroupPieChart();
+                } else if (option === 'By Donors' || option === 'By Requests') {
+                    // These would need additional endpoints and implementation
+                    console.log(`Option '${option}' selected, but not yet implemented`);
+                }
+            });
+        });
+
+        // Add time period selectors for donation trends
+        const timeSelectors = document.createElement('div');
+        timeSelectors.className = 'mt-3 text-center d-none';
+        timeSelectors.id = 'timePeriodSelectors';
+        timeSelectors.innerHTML = `
+            <button class="btn btn-sm btn-outline-primary mx-1" data-days="7">7 Days</button>
+            <button class="btn btn-sm btn-outline-primary mx-1" data-days="30">30 Days</button>
+            <button class="btn btn-sm btn-outline-primary mx-1" data-days="90">90 Days</button>
+            <button class="btn btn-sm btn-outline-primary mx-1" data-days="365">1 Year</button>
+        `;
+
+        document.querySelector('.chart-area').appendChild(timeSelectors);
+
+        // Add event listeners to time period buttons
+        document.querySelectorAll('#timePeriodSelectors .btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const days = this.getAttribute('data-days');
+                loadDonationTrend(days);
+
+                // Update active button
+                document.querySelectorAll('#timePeriodSelectors .btn').forEach(b =>
+                    b.classList.remove('btn-primary', 'text-white'));
+                this.classList.add('btn-primary', 'text-white');
+            });
+        });
+    }
+    // Initialize DataTables
+    $(document).ready(function() {
+        $('#bloodRequestsTable').DataTable({
+            "pageLength": 5,
+            "lengthChange": false,
+            "searching": false
+        });
+
+        $('#donationsTable').DataTable({
+            "pageLength": 5,
+            "lengthChange": false,
+            "searching": false
+        });
+
+        $('#bloodCampsTable').DataTable({
+            "pageLength": 5,
+            "order": [[2, 'asc']]
+        });
+    });
+</script>
+<div class="container-fluid">
+    <!-- Dashboard Header -->
+    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+        <h1 class="h3 mb-0 text-gray-800">Blood Bank Management System Dashboard</h1>
+      
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="row">
+        <!-- Blood Stock Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Total Blood Units</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalBloodUnits</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-tint fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blood Banks Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Blood Banks</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalBloodBanks</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-hospital fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Donors Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Registered Donors</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.TotalDonors</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Requests Card -->
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Pending Requests</div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@ViewBag.PendingRequests</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Content Row -->
+    <div class="row">
+        <!-- Blood Stock Analysis -->
+        <div class="col-xl-8 col-lg-7">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Blood Stock Overview</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">View Options:</div>
+                            <a class="dropdown-item" href="#">By Blood Group</a>
+                            <a class="dropdown-item" href="#">By Component Type</a>
+                            <a class="dropdown-item" href="#">By Blood Bank</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-area">
+                        <canvas id="bloodStockChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blood Group Distribution -->
+        <div class="col-xl-4 col-lg-5">
+            <div class="card shadow mb-4">
+                <!-- Card Header -->
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Blood Group Distribution</h6>
+                    <div class="dropdown no-arrow">
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in" aria-labelledby="dropdownMenuLink">
+                            <div class="dropdown-header">View Options:</div>
+                            <a class="dropdown-item" href="#">By Stock</a>
+                            <a class="dropdown-item" href="#">By Donors</a>
+                            <a class="dropdown-item" href="#">By Requests</a>
+                        </div>
+                    </div>
+                </div>
+                <!-- Card Body -->
+                <div class="card-body">
+                    <div class="chart-pie pt-4 pb-2">
+                        <canvas id="bloodGroupPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+ @*    <!-- Content Row -->
+    <div class="row">
+        <!-- Recent Blood Requests Table -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Blood Requests</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="bloodRequestsTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Patient</th>
+                                    <th>Blood Group</th>
+                                    <th>Quantity</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- This will be populated with data from the controller -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="/BloodRequest/Index" class="btn btn-primary">View All Requests</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Donations Table -->
+        <div class="col-xl-6 col-lg-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Recent Donations</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="donationsTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Donor</th>
+                                    <th>Blood Bank</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- This will be populated with data from the controller -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center mt-3">
+                        <a href="/Donations/Index" class="btn btn-primary">View All Donations</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upcoming Blood Camps -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <h6 class="m-0 font-weight-bold text-primary">Upcoming Blood Camps</h6>
+                    <a href="/BloodCamps/Create" class="btn btn-sm btn-primary">Create New Camp</a>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="bloodCampsTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Location</th>
+                                    <th>Date</th>
+                                    <th>Time</th>
+                                    <th>Organizer</th>
+                                    <th>Registrations</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- This will be populated with data from the controller -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> *@
+</div>
+
