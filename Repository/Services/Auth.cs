@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using System.Text;
 using BBMSDATA1.Context;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
@@ -37,8 +38,9 @@ namespace BBMSDATA1.Repository.Services
             var isPasswordValid = await hashPassword.VerifyPasswordAsync(user, loginRequest.Password);
             if (!isPasswordValid)
             {
-                return "Invalid Password";
+                return "Invalid Username or Password";
             }
+            
 
             var sub = configuration["Jwt:Subject"] ?? throw new Exception("JWT Subject is not configured.");
             var jwtKey = configuration["Jwt:Key"] ?? throw new Exception("JWT Key is not configured.");

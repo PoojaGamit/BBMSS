@@ -13,6 +13,5 @@ namespace BBMSDATA1.Models
         public int BloodGroupId { get; set; }
         public string ?BloodGroupName { get; set; }
 
-      
     }
 }

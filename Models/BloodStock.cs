@@ -19,5 +19,6 @@ namespace BBMSDATA1.Models
         public DateTime LastUpdated { get; set; } = DateTime.Now;
         public DateTime ExpiryDate { get; set; }
         public bool IsActive { get; set; }
+     
     }
 }

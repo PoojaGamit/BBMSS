@@ -15,26 +15,26 @@ namespace BBMSDATA1.Repository.Services
             passwordHasher = new PasswordHasher<Users>();
 
         }
-
         public async Task RegisterUserAsync(Users user, string password)
         { 
             user.PasswordHash=passwordHasher.HashPassword(user,password);
             await userrepo.AddAsync(user);
         
         }
-
         public async Task<bool> VerifyPasswordAsync(Users user, string enteredPassword)
         {
             return await Task.Run(() =>
             {
-                if (user.PasswordHash== null)
+                if (user.PasswordHash == null)
                 {
                     return false;
                 }
 
                 var result = passwordHasher.VerifyHashedPassword(user, user.PasswordHash, enteredPassword);
+
                 return result == PasswordVerificationResult.Success;
             });
         }
+
     }
 }

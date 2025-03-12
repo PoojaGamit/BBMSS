@@ -29,7 +29,7 @@ namespace BBMSDATA1.Context
         public DbSet<BagTypes> BagTypes { get; set; }
         public DbSet<Roles> Roles { get; set; }
         public DbSet<ComponentStock> ComponentStock { get; set; }
-
+        public DbSet<Appointments> Appointments { get; set; }
         public DbSet<BloodCamps> BloodCamps { get; set; }
         public DbSet<CampRegistration> CampRegistration { get; set; }
     }
