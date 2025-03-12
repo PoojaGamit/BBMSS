@@ -18,12 +18,81 @@
 		}
 
 		body {
-			font-family: 'Nunito', sans-serif;
+			font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 			background-color: var(--background);
-			color: var(--dark);
-			line-height: 1.6;
+			display: flex;
+			flex-direction: column;
+			min-height: 100vh;
+			position: relative;
+		}
+		/* Header styles */
+		.navbar {
+			background-color: white !important;
+			box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+			padding: 15px 0;
 		}
 
+		.navbar-brand {
+			font-weight: 700;
+			color: var(--primary) !important;
+			font-size: 1.5rem;
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.nav-link {
+			font-weight: 500;
+			padding: 10px 15px !important;
+			color: var(--dark) !important;
+			position: relative;
+			transition: all 0.3s ease;
+		}
+
+			.nav-link:hover {
+				color: var(--primary) !important;
+			}
+
+			.nav-link::after {
+				content: '';
+				position: absolute;
+				width: 0;
+				height: 2px;
+				background-color: var(--primary);
+				bottom: 0;
+				left: 15px;
+				transition: width 0.3s ease;
+			}
+
+			.nav-link:hover::after {
+				width: calc(100% - 30px);
+			}
+
+		.btn-primary {
+			background-color: var(--primary);
+			border-color: var(--primary);
+		}
+
+			.btn-primary:hover {
+				background-color: #3a80d2;
+				border-color: #3a80d2;
+			}
+
+		.btn-donate {
+			background-color: var(--secondary);
+			color: white;
+			border-color: var(--secondary);
+			padding: 0.375rem 0.75rem;
+			border-radius: 0.25rem;
+			text-decoration: none;
+			transition: all 0.3s ease;
+		}
+
+			.btn-donate:hover {
+				background-color: #27ae60;
+				border-color: #27ae60;
+				color: white;
+			}
 		.hero-section {
 			background: linear-gradient( 135deg, rgba(74, 144, 226, 0.9), rgba(46, 204, 113, 0.7) ), url('https://images.unsplash.com/photo-1615461469775-55103de93a7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
 			background-size: cover;
@@ -123,10 +192,7 @@
 	</style>
 </head>
 <body>
-	@*  <div class="notification-banner">
-        <i class="fas fa-bell me-2"></i>Urgent: Blood Donation Drive - Your Support Saves Lives!
-    </div>
- *@
+	
 	<section class="hero-section text-center">
 		<div class="container hero-content">
 			<h1 class="display-4 fw-bold mb-4 text-white">Donate Blood, Save Lives</h1>

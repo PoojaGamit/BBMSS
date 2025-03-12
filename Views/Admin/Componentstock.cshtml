@@ -85,46 +85,6 @@
             </div>
         </div>
     </div>
-
- @*    <!-- Quick Actions Bar -->
-    <div class="row mb-4">
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header bg-light">
-                    <i class="fas fa-bolt me-1"></i> Quick Actions
-                </div>
-                <div class="card-body">
-                    <div class="row text-center">
-                        <div class="col-md-3 col-sm-6 mb-3">
-                            <a href="#" class="btn btn-outline-primary w-100">
-                                <i class="fas fa-plus-circle mb-2 d-block fa-2x"></i>
-                                New Donation
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3">
-                            <a href="#" class="btn btn-outline-danger w-100">
-                                <i class="fas fa-ambulance mb-2 d-block fa-2x"></i>
-                                Emergency Request
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3">
-                            <a href="#" class="btn btn-outline-info w-100">
-                                <i class="fas fa-exchange-alt mb-2 d-block fa-2x"></i>
-                                Transfer Components
-                            </a>
-                        </div>
-                        <div class="col-md-3 col-sm-6 mb-3">
-                            <a href="#" class="btn btn-outline-dark w-100">
-                                <i class="fas fa-print mb-2 d-block fa-2x"></i>
-                                Print Labels
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> *@
-
     <!-- Inventory Management Card -->
     <div class="card mb-4">
         <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
@@ -178,30 +138,26 @@
                                 </select>
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label for="bloodGroupFilter" class="form-label">Blood Group</label>
+                                <label for="bloodGroupFilter" class="form-label">Blood Bank</label>
                                 <select id="bloodGroupFilter" class="form-select">
                                     <option value="">All Blood Groups</option>
-                                    <option value="1">A+</option>
-                                    <option value="2">A-</option>
-                                    <option value="3">B+</option>
-                                    <option value="4">B-</option>
-                                    <option value="5">AB+</option>
-                                    <option value="6">AB-</option>
-                                    <option value="7">O+</option>
-                                    <option value="8">O-</option>
+                                    @foreach (var group in ViewBag.BloodGroups ?? new List<dynamic>())
+                                    {
+                                        <option value="@group.Id">@group.Name</option>
+                                    }
                                 </select>
                             </div>
                             <div class="col-md-3 mb-2">
-                                <label for="componentTypeFilter" class="form-label">Component Type</label>
-                                <select id="componentTypeFilter" class="form-select">
-                                    <option value="">All Component Types</option>
-                                    <option value="1">Whole Blood</option>
-                                    <option value="2">Red Blood Cells</option>
-                                    <option value="3">Platelets</option>
-                                    <option value="4">Plasma</option>
-                                    <option value="5">Cryoprecipitate</option>
+                                <label for="ComponentFilter" class="form-label">Blood Bank</label>
+                                <select id="ComponentFilter" class="form-select">
+                                    <option value="">All Components</option>
+                                    @foreach (var group in ViewBag.ComponentTypes ?? new List<dynamic>())
+                                    {
+                                        <option value="@group.Id">@group.Name</option>
+                                    }
                                 </select>
                             </div>
+                          
                             <div class="col-md-3 mb-2">
                                 <label for="dateRangeFilter" class="form-label">Expiry Date Range</label>
                                 <input type="text" id="dateRangeFilter" class="form-control" placeholder="Select date range">
@@ -412,7 +368,7 @@
     </div>
 
     <!-- Blood Inventory Distribution Chart -->
-    <div class="row mb-4">
+    @* <div class="row mb-4">
         <div class="col-xl-6">
             <div class="card h-100">
                 <div class="card-header">
@@ -421,7 +377,7 @@
                 </div>
                 <div class="card-body">
                     <div class="text-center">
-                        <img src="/api/placeholder/520/300" alt="Blood group distribution chart" class="img-fluid" />
+                       
                     </div>
                 </div>
             </div>
@@ -439,7 +395,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> *@
 </div>
 
 <!-- Reserve Modal -->
@@ -543,13 +499,16 @@
 </div>
 
 @section Scripts {
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
     <script>
         $(document).ready(function () {
             // Initialize DataTable
             $('#componentsDataTable').DataTable({
                 responsive: true,
                 order: [[4, 'asc']], // Sort by expiry date by default
-                pageLength: 25
+                pageLength: 3
             });
 
             // Initialize date range picker (needs daterangepicker plugin)
@@ -562,7 +521,7 @@
             });
 
             $('#dateRangeFilter').on('apply.daterangepicker', function(ev, picker) {
-                $(this).val(picker.startDate.format('MM/DD/YYYY') + ' - ' + picker.endDate.format('MM/DD/YYYY'));
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
             });
 
             $('#dateRangeFilter').on('cancel.daterangepicker', function(ev, picker) {
@@ -576,7 +535,7 @@
                 var componentType = $('#componentTypeFilter').val();
                 var dateRange = $('#dateRangeFilter').val();
 
-                var url = '@Url.Action("Index")';
+                var url = '@Url.Action("Componentstock")';
                 var params = [];
 
                 if (bloodBank) params.push('bloodBankId=' + bloodBank);
@@ -593,7 +552,7 @@
 
             // Reset filters button
             $('#resetFilters').click(function() {
-                window.location.href = '@Url.Action("Index")';
+                window.location.href = '@Url.Action("Componentstock")';
             });
 
             // Modal data passing

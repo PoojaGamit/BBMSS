@@ -1,0 +1,264 @@
+﻿@model BBMSDATA1.Models.Appointments
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Schedule Blood Donation Appointment</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --background: #f4f6f7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background);
+        }
+
+        .form-container {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        select, input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--light);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+            input[type="datetime-local"] {
+                font-family: inherit;
+            }
+
+            input[type="checkbox"] {
+                width: auto;
+                margin-right: 10px;
+            }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            width: 100%;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+            button:hover {
+                background-color: #3a7bc8;
+            }
+
+        .status-pending {
+            background-color: var(--warning);
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 14px;
+            display: inline-block;
+        }
+
+        .note {
+            font-size: 14px;
+            color: #777;
+            margin-top: 5px;
+        }
+
+        .header-logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+            .header-logo span {
+                font-size: 40px;
+                color: var(--danger);
+            }
+
+        .disease-container {
+            padding: 15px;
+            border-radius: 4px;
+            background-color: rgba(244, 246, 247, 0.5);
+            border-left: 4px solid var(--warning);
+            margin-top: 10px;
+            display: none;
+        }
+
+        .disease-label {
+            color: var(--dark);
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+
+        <h1>Schedule Blood Donation</h1>
+
+        <form id="appointmentForm">
+            <input type="hidden" id="appointmentId" name="appointmentId" value="">
+
+            <div class="form-group">
+                <label for="donorId">Donor</label>
+                <select id="donorId" name="donorId" required>
+                    <option value="">-- Select Donor --</option>
+                    <!-- This would be populated dynamically from the Users table -->
+                    <option value="1">John Doe</option>
+                    <option value="2">Jane Smith</option>
+                    <option value="3">Michael Johnson</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="bloodBankId">Blood Bank Location</label>
+                <select id="bloodBankId" name="bloodBankId" required>
+                    <option value="">-- Select Blood Bank --</option>
+                    <!-- This would be populated dynamically from the BloodBanks table -->
+                    <option value="1">Downtown Blood Center</option>
+                    <option value="2">Westside Medical Plaza</option>
+                    <option value="3">Eastside Community Hospital</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="appointmentDate">Appointment Date & Time</label>
+                <input type="datetime-local" id="appointmentDate" name="appointmentDate" required>
+                <div class="note">Please select a date and time during our operating hours (9:00 AM - 5:00 PM)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="status">Status</label>
+                <select id="status" name="status" required>
+                    <option value="Pending">Pending</option>
+                    <option value="Confirmed">Confirmed</option>
+                    <option value="Cancelled">Cancelled</option>
+                </select>
+                <div class="note">New appointments are automatically set to "Pending" until confirmed by staff</div>
+            </div>
+
+            <div class="form-group">
+                <div class="checkbox-container">
+                    <input type="checkbox" id="hasDisease" name="hasDisease">
+                    <label for="hasDisease">Do you have any medical conditions or diseases?</label>
+                </div>
+            </div>
+
+            <div id="diseaseContainer" class="disease-container">
+                <div class="form-group">
+                    <label for="diseaseName" class="disease-label">Please specify your medical condition</label>
+                    <input type="text" id="diseaseName" name="diseaseName" placeholder="Enter medical condition or disease">
+                    <div class="note">Please provide this information to help us determine donation eligibility</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="additionalNotes">Additional Notes</label>
+                <textarea id="additionalNotes" name="additionalNotes" placeholder="Any additional information we should know about..."></textarea>
+            </div>
+
+            <button type="submit">Schedule Appointment</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set default status to Pending for new appointments
+            document.getElementById('status').value = 'Pending';
+
+            // Set min date to today
+            const today = new Date();
+            const formattedDate = today.toISOString().slice(0, 16);
+            document.getElementById('appointmentDate').min = formattedDate;
+
+            // Toggle disease name field visibility based on checkbox
+            const hasDiseaseCheckbox = document.getElementById('hasDisease');
+            const diseaseContainer = document.getElementById('diseaseContainer');
+            const diseaseNameInput = document.getElementById('diseaseName');
+
+            hasDiseaseCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    diseaseContainer.style.display = 'block';
+                    diseaseNameInput.setAttribute('required', '');
+                } else {
+                    diseaseContainer.style.display = 'none';
+                    diseaseNameInput.removeAttribute('required');
+                    diseaseNameInput.value = '';
+                }
+            });
+
+            // Form submission handler
+            document.getElementById('appointmentForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+
+                // Here you would typically send the form data to your server
+                // Create an object to hold the form data
+                const formData = {
+                    donorId: document.getElementById('donorId').value,
+                    bloodBankId: document.getElementById('bloodBankId').value,
+                    appointmentDate: document.getElementById('appointmentDate').value,
+                    status: document.getElementById('status').value,
+                    hasDisease: document.getElementById('hasDisease').checked,
+                    diseaseName: document.getElementById('diseaseName').value,
+                    additionalNotes: document.getElementById('additionalNotes').value,
+                    createdAt: new Date().toISOString()
+                };
+
+                console.log('Form data to be submitted:', formData);
+
+                alert('Your appointment has been scheduled! You will receive a confirmation email soon.');
+
+                // You could redirect to a confirmation page
+                // window.location.href = 'confirmation.html';
+            });
+        });
+    </script>
+</body>
+</html>

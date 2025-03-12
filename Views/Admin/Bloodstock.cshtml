@@ -12,9 +12,7 @@
                 <button type="button" class="btn btn-light btn-sm me-2" id="exportBtn">
                     <i class="fas fa-file-export me-1"></i>Export
                 </button>
-             @*    <a asp-action="Create" class="btn btn-success btn-sm">
-                    <i class="fas fa-plus-circle me-1"></i>Add New Stock
-                </a> *@
+            
             </div>
         </div>
 
@@ -26,34 +24,40 @@
                         <input type="text" id="searchInput" class="form-control" placeholder="Search inventory...">
                     </div>
                 </div>
-                <div class="col-md-3">
-                    <select class="form-select" id="bloodGroupFilter">
-                        <option value="">All Blood Groups</option>
-                        <option value="1">A+</option>
-                        <option value="2">A-</option>
-                        <option value="3">B+</option>
-                        <option value="4">B-</option>
-                        <option value="5">AB+</option>
-                        <option value="6">AB-</option>
-                        <option value="7">O+</option>
-                        <option value="8">O-</option>
+                <div class="col-md-2">
+                    <select class="form-select" id="bloodBankFilter">
+                        <option value="">All Blood Banks</option>
+                        @foreach (var bank in ViewBag.BloodBanks)
+                        {
+                            <option value="@bank.BloodBankId">@bank.BloodBankName</option>
+                        }
                     </select>
                 </div>
-                <div class="col-md-3">
+                <div class="col-md-2">
+                    <select class="form-select" id="bloodGroupFilter">
+                        <option value="">All Blood Groups</option>
+                        @foreach (var group in ViewBag.BloodGroups)
+                        {
+                            <option value="@group.BloodGroupName">@group.BloodGroupName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <select class="form-select" id="componentFilter">
                         <option value="">All Components</option>
-                        <option value="1">Whole Blood</option>
-                        <option value="2">Packed RBC</option>
-                        <option value="3">Platelet</option>
-                        <option value="4">Plasma</option>
+                        @foreach (var component in ViewBag.ComponentTypes)
+                        {
+                            <option value="@component.ComponentTypeName">@component.ComponentTypeName</option>
+                        }
                     </select>
                 </div>
                 <div class="col-md-3">
                     <select class="form-select" id="expiryFilter">
                         <option value="">Expiry Status</option>
-                        <option value="expiring">Expiring Soon (7 days)</option>
-                        <option value="expired">Expired</option>
-                        <option value="valid">Valid</option>
+                        @foreach (var status in ViewBag.ExpiryStatuses)
+                        {
+                            <option value="@status.Id">@status.Name</option>
+                        }
                     </select>
                 </div>
             </div>
@@ -296,48 +300,88 @@
 </div>
 
 @section Scripts {
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        $(document).ready(function() {
-            // Initialize tooltips
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            });
+            $(document).ready(function () {
+        $("#bloodBankFilter, #bloodGroupFilter, #componentFilter, #expiryFilter").on("change", function () {
+               filterTable();
+           });
 
+           function filterTable() {
+               var bloodBank = $("#bloodBankFilter").val();
+               var bloodGroup = $("#bloodGroupFilter").val();
+               var component = $("#componentFilter").val();
+               var expiry = $("#expiryFilter").val();
+
+               $("#bloodStockTable tbody tr").each(function () {
+                   var row = $(this);
+                   var bloodBankId = row.find("td:nth-child(1)").text().trim();
+                   var bloodGroupCell = row.find("td:nth-child(2)").text().trim();
+                   var componentCell = row.find("td:nth-child(3)").text().trim();
+
+                   var bloodBankMatch = bloodBank === "" || bloodBankId === bloodBank;
+                   var bloodGroupMatch = bloodGroup === "" || bloodGroupCell.includes(bloodGroup);
+                   var componentMatch = component === "" || componentCell.includes(component);
+                   var expiryMatch = expiry === "" || checkExpiry(row, expiry);
+
+                   if (bloodBankMatch && bloodGroupMatch && componentMatch && expiryMatch) {
+                       row.show();
+                   } else {
+                       row.hide();
+                   }
+               });
+
+               // Update the "Showing X entries" text
+               updateEntriesCount();
+           }
+
+           function updateEntriesCount() {
+               var visibleRows = $("#bloodStockTable tbody tr:visible").length;
+               $(".text-muted").text("Showing " + visibleRows);
+           }
+
+           function checkExpiry(row, filter) {
+               var expiryText = row.find("td:nth-child(6)").text().trim();
+
+               if (filter === "expiring") {
+                   return expiryText.includes("Expires in");
+               } else if (filter === "expired") {
+                   return expiryText.includes("Expired");
+               } else if (filter === "valid") {
+                   return !expiryText.includes("Expired") && !expiryText.includes("Expires in");
+               }
+               return true;
+           }
+
+                   var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+           var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+               return new bootstrap.Tooltip(tooltipTriggerEl)
+           });
             // Setup delete confirmation
-            $('.delete-btn').click(function() {
-                var id = $(this).data('id');
-                $('#confirmDeleteBtn').attr('href', '@Url.Action("Delete")/' + id);
-                $('#deleteModal').modal('show');
-            });
+         $('.delete-btn').click(function() {
+             var id = $(this).data('id');
+             $('#confirmDeleteBtn').attr('href', '@Url.Action("Delete")/' + id);
+             $('#deleteModal').modal('show');
+         });
 
-            // Search functionality
-            $("#searchInput").on("keyup", function() {
-                var value = $(this).val().toLowerCase();
-                $("#bloodStockTable tbody tr").filter(function() {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
-            });
+         // Search functionality
+         $("#searchInput").on("keyup", function() {
+             var value = $(this).val().toLowerCase();
+             $("#bloodStockTable tbody tr").filter(function() {
+                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+             });
+         });
 
-            // Blood group filter
-            $("#bloodGroupFilter").change(function() {
-                var value = $(this).val();
-                if (value === "") {
-                    $("#bloodStockTable tbody tr").show();
-                } else {
-                    $("#bloodStockTable tbody tr").hide();
-                    $("#bloodStockTable tbody tr").each(function() {
-                        if ($(this).find("td:eq(1)").text().indexOf(value) > -1) {
-                            $(this).show();
-                        }
-                    });
-                }
-            });
+         // Export functionality
+                $("#exportBtn").click(function() {
+            window.location.href = '@Url.Action("ExportBloodStock")';
+        });
 
-            // Export functionality
-            $("#exportBtn").click(function() {
-                alert("Export functionality will be implemented here");
-            });
         });
     </script>
 }
+
+
+
+

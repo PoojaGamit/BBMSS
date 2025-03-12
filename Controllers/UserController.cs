@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 
 namespace BBMS1MVC.Controllers
 {
@@ -15,7 +16,7 @@ namespace BBMS1MVC.Controllers
     {
         private readonly IHttpClientFactory clientFactory;
         private readonly MYDBContext context;
-
+       
         public UserController(IHttpClientFactory clientFactory, MYDBContext context)
         {
             this.clientFactory = clientFactory;
@@ -83,11 +84,12 @@ namespace BBMS1MVC.Controllers
                 if(!string.IsNullOrEmpty(userName))
                 {
                     HttpContext.Session.SetString("UserName", userName);
+
                 }
                 if (!string.IsNullOrEmpty(userId))
                 {
                     HttpContext.Session.SetString("Userid", userId);
-                   
+
                 }
                 if (!string.IsNullOrEmpty(role))
                 { 
@@ -190,6 +192,30 @@ namespace BBMS1MVC.Controllers
             HttpContext.Session.Clear();
             TempData["LogoutMessage"] = "You have successfully logged out.";
             return RedirectToAction("Login", "User");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UserProfile()
+        {
+            var id = HttpContext.Session.GetString("Userid");
+            if (id != null)
+            {
+                var client = clientFactory.CreateClient("MyApiClient");
+                var response = await client.GetAsync("BloodBank/GETBloodBanks");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var jsonData = await response.Content.ReadAsStringAsync();
+                    var bloodBanks = JsonConvert.DeserializeObject<IEnumerable<BloodBanks>>(jsonData);
+
+                    return View(bloodBanks);
+                }
+                else
+                {
+                    return View(new List<BloodBanks>());
+                }
+            }
+            return View();
         }
     }
 }

@@ -21,6 +21,11 @@ namespace BBMS1MVC.Controllers
             ViewBag.DonorId = donor;
             return View();
         }
-        
+
+        public IActionResult Aboutus()
+        {
+          return View();
+        }
+
     }
 }

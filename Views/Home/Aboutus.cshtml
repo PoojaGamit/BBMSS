@@ -1,0 +1,382 @@
+﻿@{
+    ViewData["Title"] = "Aboutus";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - LifeStream Blood Bank</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --background: #f4f6f7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--dark);
+        }
+
+            .section-title h2 {
+                font-size: 2.5rem;
+                margin-bottom: 1rem;
+                color: var(--primary);
+            }
+
+            .section-title p {
+                font-size: 1.2rem;
+                color: var(--dark);
+                max-width: 800px;
+                margin: 0 auto;
+            }
+
+        .eligibility-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-top: 2rem;
+        }
+
+        .eligibility-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            flex: 1 1 300px;
+            margin: 0 15px 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .eligibility-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            }
+
+            .eligibility-card h3 {
+                color: var(--danger);
+                margin-bottom: 1rem;
+                display: flex;
+                align-items: center;
+            }
+
+                .eligibility-card h3 i {
+                    margin-right: 10px;
+                    color: var(--danger);
+                }
+
+            .eligibility-card ul {
+                padding-left: 20px;
+            }
+
+            .eligibility-card li {
+                margin-bottom: 0.5rem;
+            }
+
+        .process-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            counter-reset: step;
+        }
+
+        .step-card {
+            background-color: var(--light);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            flex: 1 1 200px;
+            margin: 0 15px 30px;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .step-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+            }
+
+            .step-card::before {
+                counter-increment: step;
+                content: counter(step);
+                position: absolute;
+                top: -20px;
+                left: 20px;
+                background-color: var(--primary);
+                color: white;
+                width: 40px;
+                height: 40px;
+                border-radius: 50%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: bold;
+                font-size: 1.2rem;
+                box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+            }
+
+            .step-card h3 {
+                color: var(--primary);
+                margin-bottom: 1rem;
+            }
+
+        .faq {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--light);
+            padding-bottom: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+            .faq-item:hover {
+                border-bottom-color: var(--primary);
+            }
+
+        .faq-question {
+            font-weight: bold;
+            color: var(--dark);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+            .faq-question:hover {
+                color: var(--primary);
+            }
+
+        .faq-answer {
+            color: var(--dark);
+        }
+
+        /* Prevent image overflow */
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+            .btn:hover {
+                background-color: #3476c7;
+                transform: translateY(-2px);
+            }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+            .btn-secondary:hover {
+                background-color: #27ae60;
+            }
+
+        .btn-danger {
+            background-color: var(--danger);
+        }
+
+            .btn-danger:hover {
+                background-color: #c0392b;
+            }
+
+        /* Add a highlight section */
+     
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: block;
+            text-align: center;
+        }
+
+        /* Add navigation buttons at section bottoms */
+        .section-nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+            .section-nav .btn {
+                margin: 0 10px;
+            }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+<!-- About Section -->
+    <section id="about">
+        <div class="section-title">
+            <h2>Why Donate Blood?</h2>
+            <p>Blood donation is essential for many medical procedures, emergencies, and treating chronic illnesses.</p>
+        </div>
+        <div class="eligibility-container">
+            <div class="eligibility-card">
+                <i class="fas fa-ambulance card-icon"></i>
+                <h3>Emergency Care</h3>
+                <p>Blood is needed for accident victims, trauma injuries, and emergency surgeries. Your donation can help save someone's life during critical situations.</p>
+            </div>
+            <div class="eligibility-card">
+                <i class="fas fa-procedures card-icon"></i>
+                <h3>Surgical Procedures</h3>
+                <p>Many major surgeries wouldn't be possible without blood transfusions. Your donation ensures surgeons can perform life-saving operations.</p>
+            </div>
+            <div class="eligibility-card">
+                <i class="fas fa-ribbon card-icon"></i>
+                <h3>Cancer Treatment</h3>
+                <p>Cancer patients often require blood products during chemotherapy, radiation, and surgery. Your donation directly helps those fighting cancer.</p>
+            </div>
+            <div class="eligibility-card">
+                <i class="fas fa-heartbeat card-icon"></i>
+                <h3>Chronic Illnesses</h3>
+                <p>People with blood disorders, like sickle cell anemia and thalassemia, need regular transfusions to survive. Your donation provides ongoing support.</p>
+            </div>
+        </div>
+      
+    </section>
+
+    <!-- Eligibility Section -->
+    <section id="eligibility">
+        <div class="section-title">
+            <h2>Who Can Donate?</h2>
+            <p>Most healthy adults are eligible to donate blood. Here are the basic requirements.</p>
+        </div>
+        <div class="eligibility-container">
+            <div class="eligibility-card">
+                <h3><i class="fas fa-clipboard-check"></i> Basic Requirements</h3>
+                <ul>
+                    <li>Be at least 17 years old (16 with parental consent in some states)</li>
+                    <li>Weigh at least 110 pounds</li>
+                    <li>Be in good general health</li>
+                    <li>Have not donated whole blood in the last 56 days</li>
+                </ul>
+            </div>
+            <div class="eligibility-card">
+                <h3><i class="fas fa-heart"></i> Health Considerations</h3>
+                <ul>
+                    <li>No fever or illness at the time of donation</li>
+                    <li>Adequate iron levels</li>
+                    <li>Blood pressure within acceptable range</li>
+                    <li>Not taking certain medications</li>
+                </ul>
+            </div>
+            <div class="eligibility-card">
+                <h3><i class="fas fa-clock"></i> Temporary Deferrals</h3>
+                <ul>
+                    <li>Recent travel to certain countries</li>
+                    <li>Recent tattoos or piercings (typically 3-12 months)</li>
+                    <li>Certain vaccinations (typically 2-4 weeks)</li>
+                    <li>Recent surgery or medical procedures</li>
+                </ul>
+            </div>
+        </div>
+      
+    </section>
+
+    <!-- Process Section -->
+    <section id="process">
+        <div class="section-title">
+            <h2>The Donation Process</h2>
+            <p>Donating blood is a simple and straightforward process that typically takes about an hour.</p>
+        </div>
+        <div class="process-steps">
+            <div class="step-card">
+                <h3>Registration</h3>
+                <p>Sign in, show ID, and read educational materials about donating blood.</p>
+            </div>
+            <div class="step-card">
+                <h3>Health Screening</h3>
+                <p>Complete a confidential health questionnaire and undergo a mini-physical (temperature, pulse, blood pressure, hemoglobin).</p>
+            </div>
+            <div class="step-card">
+                <h3>Donation</h3>
+                <p>The actual blood donation typically takes about 8-10 minutes, during which you'll be seated comfortably.</p>
+            </div>
+            <div class="step-card">
+                <h3>Refreshments</h3>
+                <p>Enjoy refreshments while relaxing for 15 minutes before returning to your normal activities.</p>
+            </div>
+        </div>
+      
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq">
+        <div class="section-title">
+            <h2>Frequently Asked Questions</h2>
+            <p>Find answers to common questions about blood donation.</p>
+        </div>
+        <div class="faq">
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle" style="color: var(--primary); margin-right: 8px;"></i>Does blood donation hurt?</div>
+                <div class="faq-answer">Most people feel a slight pinch when the needle is inserted, but the actual donation process is relatively painless. Our trained staff work to ensure your comfort throughout the donation.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle" style="color: var(--primary); margin-right: 8px;"></i>How long does it take to donate blood?</div>
+                <div class="faq-answer">The entire process takes about one hour from registration to refreshments. The actual blood donation only takes about 8-10 minutes.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle" style="color: var(--primary); margin-right: 8px;"></i>How often can I donate blood?</div>
+                <div class="faq-answer">You can donate whole blood every 56 days (8 weeks). If you're donating platelets, you can donate every 7 days up to 24 times per year.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle" style="color: var(--primary); margin-right: 8px;"></i>Is it safe to donate blood?</div>
+                <div class="faq-answer">Yes, donating blood is very safe. All equipment used is sterile and disposed of after a single use. The average adult has about 10 pints of blood, and only 1 pint is taken during donation.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle" style="color: var(--primary); margin-right: 8px;"></i>What should I do before donating blood?</div>
+                <div class="faq-answer">Eat a healthy meal, drink plenty of water, get a good night's sleep, and bring a valid ID. Avoid fatty foods before donating, as they can affect blood tests.</div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question"><i class="fas fa-question-circle" style="color: var(--primary); margin-right: 8px;"></i>Will I know my blood type after donating?</div>
+                <div class="faq-answer">Yes, first-time donors will receive their blood type information by mail or through our donor portal approximately 2-4 weeks after donation.</div>
+            </div>
+        </div>
+      @*   <div class="section-nav">
+            <a href="#about" class="btn">Back to Top</a>
+            <a href="#" class="btn btn-danger">Donate Now</a>
+        </div> *@
+    </section>
+
+</body>
+</html>
