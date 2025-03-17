@@ -25,14 +25,16 @@
 								</div>
 
 								<div class="form-group mb-3">
-									<label asp-for="PasswordHash" class="control-label fw-bold">Password:</label>
-									<input asp-for="PasswordHash" class="form-control" type="password" />
+									<label asp-for="PasswordHash" class="control-label fw-bold">Password:<span class="text-danger">*</span></label>
+									<input asp-for="PasswordHash" class="form-control" type="password" required />
+									<small class="form-text text-muted">Password must be at least 8 characters long and include uppercase, lowercase, number and special character</small>
 									<span asp-validation-for="PasswordHash" class="text-danger"></span>
 								</div>
 
 								<div class="form-group mb-3">
 									<label asp-for="PhoneNumber" class="control-label fw-bold">Mobile:<span class="text-danger">*</span></label>
-									<input asp-for="PhoneNumber" class="form-control" placeholder="Mobile No." />
+									<input asp-for="PhoneNumber" class="form-control" placeholder="Mobile No." required pattern="[6-9]\d{9}" />
+									<small class="form-text text-muted">Enter a 10-digit mobile number</small>
 									<span asp-validation-for="PhoneNumber" class="text-danger"></span>
 								</div>
 								<div class="form-group mb-3">
@@ -65,10 +67,10 @@
 								</div>
 
 								<div class="form-group mb-3">
-									<label asp-for="Email" class="control-label fw-bold">Email:</label>
-									<input asp-for="Email" class="form-control" placeholder="Email" />
-									<span asp-validation-for="Email" class="text-danger"></span>
-								</div>
+    <label asp-for="Email" class="control-label fw-bold">Email:<span class="text-danger">*</span></label>
+    <input asp-for="Email" class="form-control" placeholder="Email" required pattern="[a-z0-9._%+-]+[a-z0-9.-]+\.[a-z]{2,}$" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+</div>
 
 								<div class="form-group mb-3">
 									<label asp-for="StateId" class="control-label fw-bold">State:<span class="text-danger">*</span></label>
@@ -119,6 +121,7 @@
 	}
 
 	<script>
+
 		function getLocation() {
 			if (navigator.geolocation) {
 				navigator.geolocation.getCurrentPosition(function (position) {
@@ -129,5 +132,54 @@
 				alert("Geolocation is not supported by this browser.");
 			}
 		}
+		  $.validator.addMethod("strongPassword", function (value, element) {
+            return this.optional(element) || /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$!%*?&])[A-Za-z\d$!%*?&]{8,}$/.test(value);
+        }, "Password must be at least 8 characters long and include uppercase, lowercase, number and special character");
+
+        $.validator.addMethod("validPhone", function (value, element) {
+            return this.optional(element) || /^[6-9]\d{9}$/.test(value);
+        }, "Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9");
+
+        // Add form validation
+        $("form").validate({
+            rules: {
+                Email: {
+                    required: true,
+                    email: true
+                },
+                PasswordHash: {
+                    required: true,
+                    strongPassword: true
+                },
+                PhoneNumber: {
+                    required: true,
+                    validPhone: true
+                }
+            },
+            messages: {
+                Email: {
+                    required: "Email is required",
+                    email: "Please enter a valid email address"
+                },
+                PasswordHash: {
+                    required: "Password is required"
+                },
+                PhoneNumber: {
+                    required: "Mobile number is required"
+                }
+            },
+            errorElement: "small",
+            errorClass: "text-danger",
+            highlight: function (element) {
+                $(element).addClass("is-invalid");
+            },
+            unhighlight: function (element) {
+                $(element).removeClass("is-invalid");
+            },
+            errorPlacement: function (error, element) {
+                error.insertAfter(element);
+            }
+        });
+    
 	</script>
 }

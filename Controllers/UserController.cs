@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace BBMS1MVC.Controllers
 {
@@ -102,7 +103,7 @@ namespace BBMS1MVC.Controllers
                 {
                     "Admin" => RedirectToAction("Index", "Admin"),
                     "BAdmin" => RedirectToAction("Index", "BloodBank"),
-                    "Donor" => RedirectToAction("Index", "Donor"),
+                    "Donor" => RedirectToAction("UserProfile", "User"),
                     _ => RedirectToAction("Index", "Home")
                 };
             }
@@ -200,19 +201,20 @@ namespace BBMS1MVC.Controllers
             var id = HttpContext.Session.GetString("Userid");
             if (id != null)
             {
+                int uid=Convert.ToInt32(id);
                 var client = clientFactory.CreateClient("MyApiClient");
-                var response = await client.GetAsync("BloodBank/GETBloodBanks");
+                var response = await client.GetAsync($"Users/UsersById/{uid}");
 
                 if (response.IsSuccessStatusCode)
                 {
                     var jsonData = await response.Content.ReadAsStringAsync();
-                    var bloodBanks = JsonConvert.DeserializeObject<IEnumerable<BloodBanks>>(jsonData);
+                    var bloodBanks = JsonConvert.DeserializeObject<Users>(jsonData);
 
                     return View(bloodBanks);
                 }
                 else
                 {
-                    return View(new List<BloodBanks>());
+                    return View(new Users());
                 }
             }
             return View();

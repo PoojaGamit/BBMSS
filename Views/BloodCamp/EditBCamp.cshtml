@@ -1,0 +1,271 @@
+﻿@model BBMSDATA1.Models.BloodCamps
+@{
+    ViewData["Title"] = "Edit Blood Camp";
+}
+
+<style>
+    :root {
+        --primary: #4a90e2;
+        --secondary: #2ecc71;
+        --danger: #e74c3c;
+        --warning: #f39c12;
+        --dark: #2c3e50;
+        --light: #ecf0f1;
+        --background: #f4f6f7;
+    }
+
+    body {
+        background-color: var(--background);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .page-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .page-title {
+        color: var(--dark);
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .page-subtitle {
+        color: var(--primary);
+        margin-bottom: 20px;
+        font-weight: 500;
+    }
+
+    .form-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        margin-bottom: 20px;
+    }
+
+    .form-section {
+        margin-bottom: 30px;
+    }
+
+    .section-title {
+        color: var(--dark);
+        font-size: 18px;
+        margin-bottom: 15px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--light);
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .control-label {
+        font-weight: 500;
+        color: var(--dark);
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control {
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 10px 12px;
+        width: 100%;
+        transition: border-color 0.3s;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+        }
+
+    .text-danger {
+        color: var(--danger);
+        font-size: 13px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .form-check-input {
+        margin-right: 8px;
+    }
+
+    .form-check-label {
+        display: flex;
+        align-items: center;
+        color: var(--dark);
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        border: none;
+    }
+
+    .btn-primary {
+        background-color: var(--primary);
+        color: white;
+    }
+
+        .btn-primary:hover {
+            background-color: #3a80d2;
+        }
+
+    .btn-secondary {
+        background-color: var(--light);
+        color: var(--dark);
+    }
+
+        .btn-secondary:hover {
+            background-color: #d9e0e2;
+        }
+
+    .actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: var(--primary);
+        text-decoration: none;
+    }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="page-container">
+    <h1 class="page-title">Edit Blood Camp</h1>
+    <p class="page-subtitle">Update blood camp details</p>
+
+    <div class="form-card">
+        <form asp-action="EditBCamp">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CampId" />
+
+            <div class="form-section">
+                <h3 class="section-title">Basic Information</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Location" class="control-label"></label>
+                            <input asp-for="Location" class="form-control" />
+                            <span asp-validation-for="Location" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">Schedule</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="Date" class="control-label"></label>
+                            <input asp-for="Date" class="form-control" type="date" />
+                            <span asp-validation-for="Date" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="StartTime" class="control-label"></label>
+                            <input asp-for="StartTime" class="form-control" type="time" />
+                            <span asp-validation-for="StartTime" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="EndTime" class="control-label"></label>
+                            <input asp-for="EndTime" class="form-control" type="time" />
+                            <span asp-validation-for="EndTime" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="section-title">Organization Details</h3>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="Organizer" class="control-label"></label>
+                            <input asp-for="Organizer" class="form-control" />
+                            <span asp-validation-for="Organizer" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="VisibilityUntil" class="control-label"></label>
+                            <input asp-for="VisibilityUntil" class="form-control" type="date" />
+                            <span asp-validation-for="VisibilityUntil" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section" hidden>
+                <h3 class="section-title">System Information</h3>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="CreatedBy" class="control-label"></label>
+                            <input asp-for="CreatedBy" class="form-control" readonly />
+                            <span asp-validation-for="CreatedBy" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="CreatedAt" class="control-label"></label>
+                            <input asp-for="CreatedAt" class="form-control" readonly />
+                            <span asp-validation-for="CreatedAt" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label asp-for="UpdatedAt" class="control-label"></label>
+                            <input asp-for="UpdatedAt" class="form-control" readonly />
+                            <span asp-validation-for="UpdatedAt" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group form-check">
+                    <label class="form-check-label">
+                        <input class="form-check-input" asp-for="IsActive" />
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="submit" class="btn btn-primary">Save Changes</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+
+    <a asp-action="Index" class="back-link">← Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

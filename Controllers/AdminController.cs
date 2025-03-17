@@ -20,6 +20,7 @@ namespace BBMS1MVC.Controllers
         public async Task<IActionResult> Index()
         {
             // Basic statistics for cards
+             
             ViewBag.TotalBloodUnits = await context.BloodStock.SumAsync(x => x.Quantity);
             ViewBag.TotalBloodBanks = await context.BloodBanks.CountAsync();
             ViewBag.TotalDonors = await context.Users.Where(u => u.R_ID == 2).CountAsync();

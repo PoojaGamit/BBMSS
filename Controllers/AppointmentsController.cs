@@ -18,7 +18,7 @@ namespace BBMS1MVC.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-           var id = HttpContext.Session.GetInt32("Userid");
+           var id = HttpContext.Session.GetString("Userid");
             if (id == null)
             {
                 return RedirectToAction("Login", "User");

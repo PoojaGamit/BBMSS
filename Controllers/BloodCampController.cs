@@ -69,5 +69,37 @@ namespace BBMS1MVC.Controllers
             return View(model);
 
         }
+
+        [HttpGet]
+        public async Task<IActionResult> EditBCamp(int id)
+        {
+            var client = clientFactory.CreateClient("MyApiClient");
+            var response = await client.GetAsync($"BloodCamps/GetCampById/{id}");
+            if (response.IsSuccessStatusCode)
+            {
+                var jsonData = await response.Content.ReadAsStringAsync();
+                var bloodstock = JsonConvert.DeserializeObject<BloodCamps>(jsonData);
+                return View(bloodstock);
+            }
+            return View(new Notification());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditBCamp([FromForm] BloodCamps model)
+        {
+            var client = clientFactory.CreateClient("MyApiClient");
+            var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
+
+            var response=await client.PutAsync("BloodCamps/UpdateCamp", jsonContent);
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+            else
+            {
+                ModelState.AddModelError(string.Empty, "Error while adding Blood Bank.");
+            }
+            return View(model);
+        }
     }
 }

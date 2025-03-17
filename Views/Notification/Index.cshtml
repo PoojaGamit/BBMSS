@@ -293,12 +293,11 @@
 							   class="action-btn action-edit">
 								<i class="fas fa-edit"></i> Edit
 							</a>
-							<a href="@Url.Action("Details", new { id = item.NotificationId })"
+							@* <a href="@Url.Action("Details", new { id = item.NotificationId })"
 							   class="action-btn action-details">
 								<i class="fas fa-info-circle"></i> Details
-							</a>
-							<a href="@Url.Action("Delete", new { id = item.NotificationId })"
-							   class="action-btn action-delete">
+							</a> *@
+							<a href="javascript:void(0);" onclick="deleteNotification(@item.NotificationId)" class="action-btn action-delete">
 								<i class="fas fa-trash"></i> Delete
 							</a>
 						</td>
@@ -309,7 +308,7 @@
 	</div>
 
 	<script>
-		document.addEventListener('DOMContentLoaded', function() {
+				document.addEventListener('DOMContentLoaded', function () {
 			const bloodBankFilter = document.getElementById('bloodBankFilter');
 			const statusFilter = document.getElementById('statusFilter');
 			const table = document.getElementById('notificationTable');
@@ -317,19 +316,40 @@
 
 			function applyFilters() {
 				const bankValue = bloodBankFilter.value;
-				const statusValue = statusFilter.value;
+				const statusValue = statusFilter.value.toLowerCase(); 
 
 				rows.forEach(row => {
 					const bankMatch = !bankValue || row.getAttribute('data-bank') === bankValue;
-					const statusMatch = !statusValue || row.getAttribute('data-status') === statusValue;
 
-					row.style.display = bankMatch && statusMatch ? '' : 'none';
+					const rowStatus = row.getAttribute('data-status').toLowerCase();
+					const statusMatch = !statusValue || rowStatus === statusValue;
+
+					row.style.display = (bankMatch && statusMatch) ? '' : 'none';
 				});
 			}
 
+			
 			bloodBankFilter.addEventListener('change', applyFilters);
 			statusFilter.addEventListener('change', applyFilters);
 		});
+				function deleteNotification(id) {
+			if (confirm("Are you sure you want to delete this notification?")) {
+				fetch(`https://localhost:7193/Notification/deletenoti?id=${id}`, {
+					method: "DELETE"
+				})
+				.then(response => {
+					if (response.ok) {
+						alert("Notification deleted successfully!");
+						location.reload(); // Reload page to reflect changes
+					} else {
+						alert("Error deleting notification.");
+					}
+				})
+				.catch(error => console.error("Error:", error));
+			}
+		}
+
+
 	</script>
 </body>
 </html>

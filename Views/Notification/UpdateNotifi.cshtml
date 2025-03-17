@@ -283,7 +283,7 @@
 	</div>
 
 	<script>
-		// Set default values for dates if empty
+		
 		document.addEventListener('DOMContentLoaded', function() {
 			const startDateInput = document.querySelector('[asp-for="StartDate"]');
 			const endDateInput = document.querySelector('[asp-for="EndDate"]');
@@ -301,7 +301,7 @@
 
 			if (!endDateInput.value) {
 				const now = new Date();
-				now.setDate(now.getDate() + 14); // Default end date is 14 days after start
+				now.setDate(now.getDate() + 14); 
 
 				const year = now.getFullYear();
 				const month = (now.getMonth() + 1).toString().padStart(2, '0');

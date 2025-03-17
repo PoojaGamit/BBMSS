@@ -316,3 +316,11 @@ C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\BBMS1MVC.pdb
 C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\BBMS1MVC.genruntimeconfig.cache
 C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\ref\BBMS1MVC.dll
 C:\Users\wsc\Desktop\Programmes\BBMS1MVC\obj\Debug\net8.0\BBMS1MVC.sourcelink.json
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\bin\Debug\net8.0\ClosedXML.dll
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\bin\Debug\net8.0\ClosedXML.Parser.dll
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\bin\Debug\net8.0\DocumentFormat.OpenXml.dll
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\bin\Debug\net8.0\DocumentFormat.OpenXml.Framework.dll
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\bin\Debug\net8.0\ExcelNumberFormat.dll
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\bin\Debug\net8.0\RBush.dll
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\bin\Debug\net8.0\SixLabors.Fonts.dll
+C:\Users\wsc\Desktop\Programmes\BBMS1MVC\bin\Debug\net8.0\System.IO.Packaging.dll
