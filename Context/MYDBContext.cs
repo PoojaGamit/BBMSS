@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BBMSDATA1.Models;
+﻿using BBMSDATA1.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace BBMSDATA1.Context
@@ -13,6 +8,7 @@ namespace BBMSDATA1.Context
         public MYDBContext(DbContextOptions<MYDBContext> options) : base(options)
         { }
         
+        public DbSet<Donorregi> Donorregi { get; set; }
         public DbSet<Users> Users { get; set; }
         public DbSet<States> States { get; set; }
         public DbSet<Notification> Notification { get; set; }

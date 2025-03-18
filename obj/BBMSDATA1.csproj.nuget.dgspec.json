@@ -65,7 +65,7 @@
             },
             "Microsoft.AspNetCore.Identity": {
               "target": "Package",
-              "version": "[2.3.0, )"
+              "version": "[2.1.39, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
