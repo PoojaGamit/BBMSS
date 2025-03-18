@@ -139,21 +139,6 @@ namespace BBMS1MVC.Controllers
         }
 
 
-        //[HttpGet]
-        //public async Task<IActionResult> GetBloodBank(int id)
-        //{
-        //    HttpClient client  = new HttpClient();
-        //    string url = $"https://localhost:7193/BloodStock/GetStockByBloodBankId/{id}";
-        //    HttpResponseMessage response =await client.GetAsync(url);
-        //    //var response = await clientFactory.CreateClient("MyApiClient").GetAsync($"BloodStock/GetStockByBloodBankId/{id}");
-
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var jsonData = await response.Content.ReadAsStringAsync();
-        //        var bloodstock = JsonConvert.DeserializeObject<List<BloodStock>>(jsonData);
-        //        ViewBag.BloodData = bloodstock?.ToList();
-        //    }
-        //}
     }
 }
 

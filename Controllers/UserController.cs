@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
-using Microsoft.AspNetCore.Routing.Constraints;
 
 namespace BBMS1MVC.Controllers
 {
@@ -170,12 +168,25 @@ namespace BBMS1MVC.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateUserprofile([FromForm] Users model)
         {
+            var role=HttpContext.Session.GetString("Role");
             var client = clientFactory.CreateClient("MyApiClient");
             var jsonContent = new StringContent(JsonConvert.SerializeObject(model), Encoding.UTF8, "application/json");
             var response = await client.PutAsync("Users/UpdateUser", jsonContent);
             if (response.IsSuccessStatusCode)
             {
-                return RedirectToAction("Index");
+                if (role == "Admin")
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+                else if (role == "BAdmin")
+                {
+                    return RedirectToAction("Index", "BloodBank");
+                }
+                else if (role == "Donor")
+                {
+                    return RedirectToAction("UserProfile", "User");
+                }
+                //return RedirectToAction("Index");
             }
             else
             {
@@ -198,26 +209,151 @@ namespace BBMS1MVC.Controllers
         [HttpGet]
         public async Task<IActionResult> UserProfile()
         {
-            var id = HttpContext.Session.GetString("Userid");
-            if (id != null)
+            var userId = HttpContext.Session.GetString("Userid");
+
+            if (string.IsNullOrEmpty(userId))
             {
-                int uid=Convert.ToInt32(id);
-                var client = clientFactory.CreateClient("MyApiClient");
-                var response = await client.GetAsync($"Users/UsersById/{uid}");
+                return RedirectToAction("User", "Login");
+            }
 
-                if (response.IsSuccessStatusCode)
+            int uid = Convert.ToInt32(userId);
+            var client = clientFactory.CreateClient("MyApiClient");
+
+            try
+            {
+                // Get user data
+                var userResponse = await client.GetAsync($"Users/UsersById/{uid}");
+                userResponse.EnsureSuccessStatusCode();
+                var jsonData = await userResponse.Content.ReadAsStringAsync();
+                var user = JsonConvert.DeserializeObject<Users>(jsonData);
+
+                // Get blood group name
+               var bloodGroup=context.Users.Where(a=>a.UserId == uid).Select(Users => Users.BloodGroupId).FirstOrDefault();
+                var bloodGroupname=context.BloodGroups.Where(a => a.BloodGroupId == bloodGroup).Select(BloodGroups => BloodGroups.BloodGroupName).FirstOrDefault();
+                ViewBag.BloodGroupName = bloodGroupname;
+                
+
+                // Get state name
+                var stateid=context.Users.Where(a => a.UserId == uid).Select(Users => Users.StateId).FirstOrDefault();
+             var state=context.States.Where(a => a.Id == stateid).Select(States => States.StateName).FirstOrDefault();
+                ViewBag.StateName = state;
+                 
+
+                // Get donation history
+                var donationsResponse = await client.GetAsync($"Donations/ByDonor/{uid}");
+                if (donationsResponse.IsSuccessStatusCode)
                 {
-                    var jsonData = await response.Content.ReadAsStringAsync();
-                    var bloodBanks = JsonConvert.DeserializeObject<Users>(jsonData);
+                    var donationsData = await donationsResponse.Content.ReadAsStringAsync();
+                    var donationHistory = JsonConvert.DeserializeObject<List<dynamic>>(donationsData);
+                    ViewBag.DonationHistory = donationHistory;
+                    ViewBag.TotalDonations = donationHistory?.Count ?? 0;
 
-                    return View(bloodBanks);
+                    // Calculate days since last donation
+                    if (donationHistory != null && donationHistory.Count > 0)
+                    {
+                        // Manual approach instead of using LINQ on dynamic objects
+                        DateTime lastDonationDate = DateTime.MinValue;
+                        foreach (var donation in donationHistory)
+                        {
+                            var donationDate = DateTime.Parse(donation.DonationDate.ToString());
+                            if (donationDate > lastDonationDate)
+                            {
+                                lastDonationDate = donationDate;
+                            }
+                        }
+
+                        ViewBag.DaysSinceLastDonation = (DateTime.Now - lastDonationDate).Days;
+                    }
+                    else
+                    {
+                        ViewBag.DaysSinceLastDonation = 0;
+                    }
                 }
                 else
                 {
-                    return View(new Users());
+                    ViewBag.DonationHistory = new List<dynamic>();
+                    ViewBag.TotalDonations = 0;
+                    ViewBag.DaysSinceLastDonation = 0;
                 }
+
+                // Get blood requests
+                var requestsResponse = await client.GetAsync($"BloodRequest/ByPatient/{uid}");
+                if (requestsResponse.IsSuccessStatusCode)
+                {
+                    var requestsData = await requestsResponse.Content.ReadAsStringAsync();
+                    var bloodRequests = JsonConvert.DeserializeObject<List<dynamic>>(requestsData);
+                    ViewBag.BloodRequests = bloodRequests;
+
+                    // Count pending requests manually
+                    int pendingCount = 0;
+                    if (bloodRequests != null)
+                    {
+                        foreach (var request in bloodRequests)
+                        {
+                            if (request.Status.ToString() == "Pending")
+                            {
+                                pendingCount++;
+                            }
+                        }
+                    }
+                    ViewBag.PendingRequests = pendingCount;
+                }
+                else
+                {
+                    ViewBag.BloodRequests = new List<dynamic>();
+                    ViewBag.PendingRequests = 0;
+                }
+
+                var campcount=context.BloodCamps.Where(a=>a.IsActive == true).Count();
+                ViewBag.UpcomingCamps = campcount;
+
+                var camps = context.BloodCamps.Where(a => a.IsActive == true).ToList();
+                ViewBag.UpcomingCampsList = camps;
+                // Get upcoming blood camps
+                //var campsResponse = await client.GetAsync("BloodCamps/Upcoming");
+                //if (campsResponse.IsSuccessStatusCode)
+                //{
+                //    var campsData = await campsResponse.Content.ReadAsStringAsync();
+                //    var camps = JsonConvert.DeserializeObject<List<dynamic>>(campsData);
+
+                //    // Check registration status for each camp
+                //    if (camps != null)
+                //    {
+                //        foreach (var camp in camps)
+                //        {
+                //            var regResponse = await client.GetAsync($"CampRegistrations/CheckRegistration?campId={camp.CampId}&userId={uid}");
+                //            if (regResponse.IsSuccessStatusCode)
+                //            {
+                //                var regData = await regResponse.Content.ReadAsStringAsync();
+                //                camp.IsRegistered = bool.Parse(regData);
+                //            }
+                //            else
+                //            {
+                //                camp.IsRegistered = false;
+                //            }
+                //        }
+                //    }
+
+                //    ViewBag.UpcomingCampsList = camps;
+                //    ViewBag.UpcomingCamps = camps?.Count ?? 0;
+                //}
+                //else
+                //{
+                //    ViewBag.UpcomingCampsList = new List<dynamic>();
+                //    ViewBag.UpcomingCamps = 0;
+                //}
+
+                // Get notifications
+               
+                    ViewBag.Notifications = context.Notification.Where(a=>a.IsActive == true).ToList();
+
+                return View(user);
             }
-            return View();
+            catch (HttpRequestException)
+            {
+                TempData["ErrorMessage"] = "Unable to load profile data. Please try again later.";
+                return View(new Users());
+            }
         }
     }
 }

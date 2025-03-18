@@ -93,6 +93,7 @@
 				border-color: #27ae60;
 				color: white;
 			}
+
 		.hero-section {
 			background: linear-gradient( 135deg, rgba(74, 144, 226, 0.9), rgba(46, 204, 113, 0.7) ), url('https://images.unsplash.com/photo-1615461469775-55103de93a7d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
 			background-size: cover;
@@ -192,12 +193,12 @@
 	</style>
 </head>
 <body>
-	
+
 	<section class="hero-section text-center">
 		<div class="container hero-content">
 			<h1 class="display-4 fw-bold mb-4 text-white">Donate Blood, Save Lives</h1>
 			<p class="lead mb-5 text-white">Every Drop Counts - Be a Lifeline for Someone in Need</p>
-			<a asp-action="Register" asp-controller="User" class="btn btn-lg donate-btn">
+			<a asp-action="Index" asp-controller="Donorregi" class="btn btn-lg donate-btn">
 				<i class="fas fa-heart me-2"></i>Become a Donor
 			</a>
 		</div>
@@ -300,6 +301,7 @@
 			</div>
 		</div>
 	</section>
+	
 	<section class="container my-5">
 		<div class="card notifications-card">
 			<div class="card-header text-white">
@@ -314,7 +316,6 @@
 			</div>
 		</div>
 	</section>
-
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 	<script>
@@ -352,40 +353,42 @@
 				   }
 			   });
 
-		$.ajax({
-			   url: "https://localhost:7193/BloodCamps/GetActiveCamps",
-			   type: "GET",
-			   success: function (data) {
-				   var CampList = $("#CampList");
-				   CampList.empty();
+				$.ajax({
+					url: "https://localhost:7193/BloodCamps/GetActiveCamps",
+					type: "GET",
+					success: function (data) {
+				    var CampList = $("#CampList");
+				    CampList.empty();
 
-				   if (data.length === 0) {
-					   CampList.append('<p class="text-muted">No Camps available.</p>');
-					   return;
-				   }
+						 if (data.length === 0)
+						 {
+					        CampList.append('<p class="text-muted">No Camps available.</p>');
+					        return;
+				         }
 
-				   data.forEach(function (camp) {
-					   var title = camp.Name || "No Title";
-					   var location = camp.Location || "No location";
-					   var date = camp.Date || "N/A";
-					   var startTime = camp.StartTime || "No time";
-					   var endTime = camp.EndTime || "No Time";
-
-					   var CampItem = `
-						   <a href="#" class="list-group-item list-group-item-action">
-							   <div class="d-flex w-100 justify-content-between">
-								   <h5 class="mb-1">${title}</h5>
-								   <span class="text-muted">${date} | ${startTime} - ${endTime}</span>
-							   </div>
-							   <p class="mb-1"><i class="fas fa-map-marker-alt"></i> ${location}</p>
-						   </a>`;
-					   CampList.append(CampItem);
-				   });
-			   },
-			   error: function () {
-				   $("#CampList").html('<p class="text-danger">Failed to load blood camps.</p>');
-			   }
-		   });
+					 data.forEach(function (camp)
+					 {
+						var title = camp.Name || camp.name || "No Title";
+						var location = camp.Location || camp.location || "No location";
+						var date = camp.Date || camp.date || "N/A";
+						var startTime = camp.StartTime || camp.startTime || "No time";
+						var endTime = camp.EndTime || camp.endTime || "No Time";
+						var CampItem = `
+							<a href="#" class="list-group-item list-group-item-action">
+								<div class="d-flex w-100 justify-content-between">
+									<h5 class="mb-1">${title}</h5>
+									<span class="text-muted">${date} | ${startTime} - ${endTime}</span>
+								</div>
+								<p class="mb-1"><i class="fas fa-map-marker-alt"></i> ${location}</p>
+							</a>`;
+						CampList.append(CampItem);
+					  });
+				},
+					error: function ()
+					{
+						$("#CampList").html('<p class="text-danger">Failed to load blood camps.</p>');
+					}
+				 });
 
 		   });
 	</script>

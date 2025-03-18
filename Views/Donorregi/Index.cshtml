@@ -1,0 +1,420 @@
+﻿@model BBMSDATA1.Models.Donorregi
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donor Registration</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --warning: #f39c12;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+            --background: #f4f6f7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background);
+            color: var(--dark);
+            margin: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .page-header {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 4px solid var(--primary);
+        }
+
+        h1 {
+            color: var(--primary);
+            margin-top: 0;
+            font-weight: 500;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .control-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+            .form-control:focus {
+                outline: none;
+                border-color: var(--primary);
+                box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+            }
+
+        .text-danger {
+            color: var(--danger);
+            font-size: 14px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        .btn {
+            display: inline-block;
+            font-weight: 500;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            user-select: none;
+            border: 1px solid transparent;
+            padding: 10px 20px;
+            font-size: 16px;
+            line-height: 1.5;
+            border-radius: 4px;
+            transition: all 0.15s ease-in-out;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            color: white;
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+            .btn-primary:hover {
+                background-color: #3a80d2;
+                border-color: #3a80d2;
+            }
+
+        .btn-secondary {
+            color: white;
+            background-color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+            .btn-secondary:hover {
+                background-color: #27ae60;
+                border-color: #27ae60;
+            }
+
+        .link-back {
+            display: inline-block;
+            margin-top: 20px;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+            .link-back:hover {
+                text-decoration: underline;
+            }
+
+        /* Responsive grid */
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -15px;
+            margin-left: -15px;
+        }
+
+        .col-md-6 {
+            flex: 0 0 50%;
+            max-width: 50%;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="page-header">
+            <h1>Donor Registration</h1>
+            <p>Please fill out the form below to register as a blood donor.</p>
+        </div>
+
+        <div class="card">
+            <form asp-action="Index">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="section">
+                    <div class="section-title">Personal Information</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label">Full Name</label>
+                                <input asp-for="Name" class="form-control" placeholder="Enter your full name" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Age" class="control-label">Age</label>
+                                <input asp-for="Age" class="form-control" type="number" min="18" placeholder="Must be at least 18" />
+                                <span asp-validation-for="Age" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Gender" class="control-label">Gender</label>
+                                <select asp-for="Gender" class="form-control">
+                                    <option value="">Select Gender</option>
+                                    <option value="Male">Male</option>
+                                    <option value="Female">Female</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                                <span asp-validation-for="Gender" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Mobile" class="control-label">Mobile Number</label>
+                                <input asp-for="Mobile" class="form-control" placeholder="Enter your mobile number" />
+                                <span asp-validation-for="Mobile" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Blood Information</div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Bloodgroupid" class="control-label">Blood Group</label>
+                                <select asp-for="Bloodgroupid" class="form-control">
+                                    <option value="">Select Blood Group</option>
+                                    @foreach (var bloodGroup in ViewBag.BloodGroups)
+                                    {
+                                        <option value="@bloodGroup.Value">@bloodGroup.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Bloodgroupid" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Tentativedate" class="control-label">Tentative Donation Date</label>
+                                <input asp-for="Tentativedate" class="form-control" type="date" />
+                                <span asp-validation-for="Tentativedate" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group form-check">
+                                <input class="form-check-input" asp-for="PreviouslyDonated" id="previouslyDonated" />
+                                <label class="form-check-label" for="previouslyDonated">Previously Donated Blood</label>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group form-check">
+                                <input class="form-check-input" asp-for="HistoryOfSurgeryOrTransfusion" id="surgeryHistory" />
+                                <label class="form-check-label" for="surgeryHistory">History of Surgery or Transfusion</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="section-title">Location Details</div>
+                    <div class="form-group">
+                        <label asp-for="Address" class="control-label">Address</label>
+                        <input asp-for="Address" class="form-control" placeholder="Enter your complete address" />
+                        <span asp-validation-for="Address" class="text-danger"></span>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Stateid" class="control-label">State</label>
+                                <select asp-for="Stateid" class="form-control" id="stateDropdown">
+                                    <option value="">Select State</option>
+                                    @foreach (var state in ViewBag.States)
+                                    {
+                                        <option value="@state.Value">@state.Text</option>
+                                    }
+                                </select>
+                                <span asp-validation-for="Stateid" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Districtid" class="control-label">District</label>
+                                <select asp-for="Districtid" class="form-control" id="districtDropdown">
+                                    <option value="">Select District</option>
+                                    <!-- Add district options dynamically -->
+                                </select>
+                                <span asp-validation-for="Districtid" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="Cityid" class="control-label">City</label>
+                                <select asp-for="Cityid" class="form-control" id="cityDropdown">
+                                    <option value="">Select City</option>
+                                    <!-- Add city options dynamically -->
+                                </select>
+                                <span asp-validation-for="Cityid" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="BloodBankid" class="control-label">Blood Bank</label>
+                                <select asp-for="BloodBankid" class="form-control" id="bloodBankDropdown">
+                                    <option value="">Select Blood Bank</option>
+                                    <!-- Add blood bank options dynamically -->
+                                </select>
+                                <span asp-validation-for="BloodBankid" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Register as Donor</button>
+                    <a href="javascript:history.back()" class="btn btn-secondary" style="margin-left: 10px;">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <a asp-action="Index" class="link-back">Back to List</a>
+    </div>
+
+    <script>
+               
+           document.addEventListener('DOMContentLoaded', function() {
+                    // State dropdown change event
+                    document.getElementById('stateDropdown').addEventListener('change', function() {
+                        const stateId = this.value;
+                        if(stateId) {
+                            // Make API call to fetch districts based on state
+                            fetchDistricts(stateId);
+                        } else {
+                            resetDropdown('districtDropdown');
+                            resetDropdown('cityDropdown');
+                            resetDropdown('bloodBankDropdown');
+                        }
+                    });
+
+                    // District dropdown change event
+                    document.getElementById('districtDropdown').addEventListener('change', function() {
+                        const districtId = this.value;
+                        if(districtId) {
+                            // Make API call to fetch cities based on district
+                            fetchCities(districtId);
+                        } else {
+                            resetDropdown('cityDropdown');
+                            resetDropdown('bloodBankDropdown');
+                        }
+                    });
+
+                    // City dropdown change event
+                    document.getElementById('cityDropdown').addEventListener('change', function() {
+                        const cityId = this.value;
+                        if(cityId) {
+                            // Make API call to fetch blood banks based on city
+                            fetchBloodBanks(cityId);
+                        } else {
+                            resetDropdown('bloodBankDropdown');
+                        }
+                    });
+
+                    // Helper functions
+        function fetchDistricts(stateId) {
+            fetch(`https://localhost:7193/Location/GetDistricts/${stateId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Districts:', data); // Log the data
+                    populateDropdown('districtDropdown', data);
+                })
+                .catch(error => console.error('Error fetching districts:', error));
+        }
+
+        function fetchCities(districtId) {
+            fetch(`https://localhost:7193/Location/GetCities/${districtId}`)
+                .then(response => response.json())
+                .then(data => {
+					console.log('Cities:', data); // Log the data
+                    populateDropdown('cityDropdown', data);
+                })
+                .catch(error => console.error('Error fetching cities:', error));
+        }
+
+        function fetchBloodBanks(cityId) {
+            fetch(`https://localhost:7193/BloodBank/statewiseBloodbank?cityId=${cityId}`)
+                .then(response => response.json())
+                .then(data => {
+					console.log('Blood Banks:', data); // Log the data
+                    populateDropdown('bloodBankDropdown', data);
+                })
+                .catch(error => console.error('Error fetching blood banks:', error));
+        }
+
+                  function populateDropdown(dropdownId, data) {
+            console.log(`Populating dropdown: ${dropdownId}`, data); // Log the dropdown ID and data
+            const dropdown = document.getElementById(dropdownId);
+            dropdown.innerHTML = '<option value="">Select Option</option>';
+
+            data.forEach(item => {
+                const option = document.createElement('option');
+				
+                option.value = item.id; // Use the id for the value
+                if (dropdownId === 'districtDropdown') {
+                    option.value = item.id;
+                    option.textContent = item.districtName; // Use districtName for districts
+                } else if (dropdownId === 'cityDropdown') {
+                    option.value = item.id;
+                    option.textContent = item.cityName; // Use cityName for cities
+                } else if (dropdownId === 'bloodBankDropdown') {
+                    option.value = item.id;
+                    option.textContent = item.name; // Use bloodBankName for blood banks
+                }
+                dropdown.appendChild(option);
+            });
+        }
+                    function resetDropdown(dropdownId) {
+                        const dropdown = document.getElementById(dropdownId);
+                        dropdown.innerHTML = '<option value="">Select Option</option>';
+                    }
+                });
+    </script>
+</body>
+</html>

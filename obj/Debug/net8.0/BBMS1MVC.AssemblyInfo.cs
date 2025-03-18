@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BBMS1MVC")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f67753d29141cba38c5051fc809b9fa9c3c7588")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1f7089d84c80987d41fdb5e27e230249d3ae365a")]
 [assembly: System.Reflection.AssemblyProductAttribute("BBMS1MVC")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BBMS1MVC")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

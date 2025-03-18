@@ -222,6 +222,12 @@
 									<i class="bi bi-arrow-down-up ms-1 text-muted small"></i>
 								</div>
 							</th>
+							<th>
+								<div class="d-flex align-items-center">
+									<span style="color: var(--dark);">@Html.DisplayNameFor(model => model.IsActive)</span>
+									<i class="bi bi-arrow-down-up ms-1 text-muted small"></i>
+								</div>
+							</th>
 							<th class="text-center" style="color: var(--dark);">Actions</th>
 						</tr>
 					</thead>
@@ -261,6 +267,16 @@
 											 style="width: @Math.Min(item.Quantity, 100)%;" aria-valuenow="@item.Quantity"
 											 aria-valuemin="0" aria-valuemax="100"></div>
 									</div>
+								</td>
+								<td>
+									@if (item.IsActive)
+									{
+										<span class="badge bg-success">Active</span>
+									}
+									else
+									{
+										<span class="badge bg-danger">Inactive</span>
+									}
 								</td>
 								<td>
 									<div class="d-flex flex-column">
